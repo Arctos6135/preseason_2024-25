@@ -1,5 +1,5 @@
 package frc.robot.subsystems.drivetrain;
 
-public class DrivetrainSim extends DrivetrainIO {
+public class DrivetrainIOSim extends DrivetrainIO {
     
 }

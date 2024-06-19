@@ -70,5 +70,5 @@ public class DrivetrainIO {
        * @param backLeft back left motor target speed
        * @param backRight back right motor target speed
        */
-      public void setSpeeds(frontLeft, frontRight, backLeft, backRight) {}
+      public void setSpeeds(double frontLeft, double frontRight, double backLeft, double backRight) {}
 }
