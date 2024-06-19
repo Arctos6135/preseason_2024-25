@@ -16,4 +16,18 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+
+  public static class CANBusConstants {
+    // CANIds for the kraken drive motors.
+    public static final int leftFrontDrive = 1;
+    public static final int rightFrontDrive = 2;
+    public static final int leftBackDrive = 3;
+    public static final int rightBackDrive = 4;
+
+    // CANIds for the neo turning motors.
+    public static final int leftFrontTurn = 5;
+    public static final int rightFrontTurn = 6;
+    public static final int leftBackTurn = 7;
+    public static final int rightBackTurn = 8;
+  }
 }
