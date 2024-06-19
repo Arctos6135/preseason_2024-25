@@ -29,5 +29,14 @@ public final class Constants {
     public static final int rightFrontTurn = 6;
     public static final int leftBackTurn = 7;
     public static final int rightBackTurn = 8;
+
+    // CANIds for absolute encoders on turning motors.
+    public static final int leftFrontEncoder = 9;
+    public static final int rightFrontEncoder = 10;
+    public static final int leftBackEncoder = 11;
+    public static final int rightBackEncoder = 12;
+
+    // NavX (gyro).
+    public static final int NavX = 13;
   }
 }
