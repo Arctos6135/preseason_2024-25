@@ -3,6 +3,8 @@ package frc.robot.subsystems.drivetrain;
 import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix6.*;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.revrobotics.RelativeEncoder;
 import com.ctre.phoenix5.*;
 
 import frc.robot.constants;
@@ -20,7 +22,6 @@ public class DrivetrainIOKraken extends DrivetrainIO {
     private final RelativeEncoder backLeftDriveEncoder;
     private final RelativeEncoder backRightDriveEncoder;
 
-    // PID controllers for feedback motor control.
-    public frontLeftPIDController;
+
 
 }

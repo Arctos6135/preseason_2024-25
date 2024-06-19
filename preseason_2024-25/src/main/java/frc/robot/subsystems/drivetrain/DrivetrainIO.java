@@ -1,5 +1,7 @@
 package frc.robot.subsystems.drivetrain;
 
+import org.littletonrobotics.junction.AutoLog;
+
 // Imports the advantage scope autologger.
 
 
@@ -9,8 +11,8 @@ package frc.robot.subsystems.drivetrain;
  */
 public class DrivetrainIO {
     
-    @Autolog
-    public static class DrivingInputs {
+    @AutoLog
+    public static class DrivetrainInputs {
         // Position in meters.
         public double frontLeftPosition;
         public double frontRightPosition;
