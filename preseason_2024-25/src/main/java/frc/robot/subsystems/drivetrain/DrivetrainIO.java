@@ -63,10 +63,10 @@ public class DrivetrainIO {
 
       /**
        * Set the speeds of the drive motors.
-       * @param frontLeftFeedback front left motor feedback
-       * @param frontRightFeedback front right motor feedback
-       * @param backLeftFeedback
-       * @param backRightFeedback
+       * @param frontLeft front left motor target speed
+       * @param frontRight front right motor target speed
+       * @param backLeft back left motor target speed
+       * @param backRight back right motor target speed
        */
-
+      public void setSpeeds(frontLeft, frontRight, backLeft, backRight) {}
 }
