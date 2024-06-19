@@ -1,7 +1,7 @@
 package frc.robot.subsystems.drivetrain;
 
 // Imports the advantage scope autologger.
-import org.littletonrobotics.junction.AutoLog;
+
 
 /**
  * This class represents anything that behaves like a drivetrain. By channeling all our interactions with the drivetrain hardware through this class, 
@@ -20,8 +20,8 @@ public class DrivetrainIO {
         // Velocity in meters per second.
         public double frontLeftVelocity;
         public double frontRightVelocity;
-        public double backLeftPosition;
-        public double backRightPosition;
+        public double backLeftVelocity;
+        public double backRightVelocity;
 
         // Yaw in radians.
         public double yaw;
@@ -30,8 +30,8 @@ public class DrivetrainIO {
         // Current in amperes.
         public double frontLeftCurrent;
         public double frontRightCurrent;
-        public double backLeftPosition;
-        public double backRightPosition;
+        public double backLeftCurrent;
+        public double backRightCurrent;
 
         // Temperature in celcius.
         public double frontLeftTemperature;
