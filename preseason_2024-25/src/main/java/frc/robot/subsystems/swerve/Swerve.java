@@ -16,11 +16,6 @@ public class Swerve extends SubsystemBase {
     SwerveDriveKinematics kinematics;
     SwerveDriveOdometry odometry;
     AHRS gyro;
-    private final SwerveModule frontLeftModule = new MK4iModule(CANBusConstants.FRONT_LEFT_DRIVE, CANBusConstants.FRONT_LEFT_TURN, CANBusConstants., );
-    private final SwerveModule frontRightModule = new MK4iModule(, , , );
-    private final SwerveModule backLeftModule = new MK4iModule(, , , );
-    private final SwerveModule backRightModule = new MK4iModule(, , , );
-
     // Constructor
     public Swerve() {
 
