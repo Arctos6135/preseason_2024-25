@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -34,4 +36,22 @@ public final class Constants {
   public static class GyroConstants {
     public static final int GYRO_PORT = 1;
   }
+
+  public static class SwerveConstants {
+
+    public static final double DRIVE_WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4.0);
+
+    public static final int TURNING_CURRENT_LIMIT = 40;
+
+    // In radians / radians per second.
+    public static final double TURNING_ENCODER_POSITION_FACTOR = 2 * Math.PI;
+    public static final double TURNING_VELOCITY_CONVERSION = 0;
+
+    public static final double DRIVING_CURRENT_LIMIT = 0;
+
+    // In meters.
+    public static final double DRIVING_ENCODER_POSITION_FACTOR = DRIVE_WHEEL_CIRCUMFERENCE * 2 * Math.PI;
+
+  }
+
 }
