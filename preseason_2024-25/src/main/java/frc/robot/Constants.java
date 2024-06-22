@@ -52,6 +52,9 @@ public final class Constants {
     // In meters.
     public static final double DRIVING_ENCODER_POSITION_FACTOR = DRIVE_WHEEL_CIRCUMFERENCE * 2 * Math.PI;
 
+    // This won't cause any issues
+    public static final double MAX_SPEED = 100000;
+
   }
 
 }
