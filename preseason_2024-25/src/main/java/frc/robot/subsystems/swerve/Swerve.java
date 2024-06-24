@@ -4,6 +4,8 @@ import com.kauailabs.navx.frc.AHRS;
 import com.reduxrobotics.canand.CANBus;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -67,5 +69,29 @@ public class Swerve extends SubsystemBase {
             new Translation2d(-SwerveConstants.DISTANCE_TO_CENTER, SwerveConstants.DISTANCE_TO_CENTER), // Back Left
             new Translation2d(-SwerveConstants.DISTANCE_TO_CENTER, -SwerveConstants.DISTANCE_TO_CENTER) // Back Right
         );
+    }
+
+    public void drive(double x, double y, double rotation){
+        // Converts entered values (-1 to 1) into the units used by drivetrain
+
+        double xSpeed = x * SwerveConstants.MAX_SPEED;
+        double ySpeed = y * SwerveConstants.MAX_SPEED;
+        double rSpeed = rotation * SwerveConstants.MAX_ANGULAR_VELOCITY;
+
+        Rotation2d gyroRotation = gyro.getRotation2d();
+
+        var swerveModuleStates = kinematics.toSwerveModuleStates(
+            ChassisSpeeds.fromFieldRelativeSpeeds(
+                xSpeed,
+                ySpeed,
+                rSpeed,
+                gyroRotation
+            )
+        );
+
+        frontLeftModule.setState(swerveModuleStates[0]);
+        frontRightModule.setState(swerveModuleStates[1]);
+        backLeftModule.setState(swerveModuleStates[2]);
+        backRightModule.setState(swerveModuleStates[3]);
     }
 }

@@ -3,6 +3,12 @@ package frc.robot.constants;
 import edu.wpi.first.math.util.Units;
 
 public class SwerveConstants {
+    /* Assume units are in
+     * - Meters
+     * - Seconds
+     * - Radians
+     * Unless otherwise specified
+     */
 
     public static final int FRONT_LEFT_ENCODER_PORT = 1;
     public static final int FRONT_RIGHT_ENCODER_PORT = 2;
@@ -26,11 +32,11 @@ public class SwerveConstants {
     public static final double TURNING_ENCODER_POSITION_FACTOR = 2 * Math.PI;
     public static final double TURNING_VELOCITY_CONVERSION = 0;
 
-    public static final double DRIVING_CURRENT_LIMIT = 0;
+    public static final double DRIVING_CURRENT_LIMIT = 60;
 
     // In meters.
     public static final double DRIVING_ENCODER_POSITION_FACTOR = DRIVE_WHEEL_CIRCUMFERENCE * 2 * Math.PI;
 
-    // This won't cause any issues
-    public static final double MAX_SPEED = 100000;
+    public static final double MAX_SPEED = 4;
+    public static final double MAX_ANGULAR_VELOCITY = 3;
 }
