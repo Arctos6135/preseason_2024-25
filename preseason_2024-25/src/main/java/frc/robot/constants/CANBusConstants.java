@@ -1,6 +1,6 @@
 package frc.robot.constants;
 
-public class CANBusConstans {
+public class CANBusConstants {
     // CANIds for the kraken drive motors.
     public static final int FRONT_LEFT_DRIVE = 1;
     public static final int FORNT_RIGHT_DRIVE = 2;

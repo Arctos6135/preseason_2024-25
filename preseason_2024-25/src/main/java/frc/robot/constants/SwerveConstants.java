@@ -4,6 +4,11 @@ import edu.wpi.first.math.util.Units;
 
 public class SwerveConstants {
     
+    // Angular offsets of the modules relative to the chassis in radians
+    public static final double FRONT_LEFT_ANGULAR_OFFSET = -Math.PI / 2;
+    public static final double FRONT_RIGHT_ANGULAR_OFFSET = 0;
+    public static final double BACK_LEFT_ANGULAR_OFFSET = Math.PI;
+    public static final double BACK_RIGHT_ANGULAR_OFFSET = Math.PI / 2;
 
     public static final double DRIVE_WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4.0);
 
