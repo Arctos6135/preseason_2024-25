@@ -15,8 +15,7 @@ import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogEncoder;
-import frc.robot.Constants;
-import frc.robot.Constants.SwerveConstants;
+import frc.robot.constants.SwerveConstants;
 
 public class SwerveModule {
     private final TalonFX drivingMotor;

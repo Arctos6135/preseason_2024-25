@@ -4,7 +4,15 @@
 
 package frc.robot;
 
+import frc.robot.commands.TeleopDrive;
 import frc.robot.constants.OtherConstants;
+import frc.robot.subsystems.swerve.Swerve;
+
+import java.util.function.DoubleSupplier;
+
+import javax.print.attribute.standard.MediaSize.Other;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,12 +28,24 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  public final XboxController driverController = new XboxController(OtherConstants.DRIVER_CONTROLLER);
-  public final XboxController operatorController = new XboxController(OtherConstants.OPERATOR_CONTROLLER);
+  private final XboxController driverController = new XboxController(OtherConstants.DRIVER_CONTROLLER);
+  private final XboxController operatorController = new XboxController(OtherConstants.OPERATOR_CONTROLLER);
+
+  private final DoubleSupplier driverLeftStickY = () -> MathUtil.applyDeadband(
+      driverController.getRawAxis(XboxController.Axis.kLeftY.value),
+      OtherConstants.DRIVE_DEADBAND);
+    private final DoubleSupplier driverLeftStickX = () -> MathUtil.applyDeadband(
+      driverController.getRawAxis(XboxController.Axis.kLeftX.value),
+      OtherConstants.DRIVE_DEADBAND);
+    private final DoubleSupplier driverRightStickX = () -> MathUtil.applyDeadband(
+      driverController.getRawAxis(XboxController.Axis.kRightX.value),
+      OtherConstants.DRIVE_DEADBAND);
+
+  private final Swerve drivetrain = new Swerve();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    
+    drivetrain.setDefaultCommand(new TeleopDrive(drivetrain, driverLeftStickY, driverLeftStickX, driverRightStickX));
 
     // Configure the trigger bindings
     configureBindings();
