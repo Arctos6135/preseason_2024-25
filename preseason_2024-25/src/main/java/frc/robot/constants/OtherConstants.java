@@ -5,4 +5,6 @@ public class OtherConstants {
     public static final int OPERATOR_CONTROLLER = 1;
 
     public static final int GYRO_PORT = 1;
+
+    
 }

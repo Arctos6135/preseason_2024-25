@@ -39,6 +39,7 @@ public class SwerveModule {
     public SwerveModule(int drivingCANId, int turningCANId, int encoderPort, double chassisAngularOffset) {
         drivingMotor = new TalonFX(drivingCANId);
         turningMotor = new CANSparkMax(turningCANId, MotorType.kBrushless);
+        absoluteTurningEncoder = new AnalogEncoder(encoderPort);
 
         drivingConfigurator = drivingMotor.getConfigurator();
         
