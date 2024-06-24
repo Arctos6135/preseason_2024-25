@@ -3,7 +3,7 @@ package frc.robot.subsystems.swerve;
 import java.io.File;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.constants.SwerveConstants;
 import swervelib.SwerveDrive;
 import swervelib.parser.SwerveControllerConfiguration;
 import swervelib.parser.SwerveDriveConfiguration;
@@ -27,7 +27,7 @@ public class SwerveSubsystem extends SubsystemBase{
 
         // The try except is just in case YAGSL messes something up
         try{
-            swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.SwerveConstants.MAX_SPEED);
+            swerveDrive = new SwerveParser(directory).createSwerveDrive(SwerveConstants.MAX_SPEED);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -42,7 +42,7 @@ public class SwerveSubsystem extends SubsystemBase{
      * @param controllerCfg Swerve Controller.
      */
     public SwerveSubsystem(SwerveDriveConfiguration driveCfg, SwerveControllerConfiguration controllerCfg){
-        swerveDrive = new SwerveDrive(driveCfg, controllerCfg, Constants.SwerveConstants.MAX_SPEED);
+        swerveDrive = new SwerveDrive(driveCfg, controllerCfg, SwerveConstants.MAX_SPEED);
     }
     
 }

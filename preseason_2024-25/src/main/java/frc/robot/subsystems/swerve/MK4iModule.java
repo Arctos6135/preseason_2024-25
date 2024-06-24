@@ -15,8 +15,8 @@ import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogEncoder;
-import frc.robot.Constants;
-import frc.robot.Constants.SwerveConstants;
+import frc.robot.constants.OtherConstants;
+import frc.robot.constants.SwerveConstants;
 
 public class MK4iModule {
     private final TalonFX drivingMotor;
@@ -39,7 +39,7 @@ public class MK4iModule {
     public MK4iModule(int drivingCANId, int turningCANId, int encoderCANId, double chassisAngularOffset) {
         drivingMotor = new TalonFX(drivingCANId);
         turningMotor = new CANSparkMax(turningCANId, MotorType.kBrushless);
-        absoluteTurningEncoder = new AnalogEncoder(Constants.GyroConstants.GYRO_PORT);
+        absoluteTurningEncoder = new AnalogEncoder(OtherConstants.GYRO_PORT);
 
         drivingConfigurator = drivingMotor.getConfigurator();
         
@@ -60,21 +60,21 @@ public class MK4iModule {
     }
 
     private void configTurningEncoder() {
-        absoluteTurningEncoder.setDistancePerRotation(Constants.SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
+        absoluteTurningEncoder.setDistancePerRotation(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
     }
 
     private void configTurningMotor() {
         turningMotor.restoreFactoryDefaults();
-        turningMotor.setSmartCurrentLimit(Constants.SwerveConstants.TURNING_CURRENT_LIMIT);
+        turningMotor.setSmartCurrentLimit(SwerveConstants.TURNING_CURRENT_LIMIT);
         turningMotor.setInverted(true); // unsure if this should be inverted or not.
         turningMotor.setIdleMode(IdleMode.kBrake);
 
         turningPIDController.setPositionPIDWrappingEnabled(true);
         turningPIDController.setPositionPIDWrappingMinInput(0);
-        turningPIDController.setPositionPIDWrappingMaxInput(Constants.SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
+        turningPIDController.setPositionPIDWrappingMaxInput(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
 
-        integratedTurningEncoder.setPositionConversionFactor(Constants.SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
-        integratedTurningEncoder.setVelocityConversionFactor(Constants.SwerveConstants.TURNING_VELOCITY_CONVERSION);
+        integratedTurningEncoder.setPositionConversionFactor(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
+        integratedTurningEncoder.setVelocityConversionFactor(SwerveConstants.TURNING_VELOCITY_CONVERSION);
         resetToAbsolute();
 
         turningMotor.burnFlash();
