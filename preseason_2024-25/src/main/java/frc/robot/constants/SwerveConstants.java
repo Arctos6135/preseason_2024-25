@@ -39,4 +39,7 @@ public class SwerveConstants {
 
     public static final double MAX_SPEED = 4;
     public static final double MAX_ANGULAR_VELOCITY = 3;
+
+    public static final double WHEEL_DIAMETER = Units.inchesToMeters(4.0);
+    public static final double DRIVE_ENCODER_POSITION_FACTOR = (WHEEL_DIAMETER * Math.PI);
 }
