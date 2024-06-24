@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.AnalogEncoder;
 import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
 
-public class MK4iModule {
+public class SwerveModule {
     private final TalonFX drivingMotor;
     private final CANSparkMax turningMotor;
 
@@ -36,7 +36,7 @@ public class MK4iModule {
     /**
      * Constructs an MK4i swerve module and configures the driving and turning motor, encoder, and PID controller.
      */
-    public MK4iModule(int drivingCANId, int turningCANId, int encoderCANId, double chassisAngularOffset) {
+    public SwerveModule(int drivingCANId, int turningCANId, int encoderCANId, double chassisAngularOffset) {
         drivingMotor = new TalonFX(drivingCANId);
         turningMotor = new CANSparkMax(turningCANId, MotorType.kBrushless);
         absoluteTurningEncoder = new AnalogEncoder(Constants.GyroConstants.GYRO_PORT);
