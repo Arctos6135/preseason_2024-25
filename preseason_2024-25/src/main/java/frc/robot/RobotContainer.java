@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import frc.robot.Constants.ControllerConstants;
+import frc.robot.constants.OtherConstants;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -20,8 +20,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  public final XboxController driverController = new XboxController(ControllerConstants.DRIVER_CONTROLLER);
-  public final XboxController operatorController = new XboxController(ControllerConstants.OPERATOR_CONTROLLER);
+  public final XboxController driverController = new XboxController(OtherConstants.DRIVER_CONTROLLER);
+  public final XboxController operatorController = new XboxController(OtherConstants.OPERATOR_CONTROLLER);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
