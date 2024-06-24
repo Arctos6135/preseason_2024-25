@@ -15,8 +15,8 @@ import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogEncoder;
-import frc.robot.constants.OtherConstants;
-import frc.robot.constants.SwerveConstants;
+import frc.robot.Constants;
+import frc.robot.Constants.SwerveConstants;
 
 public class SwerveModule {
     private final TalonFX drivingMotor;
@@ -39,18 +39,12 @@ public class SwerveModule {
     public SwerveModule(int drivingCANId, int turningCANId, int encoderPort, double chassisAngularOffset) {
         drivingMotor = new TalonFX(drivingCANId);
         turningMotor = new CANSparkMax(turningCANId, MotorType.kBrushless);
-<<<<<<< HEAD
-        absoluteTurningEncoder = new AnalogEncoder(encoderPort);
-=======
-        absoluteTurningEncoder = new AnalogEncoder(OtherConstants.GYRO_PORT);
->>>>>>> 924e26c6c007f8c4f5aa7070c7f83d1870df9006
 
         drivingConfigurator = drivingMotor.getConfigurator();
         
         // Creates a PID controller and the built-in encoder.
         integratedTurningEncoder = turningMotor.getEncoder();
         turningPIDController = turningMotor.getPIDController();
-        turningPIDController.setFeedbackDevice(integratedTurningEncoder);
         
 
         configTurningEncoder();
