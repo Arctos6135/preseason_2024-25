@@ -8,6 +8,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.CANBusConstants;
+import frc.robot.constants.OtherConstants;
 import frc.robot.constants.SwerveConstants;
 
 
@@ -15,39 +16,47 @@ public class Swerve extends SubsystemBase {
     // Attributes
     SwerveDriveKinematics kinematics;
     SwerveDriveOdometry odometry;
-    AHRS gyro;
+    private final AHRS gyro;
 
-    private final SwerveModule frontLeftModule = new SwerveModule(
-        CANBusConstants.FRONT_LEFT_DRIVE,
-        CANBusConstants.FRONT_LEFT_TURN,
-        SwerveConstants.FRONT_LEFT_ENCODER_PORT,
-        SwerveConstants.FRONT_LEFT_ANGULAR_OFFSET
-    );
+    private final SwerveModule frontLeftModule;
 
-    private final SwerveModule frontRightModule = new SwerveModule(
-        CANBusConstants.FRONT_RIGHT_DRIVE, 
-        CANBusConstants.FRONT_RIGHT_TURN,
-        SwerveConstants.FRONT_RIGHT_ENCODER_PORT,
-        SwerveConstants.FRONT_RIGHT_ANGULAR_OFFSET
-    );
+    private final SwerveModule frontRightModule;
 
-    private final SwerveModule backLeftModule = new SwerveModule(
-        CANBusConstants.BACK_LEFT_DRIVE, 
-        CANBusConstants.BACK_LEFT_TURN, 
-        SwerveConstants.BACK_LEFT_ENCODER_PORT,
-        SwerveConstants.BACK_LEFT_ANGULAR_OFFSET
-    );
+    private final SwerveModule backLeftModule;
 
-    private final SwerveModule backRightModule = new SwerveModule(
-        CANBusConstants.BACK_RIGHT_DRIVE, 
-        CANBusConstants.BACK_RIGHT_TURN,
-        SwerveConstants.BACK_RIGHT_ENCODER_PORT,
-        SwerveConstants.BACK_RIGHT_ANGULAR_OFFSET
-    );
+    private final SwerveModule backRightModule;
 
     // Constructor
     public Swerve() {
+        gyro = new AHRS();
 
+        frontLeftModule  = new SwerveModule(
+            CANBusConstants.FRONT_LEFT_DRIVE,
+            CANBusConstants.FRONT_LEFT_TURN,
+            SwerveConstants.FRONT_LEFT_ENCODER_PORT,
+            SwerveConstants.FRONT_LEFT_ANGULAR_OFFSET
+        );
+
+        frontRightModule  = new SwerveModule(
+            CANBusConstants.FRONT_RIGHT_DRIVE, 
+            CANBusConstants.FRONT_RIGHT_TURN,
+            SwerveConstants.FRONT_RIGHT_ENCODER_PORT,
+            SwerveConstants.FRONT_RIGHT_ANGULAR_OFFSET
+        );
+
+        backLeftModule  = new SwerveModule(
+            CANBusConstants.BACK_LEFT_DRIVE, 
+            CANBusConstants.BACK_LEFT_TURN, 
+            SwerveConstants.BACK_LEFT_ENCODER_PORT,
+            SwerveConstants.BACK_LEFT_ANGULAR_OFFSET
+        );
+
+        backRightModule  = new SwerveModule(
+            CANBusConstants.BACK_RIGHT_DRIVE, 
+            CANBusConstants.BACK_RIGHT_TURN,
+            SwerveConstants.BACK_RIGHT_ENCODER_PORT,
+            SwerveConstants.BACK_RIGHT_ANGULAR_OFFSET
+        );
         
 
         // Create SwerveDriveKinematics object
