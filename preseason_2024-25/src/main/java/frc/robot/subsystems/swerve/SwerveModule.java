@@ -2,6 +2,7 @@ package frc.robot.subsystems.swerve;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -110,7 +111,21 @@ public class SwerveModule {
     }
 
     public void setState(SwerveModuleState desiredState) {
-        turningPIDController.setReference(desiredState.angle.getRadians(), ControlType.kPosition);
-        drivingMotor.set(desiredState.speedMetersPerSecond);
+        SwerveModuleState correctedDesiredState = new SwerveModuleState();
+        correctedDesiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
+
+        // Its possible we never update chassisAngul
+        correctedDesiredState.angle = desiredState.angle.plus(Rotation2d.fromRadians(chassisAngularOffset));
+
+        // Optimize the reference state to avoid spinning further than 90 degrees.
+        SwerveModuleState optimizedDesiredState = SwerveModuleState.optimize(
+            correctedDesiredState,
+            new Rotation2d(integratedTurningEncoder.getPosition())
+        );
+
+        drivingMotor.setControl(new VelocityDutyCycle(
+            optimizedDesiredState.speedMetersPerSecond / SwerveConstants.DRIVE_ENCODER_POSITION_FACTOR)
+        );
+        turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), ControlType.kPosition);
     }
 }

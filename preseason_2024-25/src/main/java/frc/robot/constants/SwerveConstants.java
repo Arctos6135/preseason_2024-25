@@ -39,4 +39,7 @@ public class SwerveConstants {
 
     public static final double MAX_SPEED = 4;
     public static final double MAX_ANGULAR_VELOCITY = 3;
+
+    // Its probably not one
+    public static final double DRIVE_ENCODER_POSITION_FACTOR = 1;
 }
