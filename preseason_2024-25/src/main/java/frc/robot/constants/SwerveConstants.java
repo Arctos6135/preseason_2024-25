@@ -3,12 +3,20 @@ package frc.robot.constants;
 import edu.wpi.first.math.util.Units;
 
 public class SwerveConstants {
+
+    public static final int FRONT_LEFT_ENCODER_PORT = 1;
+    public static final int FRONT_RIGHT_ENCODER_PORT = 2;
+    public static final int BACK_LEFT_ENCODER_PORT = 3;
+    public static final int BACK_RIGHT_ENCODER_PORT = 4;
     
     // Angular offsets of the modules relative to the chassis in radians
     public static final double FRONT_LEFT_ANGULAR_OFFSET = -Math.PI / 2;
     public static final double FRONT_RIGHT_ANGULAR_OFFSET = 0;
     public static final double BACK_LEFT_ANGULAR_OFFSET = Math.PI;
     public static final double BACK_RIGHT_ANGULAR_OFFSET = Math.PI / 2;
+
+    // This of course assumes we manage to actually get the COG in the middle
+    public static final double DISTANCE_TO_CENTER = 12.5;
 
     public static final double DRIVE_WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4.0);
 
