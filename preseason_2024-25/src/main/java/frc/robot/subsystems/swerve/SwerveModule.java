@@ -17,6 +17,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogEncoder;
 import frc.robot.constants.SwerveConstants;
+import frc.robot.util.AdaptivePIDController;
 
 public class SwerveModule {
     private final TalonFX drivingMotor;
@@ -26,6 +27,7 @@ public class SwerveModule {
     private final RelativeEncoder integratedTurningEncoder;
 
     private final SparkPIDController turningPIDController;
+    private final AdaptivePIDController drivingPIDController;
 
     private final TalonFXConfigurator drivingConfigurator;
     private TalonFXConfiguration drivingConfigs;
@@ -46,6 +48,7 @@ public class SwerveModule {
         // Creates a PID controller and the built-in encoder.
         integratedTurningEncoder = turningMotor.getEncoder();
         turningPIDController = turningMotor.getPIDController();
+        drivingPIDController = new AdaptivePIDController(1.0, 0.2, 0.5, 0.99);
         
 
         configTurningEncoder();
