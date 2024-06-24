@@ -3,6 +3,7 @@ package frc.robot.subsystems.swerve;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -126,9 +127,9 @@ public class SwerveModule {
             new Rotation2d(integratedTurningEncoder.getPosition())
         );
 
-        drivingMotor.setControl(new VelocityDutyCycle(
-            optimizedDesiredState.speedMetersPerSecond / SwerveConstants.DRIVE_ENCODER_POSITION_FACTOR)
-        );
+        drivingPIDController.setSetpoint(optimizedDesiredState.speedMetersPerSecond / SwerveConstants.DRIVE_ENCODER_POSITION_FACTOR);
+
+        drivingMotor.setControl(new VoltageOut(drivingPIDController.calculate(drivingMotor.get())));
         turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), ControlType.kPosition);
     }
 }
