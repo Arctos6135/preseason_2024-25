@@ -36,10 +36,10 @@ public class SwerveModule {
     /**
      * Constructs an MK4i swerve module and configures the driving and turning motor, encoder, and PID controller.
      */
-    public SwerveModule(int drivingCANId, int turningCANId, int encoderCANId, double chassisAngularOffset) {
+    public SwerveModule(int drivingCANId, int turningCANId, int encoderPort, double chassisAngularOffset) {
         drivingMotor = new TalonFX(drivingCANId);
         turningMotor = new CANSparkMax(turningCANId, MotorType.kBrushless);
-        absoluteTurningEncoder = new AnalogEncoder(Constants.GyroConstants.GYRO_PORT);
+        absoluteTurningEncoder = new AnalogEncoder(encoderPort);
 
         drivingConfigurator = drivingMotor.getConfigurator();
         
