@@ -2,7 +2,6 @@ package frc.robot.subsystems.swerve;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
-import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -23,13 +22,10 @@ import frc.robot.util.AdaptivePIDController;
 public class SwerveModule {
     private final TalonFX drivingMotor;
     private final CANSparkMax turningMotor;
-
     private final AnalogEncoder absoluteTurningEncoder;
     private final RelativeEncoder integratedTurningEncoder;
-
     private final SparkPIDController turningPIDController;
     private final AdaptivePIDController drivingPIDController;
-
     private final TalonFXConfigurator drivingConfigurator;
     private TalonFXConfiguration drivingConfigs;
 
@@ -40,17 +36,15 @@ public class SwerveModule {
      * Constructs an MK4i swerve module and configures the driving and turning motor, encoder, and PID controller.
      */
     public SwerveModule(int drivingCANId, int turningCANId, int encoderPort, double chassisAngularOffset) {
-        drivingMotor = new TalonFX(drivingCANId);
-        turningMotor = new CANSparkMax(turningCANId, MotorType.kBrushless);
-        absoluteTurningEncoder = new AnalogEncoder(encoderPort);
-
-        drivingConfigurator = drivingMotor.getConfigurator();
-        
-        // Creates a PID controller and the built-in encoder.
-        integratedTurningEncoder = turningMotor.getEncoder();
-        turningPIDController = turningMotor.getPIDController();
-        drivingPIDController = new AdaptivePIDController(1.0, 0.2, 0.5, 0.99);
-        
+        this.drivingMotor = new TalonFX(drivingCANId);
+        this.turningMotor = new CANSparkMax(turningCANId, MotorType.kBrushless);
+        this.absoluteTurningEncoder = new AnalogEncoder(encoderPort);
+        this.drivingConfigurator = drivingMotor.getConfigurator();
+        this.integratedTurningEncoder = turningMotor.getEncoder();
+        this.turningPIDController = turningMotor.getPIDController();
+        this.drivingPIDController = new AdaptivePIDController(1.0, 0.2, 0.5, 0.99);
+        this.drivingConfigs = new TalonFXConfiguration();
+        this.chassisAngularOffset = chassisAngularOffset;
 
         configTurningEncoder();
         configTurningMotor();
@@ -69,7 +63,7 @@ public class SwerveModule {
     private void configTurningMotor() {
         turningMotor.restoreFactoryDefaults();
         turningMotor.setSmartCurrentLimit(SwerveConstants.TURNING_CURRENT_LIMIT);
-        turningMotor.setInverted(true); // unsure if this should be inverted or not.
+        turningMotor.setInverted(true);
         turningMotor.setIdleMode(IdleMode.kBrake);
 
         turningPIDController.setPositionPIDWrappingEnabled(true);
@@ -106,29 +100,20 @@ public class SwerveModule {
     }
 
     public SwerveModuleState getState() {
-        // Apply chassis angular offset to the encoder position to get the position
-        // relative to the chassis.
-        return new SwerveModuleState(
-            getDistance(),
-            getAngle()
-        );
+        return new SwerveModuleState(getDistance(), getAngle());
     }
 
     public void setState(SwerveModuleState desiredState) {
         SwerveModuleState correctedDesiredState = new SwerveModuleState();
         correctedDesiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
-
-        // Its possible we never update chassisAngul
         correctedDesiredState.angle = desiredState.angle.plus(Rotation2d.fromRadians(chassisAngularOffset));
 
-        // Optimize the reference state to avoid spinning further than 90 degrees.
         SwerveModuleState optimizedDesiredState = SwerveModuleState.optimize(
             correctedDesiredState,
             new Rotation2d(integratedTurningEncoder.getPosition())
         );
 
         drivingPIDController.setSetpoint(optimizedDesiredState.speedMetersPerSecond / SwerveConstants.DRIVE_ENCODER_POSITION_FACTOR);
-
         drivingMotor.setControl(new VoltageOut(drivingPIDController.calculate(drivingMotor.get())));
         turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), ControlType.kPosition);
     }
