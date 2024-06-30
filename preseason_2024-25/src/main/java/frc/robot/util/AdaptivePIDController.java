@@ -9,6 +9,18 @@ public class AdaptivePIDController extends PIDController {
     private double[] x; // Input vector [error, integral, derivative]
     private double[] y; // Output vector [output]
 
+    /**
+     * Allocates a PIDController with the given constants for kp, ki, and kd and a default period of
+     * 0.02 seconds.
+     *
+     * @param kp The proportional coefficient.
+     * @param ki The integral coefficient.
+     * @param kd The derivative coefficient.
+     * @param lambda The forgetting factor.
+     * @throws IllegalArgumentException if kp &lt; 0
+     * @throws IllegalArgumentException if ki &lt; 0
+     * @throws IllegalArgumentException if kd &lt; 0
+     */
     public AdaptivePIDController(double kp, double ki, double kd, double lambda) {
         super(kp, ki, kd);
         this.lambda = lambda;
@@ -19,6 +31,12 @@ public class AdaptivePIDController extends PIDController {
     }
 
     @Override
+    /**
+     * Returns the next output of the PID controller and updates PID values.
+     * 
+     * @param currentValue The current measurement of the process variable.
+     * @return The next controller output.
+     */
     public double calculate(double currentValue) {
         // Calculate output using current parameters.
         y[0] = super.calculate(currentValue);
