@@ -71,7 +71,7 @@ public class SwerveModule {
         turningPIDController.setPositionPIDWrappingMaxInput(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
 
         integratedTurningEncoder.setPositionConversionFactor(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
-        integratedTurningEncoder.setVelocityConversionFactor(SwerveConstants.TURNING_VELOCITY_CONVERSION);
+        integratedTurningEncoder.setVelocityConversionFactor(SwerveConstants.TURNING_ENCODER_VELOCITY_FACTOR);
         resetToAbsolute();
 
         turningMotor.burnFlash();
@@ -79,7 +79,7 @@ public class SwerveModule {
 
     private void configDriveMotor() {
         drivingConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
-        drivingConfigs.CurrentLimits.StatorCurrentLimit = 40;
+        drivingConfigs.CurrentLimits.StatorCurrentLimit = 0;
         drivingConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         drivingConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         drivingConfigurator.apply(drivingConfigs);

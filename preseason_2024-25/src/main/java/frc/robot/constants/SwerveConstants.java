@@ -30,7 +30,7 @@ public class SwerveConstants {
 
     // In radians / radians per second.
     public static final double TURNING_ENCODER_POSITION_FACTOR = 2 * Math.PI;
-    public static final double TURNING_VELOCITY_CONVERSION = 0;
+    public static final double TURNING_ENCODER_VELOCITY_FACTOR = 2 * Math.PI / 60;
 
     public static final double DRIVING_CURRENT_LIMIT = 60;
 
