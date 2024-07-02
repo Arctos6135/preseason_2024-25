@@ -9,6 +9,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogEncoder;
 import frc.robot.constants.SwerveConstants;
@@ -93,6 +94,10 @@ public class SwerveModule {
 
     public Rotation2d getAngle() {
         return Rotation2d.fromRadians(turningEncoder.getPosition() % (2 * Math.PI));
+    }
+
+    public SwerveModulePosition getModulePosition() {
+        return new SwerveModulePosition(getDistance(), getAngle());
     }
 
     public SwerveModuleState getState() {
