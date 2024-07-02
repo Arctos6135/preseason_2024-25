@@ -71,7 +71,7 @@ public class SwerveModule {
         turningPIDController.setPositionPIDWrappingMaxInput(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
 
         integratedTurningEncoder.setPositionConversionFactor(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
-        integratedTurningEncoder.setVelocityConversionFactor(SwerveConstants.TURNING_VELOCITY_CONVERSION);
+        integratedTurningEncoder.setVelocityConversionFactor(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
         resetToAbsolute();
 
         turningMotor.burnFlash();
