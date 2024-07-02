@@ -1,11 +1,6 @@
 package frc.robot.subsystems.swerve;
 
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.VoltageOut;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -17,17 +12,15 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.AnalogEncoder;
 import frc.robot.constants.SwerveConstants;
-import frc.robot.util.AdaptivePIDController;
 
 public class SwerveModule {
-    private final TalonFX drivingMotor;
+    private final CANSparkMax drivingMotor;
     private final CANSparkMax turningMotor;
     private final AnalogEncoder absoluteTurningEncoder;
-    private final RelativeEncoder integratedTurningEncoder;
+    private final RelativeEncoder drivingEncoder;
+    private final RelativeEncoder turningEncoder;
+    private final SparkPIDController drivingPIDController;
     private final SparkPIDController turningPIDController;
-    private final AdaptivePIDController drivingPIDController;
-    private final TalonFXConfigurator drivingConfigurator;
-    private TalonFXConfiguration drivingConfigs;
 
     private double chassisAngularOffset = 0;
     private SwerveModuleState desiredState = new SwerveModuleState(0.0, new Rotation2d());
@@ -36,14 +29,13 @@ public class SwerveModule {
      * Constructs an MK4i swerve module and configures the driving and turning motor, encoder, and PID controller.
      */
     public SwerveModule(int drivingCANId, int turningCANId, int encoderPort, double chassisAngularOffset) {
-        this.drivingMotor = new TalonFX(drivingCANId);
+        this.drivingMotor = new CANSparkMax(drivingCANId, MotorType.kBrushless);
         this.turningMotor = new CANSparkMax(turningCANId, MotorType.kBrushless);
         this.absoluteTurningEncoder = new AnalogEncoder(encoderPort);
-        this.drivingConfigurator = drivingMotor.getConfigurator();
-        this.integratedTurningEncoder = turningMotor.getEncoder();
+        this.drivingEncoder = drivingMotor.getEncoder();
+        this.turningEncoder = turningMotor.getEncoder();
+        this.drivingPIDController = drivingMotor.getPIDController();
         this.turningPIDController = turningMotor.getPIDController();
-        this.drivingPIDController = new AdaptivePIDController(1.0, 0.2, 0.5, 0.99);
-        this.drivingConfigs = new TalonFXConfiguration();
         this.chassisAngularOffset = chassisAngularOffset;
 
         configTurningEncoder();
@@ -53,7 +45,7 @@ public class SwerveModule {
 
     private void resetToAbsolute() {
         double absolutePosition = Math.abs(absoluteTurningEncoder.get() - absoluteTurningEncoder.getPositionOffset());
-        integratedTurningEncoder.setPosition(absolutePosition);
+        turningEncoder.setPosition(absolutePosition);
     }
 
     private void configTurningEncoder() {
@@ -70,33 +62,37 @@ public class SwerveModule {
         turningPIDController.setPositionPIDWrappingMinInput(0);
         turningPIDController.setPositionPIDWrappingMaxInput(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
 
-        integratedTurningEncoder.setPositionConversionFactor(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
-        integratedTurningEncoder.setVelocityConversionFactor(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
+        turningEncoder.setPositionConversionFactor(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
+        turningEncoder.setVelocityConversionFactor(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
         resetToAbsolute();
 
         turningMotor.burnFlash();
     }
 
     private void configDriveMotor() {
-        drivingConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
-        drivingConfigs.CurrentLimits.StatorCurrentLimit = 40;
-        drivingConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-        drivingConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        drivingConfigurator.apply(drivingConfigs);
+        drivingMotor.restoreFactoryDefaults();
+        drivingMotor.setSmartCurrentLimit(SwerveConstants.DRIVING_CURRENT_LIMIT);
+        drivingMotor.setInverted(false);
+        drivingMotor.setIdleMode(IdleMode.kBrake);
 
-        desiredState.angle = new Rotation2d(absoluteTurningEncoder.getDistance());
-        drivingMotor.setPosition(0);
+        drivingPIDController.setPositionPIDWrappingEnabled(false);
+
+        drivingEncoder.setPositionConversionFactor(SwerveConstants.DRIVING_ENCODER_POSITION_FACTOR);
+        drivingEncoder.setVelocityConversionFactor(SwerveConstants.DRIVING_ENCODER_POSITION_FACTOR);
+        drivingEncoder.setPosition(0.0);
+
+        drivingMotor.burnFlash();
     }
 
     /**
      * Gets the distance in meters.
      */
     public double getDistance() {
-        return drivingMotor.getPosition().getValueAsDouble() * SwerveConstants.DRIVING_ENCODER_POSITION_FACTOR;
+        return drivingEncoder.getPosition();
     }
 
     public Rotation2d getAngle() {
-        return Rotation2d.fromRadians(absoluteTurningEncoder.getDistance());
+        return Rotation2d.fromRadians(turningEncoder.getPosition() % (2 * Math.PI));
     }
 
     public SwerveModuleState getState() {
@@ -110,11 +106,10 @@ public class SwerveModule {
 
         SwerveModuleState optimizedDesiredState = SwerveModuleState.optimize(
             correctedDesiredState,
-            new Rotation2d(integratedTurningEncoder.getPosition())
+            new Rotation2d(turningEncoder.getPosition())
         );
 
-        drivingPIDController.setSetpoint(optimizedDesiredState.speedMetersPerSecond / SwerveConstants.DRIVE_ENCODER_POSITION_FACTOR);
-        drivingMotor.setControl(new VoltageOut(drivingPIDController.calculate(drivingMotor.get())));
+        drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, ControlType.kVelocity);
         turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), ControlType.kPosition);
     }
 }
