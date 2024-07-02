@@ -24,18 +24,18 @@ public class SwerveConstants {
     // This of course assumes we manage to actually get the COG in the middle
     public static final double DISTANCE_TO_CENTER = 12.5;
 
-    public static final double DRIVE_WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4.0);
+    public static final double DRIVE_WHEEL_CIRCUMFERENCE = Units.inchesToMeters(Math.PI * 4.0);
 
     public static final int TURNING_CURRENT_LIMIT = 40;
+    public static final int DRIVING_CURRENT_LIMIT = 60;
 
     // In radians / radians per second.
     public static final double TURNING_ENCODER_POSITION_FACTOR = 2 * Math.PI;
-    public static final double TURNING_ENCODER_VELOCITY_FACTOR = 2 * Math.PI / 60;
-
-    public static final double DRIVING_CURRENT_LIMIT = 60;
+    public static final double TURNING_ENCODER_VELOCITY_FACTOR = 2 * Math.PI / 60.0;
 
     // In meters.
-    public static final double DRIVING_ENCODER_POSITION_FACTOR = DRIVE_WHEEL_CIRCUMFERENCE * 2 * Math.PI;
+    public static final double DRIVING_ENCODER_POSITION_FACTOR = DRIVE_WHEEL_CIRCUMFERENCE;
+    public static final double DRIVING_ENCODER_VELOCITY_FACTOR = DRIVING_ENCODER_POSITION_FACTOR / 60.0;
 
     public static final double MAX_SPEED = 4;
     public static final double MAX_ANGULAR_VELOCITY = 3;

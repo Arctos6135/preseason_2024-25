@@ -1,16 +1,16 @@
 package frc.robot.subsystems.swerve;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.reduxrobotics.canand.CANBus;
 
-import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.CANBusConstants;
-import frc.robot.constants.OtherConstants;
 import frc.robot.constants.SwerveConstants;
 
 
@@ -19,6 +19,8 @@ public class Swerve extends SubsystemBase {
     SwerveDriveKinematics kinematics;
     SwerveDriveOdometry odometry;
     private final AHRS gyro;
+
+    SwerveModulePosition[] modulePositions;
 
     private final SwerveModule frontLeftModule;
 
@@ -60,6 +62,13 @@ public class Swerve extends SubsystemBase {
             SwerveConstants.BACK_RIGHT_ANGULAR_OFFSET
         );
         
+        // Create a swerve module positions object.
+        modulePositions = new SwerveModulePosition[] {
+            frontLeftModule.getModulePosition(),
+            frontRightModule.getModulePosition(),
+            backLeftModule.getModulePosition(),
+            backRightModule.getModulePosition()
+        };
 
         // Create SwerveDriveKinematics object
         // Given units are the x and y distances of the wheel to the center of robot.
@@ -69,6 +78,8 @@ public class Swerve extends SubsystemBase {
             new Translation2d(-SwerveConstants.DISTANCE_TO_CENTER, SwerveConstants.DISTANCE_TO_CENTER), // Back Left
             new Translation2d(-SwerveConstants.DISTANCE_TO_CENTER, -SwerveConstants.DISTANCE_TO_CENTER) // Back Right
         );
+
+        odometry = new SwerveDriveOdometry(kinematics, new Rotation2d(gyro.getAngle()), modulePositions);
     }
 
     public void drive(double x, double y, double rotation){
@@ -93,5 +104,28 @@ public class Swerve extends SubsystemBase {
         frontRightModule.setState(swerveModuleStates[1]);
         backLeftModule.setState(swerveModuleStates[2]);
         backRightModule.setState(swerveModuleStates[3]);
+    }
+
+    @Override
+    public void periodic() {
+        // Updates the odometry.
+        odometry.update(
+            Rotation2d.fromDegrees(gyro.getAngle()),
+            new SwerveModulePosition[] {
+                frontLeftModule.getModulePosition(),
+                frontRightModule.getModulePosition(),
+                backLeftModule.getModulePosition(),
+                backRightModule.getModulePosition()
+            }
+        );
+    }
+
+    /**
+     * Returns the current pose of the robot.
+     * 
+     * @return The pose.
+     */
+    public Pose2d getPose() {
+        return odometry.getPoseMeters();
     }
 }
