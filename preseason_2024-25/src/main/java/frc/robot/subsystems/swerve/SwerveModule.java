@@ -79,7 +79,7 @@ public class SwerveModule {
         drivingPIDController.setPositionPIDWrappingEnabled(false);
 
         drivingEncoder.setPositionConversionFactor(SwerveConstants.DRIVING_ENCODER_POSITION_FACTOR);
-        drivingEncoder.setVelocityConversionFactor(SwerveConstants.DRIVING_ENCODER_POSITION_FACTOR);
+        drivingEncoder.setVelocityConversionFactor(SwerveConstants.DRIVING_ENCODER_VELOCITY_FACTOR);
         drivingEncoder.setPosition(0.0);
 
         drivingMotor.burnFlash();
