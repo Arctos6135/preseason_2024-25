@@ -2,12 +2,9 @@ package frc.robot.commands.characterization;
 
 import org.littletonrobotics.junction.Logger;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-
-import frc.robot.subsystems.swerve.Swerve;
 
 public class TurningVelocityRoutine extends Command {
     private final LoggedMechanismGroup mechanism;
