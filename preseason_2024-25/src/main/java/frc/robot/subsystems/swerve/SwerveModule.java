@@ -41,13 +41,13 @@ public class SwerveModule {
         this.turningPIDController = turningMotor.getPIDController();
         this.chassisAngularOffset = SwerveConstants.ANGULAR_OFFSETS.get(moduleIdentifier);
 
-        turningPIDController.setP(SwerveConstants.TURNING_PID.get(moduleIdentifier).get(0));
-        turningPIDController.setI(SwerveConstants.TURNING_PID.get(moduleIdentifier).get(1));
-        turningPIDController.setD(SwerveConstants.TURNING_PID.get(moduleIdentifier).get(2));
+        turningPIDController.setP(SwerveConstants.TURNING_PID[moduleIdentifier][0]);
+        turningPIDController.setI(SwerveConstants.TURNING_PID[moduleIdentifier][1]);
+        turningPIDController.setD(SwerveConstants.TURNING_PID[moduleIdentifier][2]);
 
-        drivingPIDController.setP(SwerveConstants.DRIVING_PID.get(moduleIdentifier).get(0));
-        drivingPIDController.setI(SwerveConstants.DRIVING_PID.get(moduleIdentifier).get(1));
-        drivingPIDController.setD(SwerveConstants.DRIVING_PID.get(moduleIdentifier).get(2));
+        drivingPIDController.setP(SwerveConstants.DRIVING_PID[moduleIdentifier][0]);
+        drivingPIDController.setI(SwerveConstants.DRIVING_PID[moduleIdentifier][1]);
+        drivingPIDController.setD(SwerveConstants.DRIVING_PID[moduleIdentifier][2]);
 
         configTurningEncoder();
         configTurningMotor();
