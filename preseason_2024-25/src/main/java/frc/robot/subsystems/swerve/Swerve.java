@@ -36,33 +36,10 @@ public class Swerve extends SubsystemBase {
     public Swerve() {
         gyro = new AHRS();
 
-        frontLeftModule  = new SwerveModule(
-            CANBusConstants.FRONT_LEFT_DRIVE,
-            CANBusConstants.FRONT_LEFT_TURN,
-            SwerveConstants.FRONT_LEFT_ENCODER_PORT,
-            SwerveConstants.FRONT_LEFT_ANGULAR_OFFSET
-        );
-
-        frontRightModule  = new SwerveModule(
-            CANBusConstants.FRONT_RIGHT_DRIVE, 
-            CANBusConstants.FRONT_RIGHT_TURN,
-            SwerveConstants.FRONT_RIGHT_ENCODER_PORT,
-            SwerveConstants.FRONT_RIGHT_ANGULAR_OFFSET
-        );
-
-        backLeftModule  = new SwerveModule(
-            CANBusConstants.BACK_LEFT_DRIVE, 
-            CANBusConstants.BACK_LEFT_TURN, 
-            SwerveConstants.BACK_LEFT_ENCODER_PORT,
-            SwerveConstants.BACK_LEFT_ANGULAR_OFFSET
-        );
-
-        backRightModule  = new SwerveModule(
-            CANBusConstants.BACK_RIGHT_DRIVE, 
-            CANBusConstants.BACK_RIGHT_TURN,
-            SwerveConstants.BACK_RIGHT_ENCODER_PORT,
-            SwerveConstants.BACK_RIGHT_ANGULAR_OFFSET
-        );
+        frontLeftModule  = new SwerveModule(0);
+        frontRightModule  = new SwerveModule(1);
+        backLeftModule  = new SwerveModule(2);
+        backRightModule  = new SwerveModule(3);
         
         // Create a swerve module positions object.
         modulePositions = new SwerveModulePosition[] {
