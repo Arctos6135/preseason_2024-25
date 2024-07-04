@@ -1,5 +1,7 @@
 package frc.robot.subsystems.swerve;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -118,6 +120,8 @@ public class Swerve extends SubsystemBase {
                 backRightModule.getModulePosition()
             }
         );
+
+        Logger.recordOutput("pose", getPose());
     }
 
     /**
