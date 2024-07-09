@@ -39,6 +39,12 @@ public class TurningVelocityRoutine extends Command {
     }
 
     @Override
+    public boolean isFinished() {
+        // TODO: I assume we want to stop this once it goes the max distance
+        return false;
+    }
+
+    @Override
     public void end(boolean interupted) {
         Logger.recordOutput("Running", false);
 

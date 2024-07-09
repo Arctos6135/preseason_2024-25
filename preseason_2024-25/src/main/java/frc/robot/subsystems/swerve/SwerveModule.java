@@ -1,14 +1,11 @@
 package frc.robot.subsystems.swerve;
 
-import com.ctre.phoenix6.CANBus;
-import com.ctre.phoenix6.controls.VoltageOut;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -26,7 +23,6 @@ public class SwerveModule {
     private final SparkPIDController turningPIDController;
 
     private double chassisAngularOffset = 0;
-    private SwerveModuleState desiredState = new SwerveModuleState(0.0, new Rotation2d());
 
     /**
      * Constructs an MK4i swerve module and configures the driving and turning motor, encoder, and PID controller.

@@ -1,7 +1,6 @@
 package frc.robot.constants;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import edu.wpi.first.math.numbers.N1;
