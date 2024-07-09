@@ -21,15 +21,11 @@ public class Swerve extends SubsystemBase {
     SwerveDriveOdometry odometry;
     private final AHRS gyro;
 
-    SwerveModulePosition[] modulePositions;
-
     private final SwerveModule frontLeftModule;
-
     private final SwerveModule frontRightModule;
-
     private final SwerveModule backLeftModule;
-
     private final SwerveModule backRightModule;
+    private SwerveModulePosition[] modulePositions;
 
     // Constructor
     public Swerve() {
@@ -88,7 +84,7 @@ public class Swerve extends SubsystemBase {
     public void periodic() {
         // Updates the odometry.
         odometry.update(
-            Rotation2d.fromDegrees(0),
+            gyro.getRotation2d(),
             new SwerveModulePosition[] {
                 frontLeftModule.getModulePosition(),
                 frontRightModule.getModulePosition(),

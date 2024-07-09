@@ -90,6 +90,7 @@ public class SwerveModule {
      */
     private void resetToAbsolute() {
         double absolutePosition = Math.abs(absoluteTurningEncoder.get() - absoluteTurningEncoder.getPositionOffset());
+        turningEncoder.setPosition(absolutePosition);
     }
 
     private void configTurningMotor() {
