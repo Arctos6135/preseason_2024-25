@@ -58,7 +58,7 @@ public class Swerve extends SubsystemBase {
             new Translation2d(-SwerveConstants.DISTANCE_TO_CENTER, -SwerveConstants.DISTANCE_TO_CENTER) // Back Right
         );
 
-        odometry = new SwerveDriveOdometry(kinematics, new Rotation2d(gyro.getAngle()), modulePositions);
+        odometry = new SwerveDriveOdometry(kinematics, new Rotation2d(0), modulePositions);
     }
 
     public void drive(double x, double y, double rotation){
@@ -83,13 +83,13 @@ public class Swerve extends SubsystemBase {
         frontRightModule.setState(swerveModuleStates[1]);
         backLeftModule.setState(swerveModuleStates[2]);
         backRightModule.setState(swerveModuleStates[3]);
-    }
+        }
 
     @Override
     public void periodic() {
         // Updates the odometry.
         odometry.update(
-            Rotation2d.fromDegrees(gyro.getAngle()),
+            Rotation2d.fromDegrees(0),
             new SwerveModulePosition[] {
                 frontLeftModule.getModulePosition(),
                 frontRightModule.getModulePosition(),
