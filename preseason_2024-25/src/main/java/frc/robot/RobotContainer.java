@@ -10,8 +10,6 @@ import frc.robot.subsystems.swerve.Swerve;
 
 import java.util.function.DoubleSupplier;
 
-import javax.print.attribute.standard.MediaSize.Other;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;

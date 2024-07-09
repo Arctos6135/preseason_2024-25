@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 public class FeedforwardLog {
     private ArrayList<Double> voltages = new ArrayList<>();
     private ArrayList<Double> velocities = new ArrayList<>();
-    private ArrayList<Double> accelerations = new ArrayList();
+    private ArrayList<Double> accelerations = new ArrayList<>();
 
     public void accept(double voltage, double velocity, double acceleration) {
         voltages.add(voltage);
