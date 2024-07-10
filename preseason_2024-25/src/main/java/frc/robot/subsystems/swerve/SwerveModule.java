@@ -16,7 +16,7 @@ import frc.robot.constants.CANBusConstants;
 public class SwerveModule {
     private final CANSparkMax drivingMotor;
     private final CANSparkMax turningMotor;
-    private final AnalogEncoder absoluteTurningEncoder;
+    // private final AnalogEncoder absoluteTurningEncoder;
     private final RelativeEncoder drivingEncoder;
     private final RelativeEncoder turningEncoder;
     private final SparkPIDController drivingPIDController;
@@ -28,12 +28,13 @@ public class SwerveModule {
      * Constructs an MK4i swerve module and configures the driving and turning motor, encoder, and PID controller.
      */
     public SwerveModule(int moduleIdentifier) {
+
         // Sets up the motors.
         this.drivingMotor = new CANSparkMax(CANBusConstants.DRIVE_IDS.get(moduleIdentifier), MotorType.kBrushless);
         this.turningMotor = new CANSparkMax(CANBusConstants.TURN_IDS.get(moduleIdentifier), MotorType.kBrushless);
 
         // Creates the analog (absolute) encoder.
-        absoluteTurningEncoder = new AnalogEncoder(SwerveConstants.ENCODER_PORTS.get(moduleIdentifier));
+        // absoluteTurningEncoder = new AnalogEncoder(SwerveConstants.ENCODER_PORTS.get(moduleIdentifier));
 
         // Configures the motors to the proper settings.
         configDriveMotor();
@@ -68,7 +69,7 @@ public class SwerveModule {
         turningEncoder.setVelocityConversionFactor(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
 
         // Sets a conversion factor on the analog controller.
-        absoluteTurningEncoder.setDistancePerRotation(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
+        // absoluteTurningEncoder.setDistancePerRotation(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
 
         // Zeroes the position.
         drivingEncoder.setPosition(0.0);
@@ -89,8 +90,8 @@ public class SwerveModule {
      * Resets the turning encoders to the angle given by the analog encoders.
      */
     private void resetToAbsolute() {
-        double absolutePosition = Math.abs(absoluteTurningEncoder.get() - absoluteTurningEncoder.getPositionOffset());
-        turningEncoder.setPosition(absolutePosition);
+        // double absolutePosition = Math.abs(absoluteTurningEncoder.get() - absoluteTurningEncoder.getPositionOffset());
+        turningEncoder.setPosition(0); // turningEncoder.setPosition(absolutePosition);
     }
 
     private void configTurningMotor() {
@@ -116,10 +117,18 @@ public class SwerveModule {
     }
 
     /**
-     * Gets the distance in meters.
+     * Gets the position in meters.
      */
-    public double getDistance() {
+    public double getPosition() {
         return drivingEncoder.getPosition();
+    }
+
+    /**
+     * Gets the velocity of the driving motor in meters per second.
+     * @return driving velocity
+     */
+    public double getDrivingVelocity() {
+        return drivingEncoder.getVelocity();
     }
 
     /**
@@ -131,11 +140,19 @@ public class SwerveModule {
     }
 
     /**
+     * Gets the velocity of the turning motor in rad/s.
+     * @return angular velocity
+     */
+    public double getTurningVelocity() {
+        return turningEncoder.getVelocity();
+    }
+
+    /**
      * Gets the position of the module.
      * @return module position
      */
     public SwerveModulePosition getModulePosition() {
-        return new SwerveModulePosition(getDistance(), getAngle());
+        return new SwerveModulePosition(getPosition(), getAngle());
     }
 
     /**
@@ -143,7 +160,16 @@ public class SwerveModule {
      * @return module state
      */
     public SwerveModuleState getState() {
-        return new SwerveModuleState(getDistance(), getAngle());
+        return new SwerveModuleState(getPosition(), getAngle());
+    }
+
+
+    public double getDrivingVoltage() {
+        return drivingMotor.getBusVoltage();
+    }
+
+    public double getTurningVoltage() {
+        return turningMotor.getBusVoltage();
     }
 
     /**
@@ -164,5 +190,7 @@ public class SwerveModule {
         // Sets the setpoint for the PID controllers to follow.
         drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, ControlType.kVelocity); // m/s
         turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), ControlType.kPosition); // radians
+        
+
     }
 }

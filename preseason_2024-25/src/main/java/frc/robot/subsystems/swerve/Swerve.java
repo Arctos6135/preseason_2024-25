@@ -16,34 +16,21 @@ import frc.robot.constants.SwerveConstants;
 
 
 public class Swerve extends SubsystemBase {
+    private final SwerveInputsAutoLogged inputs = new SwerveInputsAutoLogged();
+
     // Attributes
     SwerveDriveKinematics kinematics;
     SwerveDriveOdometry odometry;
-    private final AHRS gyro;
 
-    private final SwerveModule frontLeftModule;
-    private final SwerveModule frontRightModule;
-    private final SwerveModule backLeftModule;
-    private final SwerveModule backRightModule;
     private SwerveModulePosition[] modulePositions;
+    private SwerveIO io;
 
     // Constructor
-    public Swerve() {
-        gyro = new AHRS();
-
-        frontLeftModule  = new SwerveModule(0);
-        frontRightModule  = new SwerveModule(1);
-        backLeftModule  = new SwerveModule(2);
-        backRightModule  = new SwerveModule(3);
+    public Swerve(SwerveIO io) {
+        this.io = io;
         
         // Create a swerve module positions object.
-        modulePositions = new SwerveModulePosition[] {
-            frontLeftModule.getModulePosition(),
-            frontRightModule.getModulePosition(),
-            backLeftModule.getModulePosition(),
-            backRightModule.getModulePosition()
-        };
-
+        modulePositions = io.getModulePositions();
         // Create SwerveDriveKinematics object
         // Given units are the x and y distances of the wheel to the center of robot.
         kinematics = new SwerveDriveKinematics(
@@ -63,7 +50,7 @@ public class Swerve extends SubsystemBase {
         double ySpeed = y * SwerveConstants.MAX_SPEED;
         double rSpeed = rotation * SwerveConstants.MAX_ANGULAR_VELOCITY;
 
-        Rotation2d gyroRotation = gyro.getRotation2d();
+        Rotation2d gyroRotation = io.getAngle();
 
         var swerveModuleStates = kinematics.toSwerveModuleStates(
             ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -74,26 +61,19 @@ public class Swerve extends SubsystemBase {
             )
         );
 
-        frontLeftModule.setState(swerveModuleStates[0]);
-        frontRightModule.setState(swerveModuleStates[1]);
-        backLeftModule.setState(swerveModuleStates[2]);
-        backRightModule.setState(swerveModuleStates[3]);
+        io.setStates(swerveModuleStates);
         }
 
     @Override
     public void periodic() {
+        io.updateInputs(inputs);
+        Logger.processInputs(getName(), inputs);
+
         // Updates the odometry.
         odometry.update(
-            gyro.getRotation2d(),
-            new SwerveModulePosition[] {
-                frontLeftModule.getModulePosition(),
-                frontRightModule.getModulePosition(),
-                backLeftModule.getModulePosition(),
-                backRightModule.getModulePosition()
-            }
+            io.getAngle(),
+            io.getModulePositions()
         );
-
-        Logger.recordOutput("pose", getPose());
     }
 
     /**

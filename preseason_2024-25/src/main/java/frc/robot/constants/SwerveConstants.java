@@ -39,7 +39,7 @@ public class SwerveConstants {
     }};
 
     // This of course assumes we manage to actually get the COG in the middle
-    public static final double DISTANCE_TO_CENTER = 12.5;
+    public static final double DISTANCE_TO_CENTER = Units.inchesToMeters(12.5);
 
     public static final double DRIVE_WHEEL_CIRCUMFERENCE = Units.inchesToMeters(Math.PI * 4.0);
 
@@ -83,10 +83,10 @@ public class SwerveConstants {
         add(BACK_RIGHT_DRIVING_PLANT);
     }};
 
-    public static final double[] FRONT_LEFT_TURNING_PID = {1.0, 0.2, 0.2};
-    public static final double[] FRONT_RIGHT_TURNING_PID = {1.0, 0.2, 0.2};
-    public static final double[] BACK_RIGHT_TURNING_PID = {1.0, 0.2, 0.2};
-    public static final double[] BACK_LEFT_TURNING_PID = {1.0, 0.2, 0.2};
+    public static final double[] FRONT_LEFT_TURNING_PID = {0.02, 0.02, 0.02};
+    public static final double[] FRONT_RIGHT_TURNING_PID = {0.02, 0.02, 0.02};
+    public static final double[] BACK_RIGHT_TURNING_PID = {0.02, 0.02, 0.02};
+    public static final double[] BACK_LEFT_TURNING_PID = {0.02, 0.02, 0.02};
     public static final double[][] TURNING_PID = {
         FRONT_LEFT_TURNING_PID,
         FRONT_RIGHT_TURNING_PID,
@@ -94,10 +94,10 @@ public class SwerveConstants {
         BACK_RIGHT_TURNING_PID
     };
 
-    public static final double[] FRONT_LEFT_DRIVING_PID = {1.0, 0.2, 0.2};
-    public static final double[] FRONT_RIGHT_DRIVING_PID = {1.0, 0.2, 0.2};
-    public static final double[] BACK_RIGHT_DRIVING_PID = {1.0, 0.2, 0.2};
-    public static final double[] BACK_LEFT_DRIVING_PID = {1.0, 0.2, 0.2};
+    public static final double[] FRONT_LEFT_DRIVING_PID = {0.02, 0.02, 0.02};
+    public static final double[] FRONT_RIGHT_DRIVING_PID = {0.02, 0.02, 0.02};
+    public static final double[] BACK_RIGHT_DRIVING_PID = {0.02, 0.02, 0.02};
+    public static final double[] BACK_LEFT_DRIVING_PID = {0.02, 0.02, 0.02};
     public static final double[][] DRIVING_PID = {
         FRONT_LEFT_DRIVING_PID,
         FRONT_RIGHT_DRIVING_PID,

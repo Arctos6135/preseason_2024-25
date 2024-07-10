@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.commands.TeleopDrive;
 import frc.robot.constants.OtherConstants;
 import frc.robot.subsystems.swerve.Swerve;
+import frc.robot.subsystems.swerve.SwerveIOSparkMax;
 
 import java.util.function.DoubleSupplier;
 
@@ -39,7 +40,7 @@ public class RobotContainer {
       driverController.getRawAxis(XboxController.Axis.kRightX.value),
       OtherConstants.DRIVE_DEADBAND);
 
-  private final Swerve drivetrain = new Swerve();
+  private final Swerve drivetrain = new Swerve(new SwerveIOSparkMax());
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
