@@ -56,11 +56,12 @@ public class SwerveModule {
 
         // Enables PID wrapping to take more efficient routes when turning.
         turningPIDController.setPositionPIDWrappingEnabled(true);
-        turningPIDController.setPositionPIDWrappingMinInput(0);
-        turningPIDController.setPositionPIDWrappingMaxInput(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
+        turningPIDController.setPositionPIDWrappingMinInput(-Math.PI/2);
+        turningPIDController.setPositionPIDWrappingMaxInput(Math.PI/2);
 
         // Disabled for driving because it doesn't wrap around.
         drivingPIDController.setPositionPIDWrappingEnabled(false);
+        drivingPIDController.setOutputRange(-1, 1);
 
         // Sets conversion factors so the encoder tracks in meters instead of rotations.
         drivingEncoder.setPositionConversionFactor(SwerveConstants.DRIVING_ENCODER_POSITION_FACTOR);
@@ -191,6 +192,6 @@ public class SwerveModule {
         drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, ControlType.kVelocity); // m/s
         turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), ControlType.kPosition); // radians
         
-
+        System.out.println(optimizedDesiredState.speedMetersPerSecond);
     }
 }
