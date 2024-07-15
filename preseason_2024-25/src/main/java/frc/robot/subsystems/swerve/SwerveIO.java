@@ -32,6 +32,16 @@ public class SwerveIO {
         public double backLeftTurningVelocity;
         public double backRightTurningVelocity;
 
+        public double frontLeftDrivingCurrent;
+        public double frontRightDrivingCurrent;
+        public double backLeftDrivingCurrent;
+        public double backRightDrivingCurrent;
+
+        public double frontLeftTurningCurrent;
+        public double frontRightTurningCurrent;
+        public double backLeftTurningCurrent;
+        public double backRightTurningCurrent;
+
         public double frontLeftDrivingVoltage;
         public double frontRightDrivingVoltage;
         public double backLeftDrivingVoltage;
@@ -63,8 +73,12 @@ public class SwerveIO {
         return new Rotation2d(0);
     }
 
-    // Placeholder which gets ovveridden.
+    // Placeholder which gets overidden.
     public SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[3];
     }
+
+    public void setDrivingPID(double P, double I, double D) {}
+
+    public void setTurningPID(double P, double I, double D) {}
 }

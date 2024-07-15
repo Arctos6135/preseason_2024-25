@@ -42,36 +42,68 @@ public class SwerveIOSparkMax extends SwerveIO {
         inputs.frontLeftAngle = frontLeft.getAngle().getDegrees();
         inputs.frontLeftDrivingVelocity = frontLeft.getDrivingVelocity();
         inputs.frontLeftTurningVelocity = frontLeft.getTurningVelocity();
+        inputs.frontLeftDrivingCurrent = frontLeft.getDrivingCurrent();
+        inputs.frontLeftTurningCurrent = frontLeft.getTurningCurrent();
         inputs.frontLeftDrivingVoltage = frontLeft.getDrivingVoltage();
         inputs.frontLeftTurningVoltage = frontLeft.getTurningVoltage();
+        inputs.frontLeftTargetVelocity = frontLeft.velocitySetpoint;
+        inputs.frontLeftTargetAngle = frontLeft.angleSetpoint;
 
         // Front Right
         inputs.frontRightPosition = frontRight.getPosition();
         inputs.frontRightAngle = frontRight.getAngle().getDegrees();
         inputs.frontRightDrivingVelocity = frontRight.getDrivingVelocity();
         inputs.frontRightTurningVelocity = frontRight.getTurningVelocity();
+        inputs.frontRightDrivingCurrent = frontRight.getDrivingCurrent();
+        inputs.frontRightTurningCurrent = frontRight.getTurningCurrent();
         inputs.frontRightDrivingVoltage = frontRight.getDrivingVoltage();
         inputs.frontRightTurningVoltage = frontRight.getTurningVoltage();
+        inputs.frontRightTargetVelocity = frontRight.velocitySetpoint;
+        inputs.frontRightTargetAngle = frontRight.angleSetpoint;
 
         // Back Left
         inputs.backLeftPosition = backLeft.getPosition();
         inputs.backLeftAngle = backLeft.getAngle().getDegrees();
         inputs.backLeftDrivingVelocity = backLeft.getDrivingVelocity();
         inputs.backLeftTurningVelocity = backLeft.getTurningVelocity();
+        inputs.backLeftDrivingCurrent = backLeft.getDrivingCurrent();
+        inputs.backLeftTurningCurrent = backLeft.getTurningCurrent();
         inputs.backLeftDrivingVoltage = backLeft.getDrivingVoltage();
         inputs.backLeftTurningVoltage = backLeft.getTurningVoltage();
+        inputs.backLeftTargetVelocity = backLeft.velocitySetpoint;
+        inputs.backLeftTargetAngle = backLeft.angleSetpoint;
 
         // Back Right
         inputs.backRightPosition = backRight.getPosition();
         inputs.backRightAngle = backRight.getAngle().getDegrees();
         inputs.backRightDrivingVelocity = backRight.getDrivingVelocity();
         inputs.backRightTurningVelocity = backRight.getTurningVelocity();
+        inputs.backRightDrivingCurrent = backRight.getDrivingCurrent();
+        inputs.backRightTurningCurrent = backRight.getTurningCurrent();
         inputs.backRightDrivingVoltage = backRight.getDrivingVoltage();
         inputs.backRightTurningVoltage = backRight.getTurningVoltage();
+        inputs.backRightTargetVelocity = backRight.velocitySetpoint;
+        inputs.backRightTargetAngle = backRight.angleSetpoint;
     }
 
     @Override 
     public Rotation2d getAngle() {
         return Rotation2d.fromDegrees(gyro.getAngle());
+    }
+
+    @Override
+    public void setDrivingPID(double P, double I, double D) {
+        frontLeft.setDrivingPID(P, I, D);
+        frontRight.setDrivingPID(P, I, D);
+        backLeft.setDrivingPID(P, I, D);
+        backRight.setDrivingPID(P, I, D);
+    }
+
+    @Override
+    public void setTurningPID(double P, double I, double D) {
+        frontLeft.setTurningPID(P, I, D);
+        frontRight.setTurningPID(P, I, D);
+        backLeft.setTurningPID(P, I, D);
+        backRight.setTurningPID(P, I, D);
     }
 }

@@ -41,24 +41,24 @@ public class SwerveConstants {
     // This of course assumes we manage to actually get the COG in the middle
     public static final double DISTANCE_TO_CENTER = Units.inchesToMeters(12.5);
 
-    public static final double DRIVE_WHEEL_CIRCUMFERENCE = Units.inchesToMeters(Math.PI * 4.0);
+    public static final double DRIVE_WHEEL_CIRCUMFERENCE = Units.inchesToMeters(4.0 * Math.PI);
 
     public static final int TURNING_CURRENT_LIMIT = 40;
     public static final int DRIVING_CURRENT_LIMIT = 60;
 
+    public static final double DRIVING_GEARING_RATIO = 6.12;
+    public static final double TURNING_GEARING_RATIO = 150.0 / 7.0;
+
     // In radians / radians per second.
-    public static final double TURNING_ENCODER_POSITION_FACTOR = 2 * Math.PI;
-    public static final double TURNING_ENCODER_VELOCITY_FACTOR = 2 * Math.PI / 60.0;
+    public static final double TURNING_ENCODER_POSITION_FACTOR = (2 * Math.PI) / TURNING_GEARING_RATIO;
+    public static final double TURNING_ENCODER_VELOCITY_FACTOR = TURNING_ENCODER_POSITION_FACTOR / 60.0;
 
     // In meters.
-    public static final double DRIVING_ENCODER_POSITION_FACTOR = DRIVE_WHEEL_CIRCUMFERENCE;
-    public static final double DRIVING_ENCODER_VELOCITY_FACTOR = DRIVING_ENCODER_POSITION_FACTOR / 60.0;
+    public static final double DRIVING_ENCODER_POSITION_FACTOR = DRIVE_WHEEL_CIRCUMFERENCE / DRIVING_GEARING_RATIO;
+    public static final double DRIVING_ENCODER_VELOCITY_FACTOR = (DRIVE_WHEEL_CIRCUMFERENCE / DRIVING_GEARING_RATIO) / 60.0;
 
     public static final double MAX_SPEED = 4;
     public static final double MAX_ANGULAR_VELOCITY = 3;
-
-    public static final double WHEEL_DIAMETER = Units.inchesToMeters(4.0);
-    public static final double DRIVE_ENCODER_POSITION_FACTOR = (WHEEL_DIAMETER * Math.PI);
 
     // Plants for feedforward and simulation purposes.
     public static final LinearSystem<N1, N1, N1> FRONT_LEFT_TURNING_PLANT = null;
@@ -94,10 +94,10 @@ public class SwerveConstants {
         BACK_RIGHT_TURNING_PID
     };
 
-    public static final double[] FRONT_LEFT_DRIVING_PID = {0.5, 0.0, 0.0};
-    public static final double[] FRONT_RIGHT_DRIVING_PID = {0.5, 0.0, 0.0};
-    public static final double[] BACK_RIGHT_DRIVING_PID = {0.5, 0.0, 0.0};
-    public static final double[] BACK_LEFT_DRIVING_PID = {0.5, 0.0, 0.0};
+    public static final double[] FRONT_LEFT_DRIVING_PID = {0.2, 0.0, 0.0};
+    public static final double[] FRONT_RIGHT_DRIVING_PID = {0.2, 0.0, 0.0};
+    public static final double[] BACK_RIGHT_DRIVING_PID = {0.2, 0.0, 0.0};
+    public static final double[] BACK_LEFT_DRIVING_PID = {0.2, 0.0, 0.0};
     public static final double[][] DRIVING_PID = {
         FRONT_LEFT_DRIVING_PID,
         FRONT_RIGHT_DRIVING_PID,

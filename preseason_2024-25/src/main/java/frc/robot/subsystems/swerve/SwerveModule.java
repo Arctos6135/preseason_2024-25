@@ -22,6 +22,9 @@ public class SwerveModule {
     private final SparkPIDController drivingPIDController;
     private final SparkPIDController turningPIDController;
 
+    public double angleSetpoint;
+    public double velocitySetpoint;
+
     private double chassisAngularOffset = 0;
 
     /**
@@ -52,22 +55,22 @@ public class SwerveModule {
         drivingPIDController.setFeedbackDevice(drivingEncoder);
         turningPIDController.setFeedbackDevice(turningEncoder);
 
-        this.chassisAngularOffset = SwerveConstants.ANGULAR_OFFSETS.get(moduleIdentifier);
-
-        // Enables PID wrapping to take more efficient routes when turning.
-        turningPIDController.setPositionPIDWrappingEnabled(true);
-        turningPIDController.setPositionPIDWrappingMinInput(-Math.PI/2);
-        turningPIDController.setPositionPIDWrappingMaxInput(Math.PI/2);
-
-        // Disabled for driving because it doesn't wrap around.
-        drivingPIDController.setPositionPIDWrappingEnabled(false);
-        drivingPIDController.setOutputRange(-1, 1);
-
         // Sets conversion factors so the encoder tracks in meters instead of rotations.
         drivingEncoder.setPositionConversionFactor(SwerveConstants.DRIVING_ENCODER_POSITION_FACTOR);
         drivingEncoder.setVelocityConversionFactor(SwerveConstants.DRIVING_ENCODER_VELOCITY_FACTOR);
         turningEncoder.setPositionConversionFactor(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
-        turningEncoder.setVelocityConversionFactor(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
+        turningEncoder.setVelocityConversionFactor(SwerveConstants.TURNING_ENCODER_VELOCITY_FACTOR);
+
+        this.chassisAngularOffset = SwerveConstants.ANGULAR_OFFSETS.get(moduleIdentifier);
+
+        // Enables PID wrapping to take more efficient routes when turning.
+        turningPIDController.setPositionPIDWrappingEnabled(true);
+        turningPIDController.setPositionPIDWrappingMinInput(-2 * Math.PI);
+        turningPIDController.setPositionPIDWrappingMaxInput(2 * Math.PI);
+
+        // Disabled for driving because it doesn't wrap around.
+        drivingPIDController.setPositionPIDWrappingEnabled(false);
+        drivingPIDController.setFF(0.01);
 
         // Sets a conversion factor on the analog controller.
         // absoluteTurningEncoder.setDistancePerRotation(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
@@ -106,7 +109,7 @@ public class SwerveModule {
         turningMotor.setIdleMode(IdleMode.kBrake);
 
         // Saves the changes so they retain throughout power cycles.
-        turningMotor.burnFlash();
+        // turningMotor.burnFlash();
     }
 
     private void configDriveMotor() {
@@ -114,7 +117,7 @@ public class SwerveModule {
         drivingMotor.setSmartCurrentLimit(SwerveConstants.DRIVING_CURRENT_LIMIT);
         drivingMotor.setInverted(false);
         drivingMotor.setIdleMode(IdleMode.kBrake);
-        drivingMotor.burnFlash();
+        // drivingMotor.burnFlash();
     }
 
     /**
@@ -122,6 +125,18 @@ public class SwerveModule {
      */
     public double getPosition() {
         return drivingEncoder.getPosition();
+    }
+
+    public void setDrivingPID(double P, double I, double D) {
+        drivingPIDController.setP(P);
+        drivingPIDController.setI(I);
+        drivingPIDController.setD(D);
+    }
+
+    public void setTurningPID(double P, double I, double D) {
+        turningPIDController.setP(P);
+        turningPIDController.setI(I);
+        turningPIDController.setD(D);
     }
 
     /**
@@ -164,13 +179,20 @@ public class SwerveModule {
         return new SwerveModuleState(getPosition(), getAngle());
     }
 
+    public double getDrivingCurrent() {
+        return drivingMotor.getOutputCurrent();
+    }
+
+    public double getTurningCurrent() {
+        return drivingMotor.getOutputCurrent();
+    }
 
     public double getDrivingVoltage() {
-        return drivingMotor.getBusVoltage();
+        return drivingMotor.getAppliedOutput();
     }
 
     public double getTurningVoltage() {
-        return turningMotor.getBusVoltage();
+        return turningMotor.getAppliedOutput();
     }
 
     /**
@@ -191,7 +213,8 @@ public class SwerveModule {
         // Sets the setpoint for the PID controllers to follow.
         drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, ControlType.kVelocity); // m/s
         turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), ControlType.kPosition); // radians
-        
-        System.out.println(optimizedDesiredState.speedMetersPerSecond);
+
+        velocitySetpoint = optimizedDesiredState.speedMetersPerSecond;
+        angleSetpoint = optimizedDesiredState.angle.getDegrees();
     }
 }
