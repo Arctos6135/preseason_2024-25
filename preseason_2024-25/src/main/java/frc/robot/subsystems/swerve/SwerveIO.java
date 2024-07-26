@@ -78,7 +78,19 @@ public class SwerveIO {
         return new SwerveModulePosition[3];
     }
 
-    public void setDrivingPID(double P, double I, double D) {}
+    public void setFrontLeftDrivingPID(double P, double I, double D) {}
 
-    public void setTurningPID(double P, double I, double D) {}
+    public void setFrontLeftTurningPID(double P, double I, double D) {}
+
+    public void setFrontRightDrivingPID(double P, double I, double D) {}
+
+    public void setFrontRightTurningPID(double P, double I, double D) {}
+
+    public void setBackLeftDrivingPID(double P, double I, double D) {}
+
+    public void setBackLeftTurningPID(double P, double I, double D) {}
+
+    public void setBackRightDrivingPID(double P, double I, double D) {}
+
+    public void setBackRightTurningPID(double P, double I, double D) {}
 }

@@ -92,18 +92,42 @@ public class SwerveIOSparkMax extends SwerveIO {
     }
 
     @Override
-    public void setDrivingPID(double P, double I, double D) {
+    public void setFrontLeftDrivingPID(double P, double I, double D) {
         frontLeft.setDrivingPID(P, I, D);
+    }
+
+    @Override
+    public void setFrontLeftTurningPID(double P, double I, double D) {
+        frontLeft.setTurningPID(P, I, D);
+    }
+
+    @Override
+    public void setFrontRightDrivingPID(double P, double I, double D) {
         frontRight.setDrivingPID(P, I, D);
+    }
+
+    @Override
+    public void setFrontRightTurningPID(double P, double I, double D) {
+        frontRight.setTurningPID(P, I, D);
+    }
+
+    @Override
+    public void setBackLeftDrivingPID(double P, double I, double D) {
         backLeft.setDrivingPID(P, I, D);
+    }
+
+    @Override
+    public void setBackLeftTurningPID(double P, double I, double D) {
+        backLeft.setTurningPID(P, I, D);
+    }
+
+    @Override
+    public void setBackRightDrivingPID(double P, double I, double D) {
         backRight.setDrivingPID(P, I, D);
     }
 
     @Override
-    public void setTurningPID(double P, double I, double D) {
-        frontLeft.setTurningPID(P, I, D);
-        frontRight.setTurningPID(P, I, D);
-        backLeft.setTurningPID(P, I, D);
+    public void setBackRightTurningPID(double P, double I, double D) {
         backRight.setTurningPID(P, I, D);
     }
 }

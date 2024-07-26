@@ -22,13 +22,15 @@ public class Swerve extends SubsystemBase {
     SwerveDriveKinematics kinematics;
     SwerveDriveOdometry odometry;
 
-    public double dashboardDrivingP;
-    public double dashboardDrivingI;
-    public double dashboardDrivingD;
+    public double[] frontLeftDrivingPID = SwerveConstants.FRONT_LEFT_DRIVING_PID;
+    public double[] frontRightDrivingPID = SwerveConstants.FRONT_RIGHT_DRIVING_PID;
+    public double[] backLeftDrivingPID = SwerveConstants.BACK_LEFT_DRIVING_PID;
+    public double[] backRightDrivingPID = SwerveConstants.BACK_RIGHT_DRIVING_PID;
 
-    public double dashboardTurningP;
-    public double dashboardTurningI;
-    public double dashboardTurningD;
+    public double[] frontLeftTurningPID = SwerveConstants.FRONT_LEFT_TURNING_PID;
+    public double[] frontRightTurningPID = SwerveConstants.FRONT_RIGHT_TURNING_PID;
+    public double[] backLeftTurningPID = SwerveConstants.BACK_LEFT_TURNING_PID;
+    public double[] backRightTurningPID = SwerveConstants.BACK_RIGHT_TURNING_PID;
 
     private SwerveModulePosition[] modulePositions;
     private SwerveIO io;
@@ -37,21 +39,15 @@ public class Swerve extends SubsystemBase {
     public Swerve(SwerveIO io) {
         this.io = io;
 
-        dashboardDrivingP = SwerveConstants.DRIVING_PID[0][0];
-        dashboardDrivingI = SwerveConstants.DRIVING_PID[0][1];
-        dashboardDrivingD = SwerveConstants.DRIVING_PID[0][2];
+        SmartDashboard.putNumberArray("frontLeftDrivingPID", frontLeftDrivingPID);
+        SmartDashboard.putNumberArray("frontRightDrivingPID", frontRightDrivingPID);
+        SmartDashboard.putNumberArray("backLeftDrivingPID", backLeftDrivingPID);
+        SmartDashboard.putNumberArray("backRightDrivingPID", backRightDrivingPID);
 
-        SmartDashboard.putNumber("dashboardDrivingP", dashboardDrivingP);
-        SmartDashboard.putNumber("dashboardDrivingI", dashboardDrivingI);
-        SmartDashboard.putNumber("dashboardDrivingD", dashboardDrivingD);
-
-        dashboardTurningP = SwerveConstants.TURNING_PID[0][0];
-        dashboardTurningI = SwerveConstants.TURNING_PID[0][1];
-        dashboardTurningD = SwerveConstants.TURNING_PID[0][2];
-
-        SmartDashboard.putNumber("dashboardTurningP", dashboardTurningP);
-        SmartDashboard.putNumber("dashboardTurningI", dashboardTurningI);
-        SmartDashboard.putNumber("dashboardTurningD", dashboardDrivingD);
+        SmartDashboard.putNumberArray("frontLeftTurningPID", frontLeftTurningPID);
+        SmartDashboard.putNumberArray("frontRightTurningPID", frontRightTurningPID);
+        SmartDashboard.putNumberArray("backLeftTurningPID", backLeftTurningPID);
+        SmartDashboard.putNumberArray("backRightTurningPID", backRightTurningPID);
         
         // Create a swerve module positions object.
         modulePositions = io.getModulePositions();
@@ -103,6 +99,40 @@ public class Swerve extends SubsystemBase {
         io.updateInputs(inputs);
         Logger.processInputs(getName(), inputs);
 
+        if (frontLeftDrivingPID != SmartDashboard.getNumberArray("frontLeftDrivingPID", frontLeftDrivingPID)) {
+            frontLeftDrivingPID = SmartDashboard.getNumberArray("frontLeftDrivingPID", frontLeftDrivingPID);
+            io.setFrontLeftDrivingPID(frontLeftDrivingPID[0], frontLeftDrivingPID[1], frontLeftDrivingPID[2]);
+        }
+        if (frontRightDrivingPID != SmartDashboard.getNumberArray("frontRightDrivingPID", frontRightDrivingPID)) {
+            frontRightDrivingPID = SmartDashboard.getNumberArray("frontRightDrivingPID", frontRightDrivingPID);
+            io.setFrontRightDrivingPID(frontRightDrivingPID[0], frontRightDrivingPID[1], frontRightDrivingPID[2]);
+        }
+        if (backLeftDrivingPID != SmartDashboard.getNumberArray("backLeftDrivingPID", backLeftDrivingPID)) {
+            backLeftDrivingPID = SmartDashboard.getNumberArray("backLeftDrivingPID", backLeftDrivingPID);
+            io.setBackLeftDrivingPID(backLeftDrivingPID[0], backLeftDrivingPID[1], backLeftDrivingPID[2]);
+        }
+        if (backRightDrivingPID != SmartDashboard.getNumberArray("backRightDrivingPID", backRightDrivingPID)) {
+            backRightDrivingPID = SmartDashboard.getNumberArray("backRightDrivingPID", backRightDrivingPID);
+            io.setBackRightDrivingPID(backRightDrivingPID[0], backRightDrivingPID[1], backRightDrivingPID[2]);
+        }
+
+        if (frontLeftTurningPID != SmartDashboard.getNumberArray("frontLeftTurningPID", frontLeftTurningPID)) {
+            frontLeftTurningPID = SmartDashboard.getNumberArray("frontLeftTurningPID", frontLeftTurningPID);
+            io.setFrontLeftTurningPID(frontLeftTurningPID[0], frontLeftTurningPID[1], frontLeftTurningPID[2]);
+        }
+        if (frontRightTurningPID != SmartDashboard.getNumberArray("frontRightTurningPID", frontRightTurningPID)) {
+            frontRightTurningPID = SmartDashboard.getNumberArray("frontRightTurningPID", frontRightTurningPID);
+            io.setFrontRightTurningPID(frontRightTurningPID[0], frontRightTurningPID[1], frontRightTurningPID[2]);
+        }
+        if (backLeftTurningPID != SmartDashboard.getNumberArray("backLeftTurningPID", backLeftTurningPID)) {
+            backLeftTurningPID = SmartDashboard.getNumberArray("backLeftTurningPID", backLeftTurningPID);
+            io.setBackLeftTurningPID(backLeftTurningPID[0], backLeftTurningPID[1], backLeftTurningPID[2]);
+        }
+        if (backRightTurningPID != SmartDashboard.getNumberArray("backRightTurningPID", backRightTurningPID)) {
+            backRightTurningPID = SmartDashboard.getNumberArray("backRightTurningPID", backRightTurningPID);
+            io.setBackRightTurningPID(backRightTurningPID[0], backRightTurningPID[1], backRightTurningPID[2]);
+        }
+
         // Updates the odometry.
         odometry.update(
             io.getAngle(),
@@ -110,22 +140,6 @@ public class Swerve extends SubsystemBase {
         );
 
         Logger.recordOutput("pose", odometry.getPoseMeters());
-
-        if (dashboardDrivingP != SmartDashboard.getNumber("dashboardDrivingP", dashboardDrivingP) || dashboardDrivingI != SmartDashboard.getNumber("dashboardDrivingI", dashboardDrivingI) || dashboardDrivingD != SmartDashboard.getNumber("dashboardDrivingD", dashboardDrivingD)) {
-            dashboardDrivingP = SmartDashboard.getNumber("dashboardDrivingP", dashboardDrivingP);
-            dashboardDrivingI = SmartDashboard.getNumber("dashboardDrivingI", dashboardDrivingI);
-            dashboardDrivingD = SmartDashboard.getNumber("dashboardDrivingD", dashboardDrivingD);
-            io.setDrivingPID(dashboardDrivingP, dashboardDrivingI, dashboardDrivingD);
-            resetStates();
-        }
-
-        if (dashboardTurningP != SmartDashboard.getNumber("dashboardTurningP", dashboardTurningP) || dashboardTurningI != SmartDashboard.getNumber("dashboardTurningI", dashboardTurningI) || dashboardTurningD != SmartDashboard.getNumber("dashboardTurningD", dashboardTurningD)) {
-            dashboardTurningP = SmartDashboard.getNumber("dashboardTurningP", dashboardTurningP);
-            dashboardTurningI = SmartDashboard.getNumber("dashboardTurningI", dashboardTurningI);
-            dashboardTurningD = SmartDashboard.getNumber("dashboardTurningD", dashboardTurningD);
-            io.setTurningPID(dashboardTurningP, dashboardTurningI, dashboardTurningD);
-            resetStates();
-        }
     }
 
     /**
