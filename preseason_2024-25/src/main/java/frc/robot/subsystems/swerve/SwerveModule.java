@@ -5,13 +5,14 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
+
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.AnalogEncoder;
-import frc.robot.constants.SwerveConstants;
 import frc.robot.constants.CANBusConstants;
+import frc.robot.constants.SwerveConstants;
 
 public class SwerveModule {
     private final CANSparkMax drivingMotor;
@@ -19,8 +20,9 @@ public class SwerveModule {
     // private final AnalogEncoder absoluteTurningEncoder;
     private final RelativeEncoder drivingEncoder;
     private final RelativeEncoder turningEncoder;
-    private final SparkPIDController drivingPIDController;
-    private final SparkPIDController turningPIDController;
+
+    private final PIDController drivingPIDController;
+    private final PIDController turningPIDController;
 
     public double angleSetpoint;
     public double velocitySetpoint;
@@ -47,13 +49,9 @@ public class SwerveModule {
         this.drivingEncoder = drivingMotor.getEncoder();
         this.turningEncoder = turningMotor.getEncoder();
 
-        // Creates SparkPIDControllers.
-        this.drivingPIDController = drivingMotor.getPIDController();
-        this.turningPIDController = turningMotor.getPIDController();
-
-        // Links the controllers to the encoders.
-        drivingPIDController.setFeedbackDevice(drivingEncoder);
-        turningPIDController.setFeedbackDevice(turningEncoder);
+        // Creates PIDController with the module's unique gains.
+        this.drivingPIDController = new PIDController(SwerveConstants.DRIVING_PID[moduleIdentifier][0], SwerveConstants.DRIVING_PID[moduleIdentifier][1], SwerveConstants.DRIVING_PID[moduleIdentifier][2]);
+        this.turningPIDController = new PIDController(SwerveConstants.TURNING_PID[moduleIdentifier][0], SwerveConstants.TURNING_PID[moduleIdentifier][1], SwerveConstants.TURNING_PID[moduleIdentifier][2]);
 
         // Sets conversion factors so the encoder tracks in meters instead of rotations.
         drivingEncoder.setPositionConversionFactor(SwerveConstants.DRIVING_ENCODER_POSITION_FACTOR);
@@ -64,13 +62,10 @@ public class SwerveModule {
         this.chassisAngularOffset = SwerveConstants.ANGULAR_OFFSETS.get(moduleIdentifier);
 
         // Enables PID wrapping to take more efficient routes when turning.
-        turningPIDController.setPositionPIDWrappingEnabled(true);
-        turningPIDController.setPositionPIDWrappingMinInput(-2 * Math.PI);
-        turningPIDController.setPositionPIDWrappingMaxInput(2 * Math.PI);
+        turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
         // Disabled for driving because it doesn't wrap around.
-        drivingPIDController.setPositionPIDWrappingEnabled(false);
-        drivingPIDController.setFF(0.01);
+        drivingPIDController.disableContinuousInput();
 
         // Sets a conversion factor on the analog controller.
         // absoluteTurningEncoder.setDistancePerRotation(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
@@ -80,14 +75,6 @@ public class SwerveModule {
 
         // Resets the turning position to match the absolute position.
         resetToAbsolute();
-
-        // Set PID values.
-        turningPIDController.setP(SwerveConstants.TURNING_PID[moduleIdentifier][0]);
-        turningPIDController.setI(SwerveConstants.TURNING_PID[moduleIdentifier][1]);
-        turningPIDController.setD(SwerveConstants.TURNING_PID[moduleIdentifier][2]);
-        drivingPIDController.setP(SwerveConstants.DRIVING_PID[moduleIdentifier][0]);
-        drivingPIDController.setI(SwerveConstants.DRIVING_PID[moduleIdentifier][1]);
-        drivingPIDController.setD(SwerveConstants.DRIVING_PID[moduleIdentifier][2]);
     }
 
     /**
@@ -211,8 +198,12 @@ public class SwerveModule {
         );
 
         // Sets the setpoint for the PID controllers to follow.
-        drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, ControlType.kVelocity); // m/s
-        turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), ControlType.kPosition); // radians
+        drivingPIDController.setSetpoint(optimizedDesiredState.speedMetersPerSecond); // m/s
+        turningPIDController.setSetpoint(optimizedDesiredState.angle.getRadians()); // radians
+
+        // Calculates and sets the voltages of the motors.
+        drivingMotor.setVoltage(MathUtil.clamp(drivingPIDController.calculate(drivingEncoder.getVelocity()), -12, 12));
+        turningMotor.setVoltage(MathUtil.clamp(turningPIDController.calculate(turningEncoder.getPosition()), -12, 12));
 
         velocitySetpoint = optimizedDesiredState.speedMetersPerSecond;
         angleSetpoint = optimizedDesiredState.angle.getDegrees();
