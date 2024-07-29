@@ -83,22 +83,22 @@ public class SwerveConstants {
         add(BACK_RIGHT_DRIVING_PLANT);
     }};
 
-    public static final double[] FRONT_LEFT_TURNING_PID = {0.02, 0.0, 0.0};
-    public static final double[] FRONT_RIGHT_TURNING_PID = {0.02, 0.0, 0.0};
-    public static final double[] BACK_RIGHT_TURNING_PID = {0.02, 0.0, 0.0};
-    public static final double[] BACK_LEFT_TURNING_PID = {0.02, 0.0, 0.0};
-    public static final double[][] TURNING_PID = {
+    public static double[] FRONT_LEFT_TURNING_PID = {0.02, 0.0, 0.0};
+    public static double[] FRONT_RIGHT_TURNING_PID = {0.02, 0.0, 0.0};
+    public static double[] BACK_RIGHT_TURNING_PID = {0.02, 0.0, 0.0};
+    public static double[] BACK_LEFT_TURNING_PID = {0.02, 0.0, 0.0};
+    public static double[][] TURNING_PID = {
         FRONT_LEFT_TURNING_PID,
         FRONT_RIGHT_TURNING_PID,
         BACK_LEFT_TURNING_PID,
         BACK_RIGHT_TURNING_PID
     };
 
-    public static final double[] FRONT_LEFT_DRIVING_PID = {0.2, 0.0, 0.0};
-    public static final double[] FRONT_RIGHT_DRIVING_PID = {0.2, 0.0, 0.0};
-    public static final double[] BACK_RIGHT_DRIVING_PID = {0.2, 0.0, 0.0};
-    public static final double[] BACK_LEFT_DRIVING_PID = {0.2, 0.0, 0.0};
-    public static final double[][] DRIVING_PID = {
+    public static double[] FRONT_LEFT_DRIVING_PID = {0.2, 0.0, 0.0};
+    public static double[] FRONT_RIGHT_DRIVING_PID = {0.2, 0.0, 0.0};
+    public static double[] BACK_RIGHT_DRIVING_PID = {0.2, 0.0, 0.0};
+    public static double[] BACK_LEFT_DRIVING_PID = {0.2, 0.0, 0.0};
+    public static double[][] DRIVING_PID = {
         FRONT_LEFT_DRIVING_PID,
         FRONT_RIGHT_DRIVING_PID,
         BACK_LEFT_DRIVING_PID,
