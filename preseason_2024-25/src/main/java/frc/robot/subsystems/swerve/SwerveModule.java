@@ -8,16 +8,20 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.AnalogEncoder;
 import frc.robot.constants.CANBusConstants;
 import frc.robot.constants.SwerveConstants;
 
 public class SwerveModule {
     private final CANSparkMax drivingMotor;
     private final CANSparkMax turningMotor;
-    // private final AnalogEncoder absoluteTurningEncoder;
+
+    private final AnalogEncoder absoluteTurningEncoder;
+
     private final RelativeEncoder drivingEncoder;
     private final RelativeEncoder turningEncoder;
 
@@ -33,13 +37,12 @@ public class SwerveModule {
      * Constructs an MK4i swerve module and configures the driving and turning motor, encoder, and PID controller.
      */
     public SwerveModule(int moduleIdentifier) {
-
         // Sets up the motors.
         this.drivingMotor = new CANSparkMax(CANBusConstants.DRIVE_IDS.get(moduleIdentifier), MotorType.kBrushless);
         this.turningMotor = new CANSparkMax(CANBusConstants.TURN_IDS.get(moduleIdentifier), MotorType.kBrushless);
 
         // Creates the analog (absolute) encoder.
-        // absoluteTurningEncoder = new AnalogEncoder(SwerveConstants.ENCODER_PORTS.get(moduleIdentifier));
+        absoluteTurningEncoder = new AnalogEncoder(SwerveConstants.ENCODER_PORTS.get(moduleIdentifier));
 
         // Configures the motors to the proper settings.
         configDriveMotor();
@@ -68,7 +71,7 @@ public class SwerveModule {
         drivingPIDController.disableContinuousInput();
 
         // Sets a conversion factor on the analog controller.
-        // absoluteTurningEncoder.setDistancePerRotation(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
+        absoluteTurningEncoder.setDistancePerRotation(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
 
         // Zeroes the position.
         drivingEncoder.setPosition(0.0);
@@ -81,8 +84,8 @@ public class SwerveModule {
      * Resets the turning encoders to the angle given by the analog encoders.
      */
     private void resetToAbsolute() {
-        // double absolutePosition = Math.abs(absoluteTurningEncoder.get() - absoluteTurningEncoder.getPositionOffset());
-        turningEncoder.setPosition(0); // turningEncoder.setPosition(absolutePosition);
+        Rotation2d absolutePosition = Rotation2d.fromRotations(absoluteTurningEncoder.getAbsolutePosition() - absoluteTurningEncoder.getPositionOffset());
+        turningEncoder.setPosition(absolutePosition.getRadians());
     }
 
     private void configTurningMotor() {
@@ -96,7 +99,7 @@ public class SwerveModule {
         turningMotor.setIdleMode(IdleMode.kBrake);
 
         // Saves the changes so they retain throughout power cycles.
-        // turningMotor.burnFlash();
+        turningMotor.burnFlash();
     }
 
     private void configDriveMotor() {
@@ -104,7 +107,7 @@ public class SwerveModule {
         drivingMotor.setSmartCurrentLimit(SwerveConstants.DRIVING_CURRENT_LIMIT);
         drivingMotor.setInverted(false);
         drivingMotor.setIdleMode(IdleMode.kBrake);
-        // drivingMotor.burnFlash();
+        drivingMotor.burnFlash();
     }
 
     /**
@@ -139,7 +142,7 @@ public class SwerveModule {
      * @return module angle
      */
     public Rotation2d getAngle() {
-        return Rotation2d.fromRadians(turningEncoder.getPosition() % (2 * Math.PI)); // keeps in least terms.
+        return Rotation2d.fromRotations(turningEncoder.getPosition());
     }
 
     /**
@@ -194,7 +197,7 @@ public class SwerveModule {
 
         SwerveModuleState optimizedDesiredState = SwerveModuleState.optimize(
             correctedDesiredState,
-            new Rotation2d(turningEncoder.getPosition())
+            getAngle()
         );
 
         // Sets the setpoint for the PID controllers to follow.
@@ -203,7 +206,7 @@ public class SwerveModule {
 
         // Calculates and sets the voltages of the motors.
         drivingMotor.setVoltage(MathUtil.clamp(drivingPIDController.calculate(drivingEncoder.getVelocity()), -12, 12));
-        turningMotor.setVoltage(MathUtil.clamp(turningPIDController.calculate(turningEncoder.getPosition()), -12, 12));
+        turningMotor.setVoltage(MathUtil.clamp(turningPIDController.calculate(getAngle().getRadians()), -12, 12));
 
         velocitySetpoint = optimizedDesiredState.speedMetersPerSecond;
         angleSetpoint = optimizedDesiredState.angle.getDegrees();

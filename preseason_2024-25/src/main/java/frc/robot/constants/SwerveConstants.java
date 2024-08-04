@@ -15,10 +15,10 @@ public class SwerveConstants {
      * Unless otherwise specified
      */
 
-    public static final int FRONT_LEFT_ENCODER_PORT = 1;
-    public static final int FRONT_RIGHT_ENCODER_PORT = 2;
-    public static final int BACK_LEFT_ENCODER_PORT = 3;
-    public static final int BACK_RIGHT_ENCODER_PORT = 4;
+    public static final int FRONT_LEFT_ENCODER_PORT = 0;
+    public static final int FRONT_RIGHT_ENCODER_PORT = 1;
+    public static final int BACK_LEFT_ENCODER_PORT = 2;
+    public static final int BACK_RIGHT_ENCODER_PORT = 3;
     public static final List<Integer> ENCODER_PORTS = new ArrayList<>() {{
         add(FRONT_LEFT_ENCODER_PORT);
         add(FRONT_RIGHT_ENCODER_PORT);
@@ -37,6 +37,18 @@ public class SwerveConstants {
         add(BACK_LEFT_ANGULAR_OFFSET);
         add(BACK_RIGHT_ANGULAR_OFFSET);
     }};
+
+    // Position offsets.
+    public static final double FRONT_LEFT_POSITION_OFFSET = -7.53982;
+    public static final double FRONT_RIGHT_POSITION_OFFSET = -0.314159;
+    public static final double BACK_LEFT_POSITION_OFFSET = -0.1047;
+    public static final double BACK_RIGHT_POSITION_OFFSET = 0.401426;
+    public static double[] POSITION_OFFSETS = {
+        FRONT_LEFT_POSITION_OFFSET,
+        FRONT_RIGHT_POSITION_OFFSET,
+        BACK_LEFT_POSITION_OFFSET,
+        BACK_RIGHT_POSITION_OFFSET
+    };
 
     // This of course assumes we manage to actually get the COG in the middle
     public static final double DISTANCE_TO_CENTER = Units.inchesToMeters(12.5);
@@ -60,17 +72,17 @@ public class SwerveConstants {
     public static final double MAX_SPEED = 4;
     public static final double MAX_ANGULAR_VELOCITY = 3;
 
-    // Plants for feedforward and simulation purposes.
-    public static final LinearSystem<N1, N1, N1> FRONT_LEFT_TURNING_PLANT = null;
-    public static final LinearSystem<N1, N1, N1> FRONT_RIGHT_TURNING_PLANT = null;
-    public static final LinearSystem<N1, N1, N1> BACK_LEFT_TURNING_PLANT = null;
-    public static final LinearSystem<N1, N1, N1> BACK_RIGHT_TURNING_PLANT = null;
-    public static final List<LinearSystem<N1, N1, N1>> TURNING_PLANTS = new ArrayList<>() {{
-        add(FRONT_LEFT_TURNING_PLANT);
-        add(FRONT_RIGHT_TURNING_PLANT);
-        add(BACK_LEFT_TURNING_PLANT);
-        add(BACK_RIGHT_TURNING_PLANT);
-    }};
+    // Gains for feedforward and simulation purposes.
+    public static final double[] FRONT_LEFT_TURNING_GAINS = {0.135, 0.002209322474, 0.0008064027032};
+    public static final double[] FRONT_RIGHT_TURNING_GAINS = {0.135, 0.002209322474, 0.0008064027032}; // Placeholder until encoder wires fixed.
+    public static final double[] BACK_LEFT_TURNING_GAINS = {0.135, 0.002206896552, 0.0009622068966};
+    public static final double[] BACK_RIGHT_TURNING_GAINS = {0.125, 0.002084437086, 0.0007920860927};
+    public static final double[][] TURNING_GAINS = {
+        FRONT_LEFT_TURNING_GAINS,
+        FRONT_RIGHT_TURNING_GAINS,
+        BACK_LEFT_TURNING_GAINS,
+        BACK_RIGHT_TURNING_GAINS
+    };
 
     public static final LinearSystem<N1, N1, N1> FRONT_LEFT_DRIVING_PLANT = null;
     public static final LinearSystem<N1, N1, N1> FRONT_RIGHT_DRIVING_PLANT = null;
@@ -83,10 +95,10 @@ public class SwerveConstants {
         add(BACK_RIGHT_DRIVING_PLANT);
     }};
 
-    public static double[] FRONT_LEFT_TURNING_PID = {0.02, 0.0, 0.0};
-    public static double[] FRONT_RIGHT_TURNING_PID = {0.02, 0.0, 0.0};
-    public static double[] BACK_RIGHT_TURNING_PID = {0.02, 0.0, 0.0};
-    public static double[] BACK_LEFT_TURNING_PID = {0.02, 0.0, 0.0};
+    public static double[] FRONT_LEFT_TURNING_PID = {1.1, 0.0, 0.0};
+    public static double[] FRONT_RIGHT_TURNING_PID = {1.1, 0.0, 0.0};
+    public static double[] BACK_RIGHT_TURNING_PID = {1.1, 0.0, 0.0};
+    public static double[] BACK_LEFT_TURNING_PID = {1.1, 0.0, 0.0};
     public static double[][] TURNING_PID = {
         FRONT_LEFT_TURNING_PID,
         FRONT_RIGHT_TURNING_PID,
