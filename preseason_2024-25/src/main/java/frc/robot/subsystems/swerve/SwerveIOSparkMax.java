@@ -40,6 +40,7 @@ public class SwerveIOSparkMax extends SwerveIO {
         // Front Left
         inputs.frontLeftPosition = frontLeft.getPosition();
         inputs.frontLeftAngle = frontLeft.getAngle().getDegrees();
+        inputs.frontLeftAbsoluteAngle = frontLeft.getAbsoluteAngle().getRotations();
         inputs.frontLeftDrivingVelocity = frontLeft.getDrivingVelocity();
         inputs.frontLeftTurningVelocity = frontLeft.getTurningVelocity();
         inputs.frontLeftDrivingCurrent = frontLeft.getDrivingCurrent();
@@ -52,6 +53,7 @@ public class SwerveIOSparkMax extends SwerveIO {
         // Front Right
         inputs.frontRightPosition = frontRight.getPosition();
         inputs.frontRightAngle = frontRight.getAngle().getDegrees();
+        inputs.frontRightAbsoluteAngle = frontRight.getAbsoluteAngle().getRotations();
         inputs.frontRightDrivingVelocity = frontRight.getDrivingVelocity();
         inputs.frontRightTurningVelocity = frontRight.getTurningVelocity();
         inputs.frontRightDrivingCurrent = frontRight.getDrivingCurrent();
@@ -64,6 +66,7 @@ public class SwerveIOSparkMax extends SwerveIO {
         // Back Left
         inputs.backLeftPosition = backLeft.getPosition();
         inputs.backLeftAngle = backLeft.getAngle().getDegrees();
+        inputs.backLeftAbsoluteAngle = backLeft.getAbsoluteAngle().getRotations();
         inputs.backLeftDrivingVelocity = backLeft.getDrivingVelocity();
         inputs.backLeftTurningVelocity = backLeft.getTurningVelocity();
         inputs.backLeftDrivingCurrent = backLeft.getDrivingCurrent();
@@ -76,6 +79,7 @@ public class SwerveIOSparkMax extends SwerveIO {
         // Back Right
         inputs.backRightPosition = backRight.getPosition();
         inputs.backRightAngle = backRight.getAngle().getDegrees();
+        inputs.backRightAbsoluteAngle = backRight.getAbsoluteAngle().getRotations();
         inputs.backRightDrivingVelocity = backRight.getDrivingVelocity();
         inputs.backRightTurningVelocity = backRight.getTurningVelocity();
         inputs.backRightDrivingCurrent = backRight.getDrivingCurrent();

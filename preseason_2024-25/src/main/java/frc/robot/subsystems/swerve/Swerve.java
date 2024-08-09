@@ -160,7 +160,7 @@ public class Swerve extends SubsystemBase {
 
         // Update Front Left PID Constants for Driving
         if (frontLeftDrivingP.update() || frontLeftDrivingI.update() || frontLeftDrivingD.update()) {
-            io.setFrontLeftDrivingPID(frontLeftDrivingD.get(), frontLeftDrivingI.get(), frontLeftDrivingD.get());
+            io.setFrontLeftDrivingPID(frontLeftDrivingP.get(), frontLeftDrivingI.get(), frontLeftDrivingD.get());
         }
 
         // Update Front Left PID Constants for Turning
@@ -170,7 +170,7 @@ public class Swerve extends SubsystemBase {
 
         // Update Front Right PID Constants for Driving
         if (frontRightDrivingP.update() || frontRightDrivingI.update() || frontRightDrivingD.update()) {
-            io.setFrontRightDrivingPID(frontRightDrivingD.get(), frontRightDrivingI.get(), frontRightDrivingD.get());
+            io.setFrontRightDrivingPID(frontRightDrivingP.get(), frontRightDrivingI.get(), frontRightDrivingD.get());
         }
 
         // Update Front Right PID Constants for Turning
@@ -180,7 +180,7 @@ public class Swerve extends SubsystemBase {
 
         // Update Back Left PID Constants for Driving
         if (backLeftDrivingP.update() || backLeftDrivingI.update() || backLeftDrivingD.update()) {
-            io.setBackLeftDrivingPID(backLeftDrivingD.get(), backLeftDrivingI.get(), backLeftDrivingD.get());
+            io.setBackLeftDrivingPID(backLeftDrivingP.get(), backLeftDrivingI.get(), backLeftDrivingD.get());
         }
 
         // Update Back Left PID Constants for Turning
@@ -190,7 +190,7 @@ public class Swerve extends SubsystemBase {
 
         // Update Back Right PID Constants for Driving
         if (backRightDrivingP.update() || backRightDrivingI.update() || backRightDrivingD.update()) {
-            io.setBackRightDrivingPID(backRightDrivingD.get(), backRightDrivingI.get(), backRightDrivingD.get());
+            io.setBackRightDrivingPID(backRightDrivingP.get(), backRightDrivingI.get(), backRightDrivingD.get());
         }
 
         // Update Back Right PID Constants for Turning

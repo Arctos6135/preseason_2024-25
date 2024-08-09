@@ -17,6 +17,11 @@ public class SwerveIO {
         public double backLeftAngle;
         public double backRightAngle;
 
+        public double frontLeftAbsoluteAngle;
+        public double frontRightAbsoluteAngle;
+        public double backLeftAbsoluteAngle;
+        public double backRightAbsoluteAngle;
+
         public double frontLeftPosition;
         public double frontRightPosition;
         public double backLeftPosition;

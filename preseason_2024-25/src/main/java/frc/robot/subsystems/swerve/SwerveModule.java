@@ -44,6 +44,8 @@ public class SwerveModule {
         // Creates the analog (absolute) encoder.
         absoluteTurningEncoder = new AnalogEncoder(SwerveConstants.ENCODER_PORTS.get(moduleIdentifier));
 
+        absoluteTurningEncoder.setPositionOffset(SwerveConstants.POSITION_OFFSETS[moduleIdentifier]);
+
         // Configures the motors to the proper settings.
         configDriveMotor();
         configTurningMotor();
@@ -62,7 +64,8 @@ public class SwerveModule {
         turningEncoder.setPositionConversionFactor(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
         turningEncoder.setVelocityConversionFactor(SwerveConstants.TURNING_ENCODER_VELOCITY_FACTOR);
 
-        this.chassisAngularOffset = SwerveConstants.ANGULAR_OFFSETS.get(moduleIdentifier);
+        this.chassisAngularOffset = 0.0; // SwerveConstants.ANGULAR_OFFSETS.get(moduleIdentifier);
+
 
         // Enables PID wrapping to take more efficient routes when turning.
         turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
@@ -84,7 +87,7 @@ public class SwerveModule {
      * Resets the turning encoders to the angle given by the analog encoders.
      */
     private void resetToAbsolute() {
-        Rotation2d absolutePosition = Rotation2d.fromRotations(absoluteTurningEncoder.getAbsolutePosition() - absoluteTurningEncoder.getPositionOffset());
+        Rotation2d absolutePosition = Rotation2d.fromRotations((absoluteTurningEncoder.getAbsolutePosition() - absoluteTurningEncoder.getPositionOffset()) % 1);
         turningEncoder.setPosition(absolutePosition.getRadians());
     }
 
@@ -99,7 +102,7 @@ public class SwerveModule {
         turningMotor.setIdleMode(IdleMode.kBrake);
 
         // Saves the changes so they retain throughout power cycles.
-        turningMotor.burnFlash();
+        // sturningMotor.burnFlash();
     }
 
     private void configDriveMotor() {
@@ -107,7 +110,7 @@ public class SwerveModule {
         drivingMotor.setSmartCurrentLimit(SwerveConstants.DRIVING_CURRENT_LIMIT);
         drivingMotor.setInverted(false);
         drivingMotor.setIdleMode(IdleMode.kBrake);
-        drivingMotor.burnFlash();
+        // drivingMotor.burnFlash();
     }
 
     /**
@@ -142,7 +145,11 @@ public class SwerveModule {
      * @return module angle
      */
     public Rotation2d getAngle() {
-        return Rotation2d.fromRotations(turningEncoder.getPosition());
+        return Rotation2d.fromRadians(turningEncoder.getPosition());
+    }
+
+    public Rotation2d getAbsoluteAngle() {
+        return Rotation2d.fromRotations(absoluteTurningEncoder.get());
     }
 
     /**

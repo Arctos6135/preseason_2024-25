@@ -27,10 +27,10 @@ public class SwerveConstants {
     }};
     
     // Angular offsets of the modules relative to the chassis in radians
-    public static final double FRONT_LEFT_ANGULAR_OFFSET = -Math.PI / 2;
-    public static final double FRONT_RIGHT_ANGULAR_OFFSET = 0;
-    public static final double BACK_LEFT_ANGULAR_OFFSET = Math.PI;
-    public static final double BACK_RIGHT_ANGULAR_OFFSET = Math.PI / 2;
+    public static final double FRONT_LEFT_ANGULAR_OFFSET = 0.0;
+    public static final double FRONT_RIGHT_ANGULAR_OFFSET = 0.0;
+    public static final double BACK_LEFT_ANGULAR_OFFSET = 0.0;
+    public static final double BACK_RIGHT_ANGULAR_OFFSET = 0.0;
     public static final List<Double> ANGULAR_OFFSETS = new ArrayList<>() {{
         add(FRONT_LEFT_ANGULAR_OFFSET);
         add(FRONT_RIGHT_ANGULAR_OFFSET);
@@ -38,11 +38,11 @@ public class SwerveConstants {
         add(BACK_RIGHT_ANGULAR_OFFSET);
     }};
 
-    // Position offsets.
-    public static final double FRONT_LEFT_POSITION_OFFSET = -7.53982;
-    public static final double FRONT_RIGHT_POSITION_OFFSET = -0.314159;
-    public static final double BACK_LEFT_POSITION_OFFSET = -0.1047;
-    public static final double BACK_RIGHT_POSITION_OFFSET = 0.401426;
+    // Position offsets (rotations).
+    public static final double FRONT_LEFT_POSITION_OFFSET = 0.961;
+    public static final double FRONT_RIGHT_POSITION_OFFSET = 0.570;
+    public static final double BACK_LEFT_POSITION_OFFSET = 0.510;
+    public static final double BACK_RIGHT_POSITION_OFFSET = 0.186;
     public static double[] POSITION_OFFSETS = {
         FRONT_LEFT_POSITION_OFFSET,
         FRONT_RIGHT_POSITION_OFFSET,
@@ -69,8 +69,8 @@ public class SwerveConstants {
     public static final double DRIVING_ENCODER_POSITION_FACTOR = DRIVE_WHEEL_CIRCUMFERENCE / DRIVING_GEARING_RATIO;
     public static final double DRIVING_ENCODER_VELOCITY_FACTOR = (DRIVE_WHEEL_CIRCUMFERENCE / DRIVING_GEARING_RATIO) / 60.0;
 
-    public static final double MAX_SPEED = 4;
-    public static final double MAX_ANGULAR_VELOCITY = 3;
+    public static final double MAX_SPEED = 2;
+    public static final double MAX_ANGULAR_VELOCITY = 6;
 
     // Gains for feedforward and simulation purposes.
     public static final double[] FRONT_LEFT_TURNING_GAINS = {0.135, 0.002209322474, 0.0008064027032};
@@ -95,10 +95,10 @@ public class SwerveConstants {
         add(BACK_RIGHT_DRIVING_PLANT);
     }};
 
-    public static double[] FRONT_LEFT_TURNING_PID = {1.1, 0.0, 0.0};
-    public static double[] FRONT_RIGHT_TURNING_PID = {1.1, 0.0, 0.0};
-    public static double[] BACK_RIGHT_TURNING_PID = {1.1, 0.0, 0.0};
-    public static double[] BACK_LEFT_TURNING_PID = {1.1, 0.0, 0.0};
+    public static double[] FRONT_LEFT_TURNING_PID = {1.3, 0.0, 0.0};
+    public static double[] FRONT_RIGHT_TURNING_PID = {1.3, 0.0, 0.0};
+    public static double[] BACK_RIGHT_TURNING_PID = {1.3, 0.0, 0.0};
+    public static double[] BACK_LEFT_TURNING_PID = {1.3, 0.0, 0.0};
     public static double[][] TURNING_PID = {
         FRONT_LEFT_TURNING_PID,
         FRONT_RIGHT_TURNING_PID,
@@ -106,10 +106,10 @@ public class SwerveConstants {
         BACK_RIGHT_TURNING_PID
     };
 
-    public static double[] FRONT_LEFT_DRIVING_PID = {0.2, 0.0, 0.0};
-    public static double[] FRONT_RIGHT_DRIVING_PID = {0.2, 0.0, 0.0};
-    public static double[] BACK_RIGHT_DRIVING_PID = {0.2, 0.0, 0.0};
-    public static double[] BACK_LEFT_DRIVING_PID = {0.2, 0.0, 0.0};
+    public static double[] FRONT_LEFT_DRIVING_PID = {3.0, 0.0, 0.0};
+    public static double[] FRONT_RIGHT_DRIVING_PID = {3.0, 0.0, 0.0};
+    public static double[] BACK_RIGHT_DRIVING_PID = {3.0, 0.0, 0.0};
+    public static double[] BACK_LEFT_DRIVING_PID = {3.0, 0.0, 0.0};
     public static double[][] DRIVING_PID = {
         FRONT_LEFT_DRIVING_PID,
         FRONT_RIGHT_DRIVING_PID,
