@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.swerve.Swerve;
 
@@ -10,12 +11,17 @@ public class TeleopDrive extends Command {
     private DoubleSupplier xSpeedSupplier;
     private DoubleSupplier ySpeedSupplier;
     private DoubleSupplier rotSpeedSupplier;
+    private SlewRateLimiter xRateLimiter;
+    private SlewRateLimiter yRateLimiter;
 
     public TeleopDrive(Swerve drivetrain, DoubleSupplier xSpeedSupplier, DoubleSupplier ySpeedSupplier, DoubleSupplier rotSpeedSupplier) {
         this.drivetrain = drivetrain;
         this.xSpeedSupplier = xSpeedSupplier;
         this.ySpeedSupplier = ySpeedSupplier;
         this.rotSpeedSupplier = rotSpeedSupplier;
+        //0.5 was totally arbitrary so were gonna have to change this
+        xRateLimiter = new SlewRateLimiter(0.5);
+        yRateLimiter = new SlewRateLimiter(0.5);
 
         addRequirements(drivetrain);
     }
@@ -29,8 +35,8 @@ public class TeleopDrive extends Command {
     public void execute() {
         // Very simple version of this but good enough for now
 
-        double xSpeed = xSpeedSupplier.getAsDouble();
-        double ySpeed = ySpeedSupplier.getAsDouble();
+        double xSpeed = xRateLimiter.calculate(xSpeedSupplier.getAsDouble());
+        double ySpeed = yRateLimiter.calculate(ySpeedSupplier.getAsDouble());
         double rotSpeed = rotSpeedSupplier.getAsDouble();
 
         // Update Swerve module states based on inputs
