@@ -43,6 +43,8 @@ public class SwerveIOSparkMax extends SwerveIO {
         inputs.frontLeftAbsoluteAngle = frontLeft.getAbsoluteAngle().getRotations();
         inputs.frontLeftDrivingVelocity = frontLeft.getDrivingVelocity();
         inputs.frontLeftTurningVelocity = frontLeft.getTurningVelocity();
+        inputs.frontLeftDrivingAcceleration = frontLeft.getDrivingAcceleration();
+        inputs.frontLeftTurningAcceleration = frontLeft.getTurningAcceleration();
         inputs.frontLeftDrivingCurrent = frontLeft.getDrivingCurrent();
         inputs.frontLeftTurningCurrent = frontLeft.getTurningCurrent();
         inputs.frontLeftDrivingVoltage = frontLeft.getDrivingVoltage();
@@ -56,6 +58,8 @@ public class SwerveIOSparkMax extends SwerveIO {
         inputs.frontRightAbsoluteAngle = frontRight.getAbsoluteAngle().getRotations();
         inputs.frontRightDrivingVelocity = frontRight.getDrivingVelocity();
         inputs.frontRightTurningVelocity = frontRight.getTurningVelocity();
+        inputs.frontRightDrivingAcceleration = frontRight.getDrivingAcceleration();
+        inputs.frontRightTurningAcceleration = frontRight.getTurningAcceleration();
         inputs.frontRightDrivingCurrent = frontRight.getDrivingCurrent();
         inputs.frontRightTurningCurrent = frontRight.getTurningCurrent();
         inputs.frontRightDrivingVoltage = frontRight.getDrivingVoltage();
@@ -69,6 +73,8 @@ public class SwerveIOSparkMax extends SwerveIO {
         inputs.backLeftAbsoluteAngle = backLeft.getAbsoluteAngle().getRotations();
         inputs.backLeftDrivingVelocity = backLeft.getDrivingVelocity();
         inputs.backLeftTurningVelocity = backLeft.getTurningVelocity();
+        inputs.backLeftDrivingAcceleration = backLeft.getDrivingAcceleration();
+        inputs.backLeftDrivingAcceleration = backLeft.getTurningAcceleration();
         inputs.backLeftDrivingCurrent = backLeft.getDrivingCurrent();
         inputs.backLeftTurningCurrent = backLeft.getTurningCurrent();
         inputs.backLeftDrivingVoltage = backLeft.getDrivingVoltage();
@@ -82,6 +88,8 @@ public class SwerveIOSparkMax extends SwerveIO {
         inputs.backRightAbsoluteAngle = backRight.getAbsoluteAngle().getRotations();
         inputs.backRightDrivingVelocity = backRight.getDrivingVelocity();
         inputs.backRightTurningVelocity = backRight.getTurningVelocity();
+        inputs.backRightDrivingAcceleration = backRight.getDrivingAcceleration();
+        inputs.backRightTurningAcceleration = backRight.getTurningAcceleration();
         inputs.backRightDrivingCurrent = backRight.getDrivingCurrent();
         inputs.backRightTurningCurrent = backRight.getTurningCurrent();
         inputs.backRightDrivingVoltage = backRight.getDrivingVoltage();

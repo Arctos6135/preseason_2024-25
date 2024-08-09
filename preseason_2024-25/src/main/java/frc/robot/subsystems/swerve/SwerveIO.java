@@ -37,6 +37,16 @@ public class SwerveIO {
         public double backLeftTurningVelocity;
         public double backRightTurningVelocity;
 
+        public double frontLeftDrivingAcceleration;
+        public double frontRightDrivingAcceleration;
+        public double backLeftDrivingAcceleration;
+        public double backRightDrivingAcceleration;
+
+        public double frontLeftTurningAcceleration;
+        public double frontRightTurningAcceleration;
+        public double backLeftTurningAcceleration;
+        public double backRightTurningAcceleration;
+
         public double frontLeftDrivingCurrent;
         public double frontRightDrivingCurrent;
         public double backLeftDrivingCurrent;
