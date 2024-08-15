@@ -38,7 +38,7 @@ public class RobotContainer {
       OtherConstants.DRIVE_DEADBAND);
     private final DoubleSupplier driverRightStickX = () -> MathUtil.applyDeadband(
       driverController.getRawAxis(XboxController.Axis.kRightX.value),
-      OtherConstants.DRIVE_DEADBAND);
+      OtherConstants.DRIVE_DEADBAND * 2);
 
   private final Swerve drivetrain = new Swerve(new SwerveIOSparkMax());
 

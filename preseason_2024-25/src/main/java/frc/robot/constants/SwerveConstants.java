@@ -39,7 +39,7 @@ public class SwerveConstants {
     }};
 
     // Position offsets (rotations).
-    public static final double FRONT_LEFT_POSITION_OFFSET = 0.961;
+    public static final double FRONT_LEFT_POSITION_OFFSET = 0.935;
     public static final double FRONT_RIGHT_POSITION_OFFSET = 0.570;
     public static final double BACK_LEFT_POSITION_OFFSET = 0.510;
     public static final double BACK_RIGHT_POSITION_OFFSET = 0.186;
@@ -69,8 +69,8 @@ public class SwerveConstants {
     public static final double DRIVING_ENCODER_POSITION_FACTOR = DRIVE_WHEEL_CIRCUMFERENCE / DRIVING_GEARING_RATIO;
     public static final double DRIVING_ENCODER_VELOCITY_FACTOR = (DRIVE_WHEEL_CIRCUMFERENCE / DRIVING_GEARING_RATIO) / 60.0;
 
-    public static final double MAX_SPEED = 2;
-    public static final double MAX_ANGULAR_VELOCITY = 6;
+    public static final double MAX_SPEED = 4;
+    public static final double MAX_ANGULAR_VELOCITY = 4;
 
     // Gains for feedforward and simulation purposes.
     public static final double[] FRONT_LEFT_TURNING_GAINS = {0.135, 0.002209322474, 0.0008064027032};
@@ -106,10 +106,10 @@ public class SwerveConstants {
         BACK_RIGHT_TURNING_PID
     };
 
-    public static double[] FRONT_LEFT_DRIVING_PID = {6.0, 0.0, 0.1};
-    public static double[] FRONT_RIGHT_DRIVING_PID = {6.0, 0.0, 0.1};
-    public static double[] BACK_RIGHT_DRIVING_PID = {6.0, 0.0, 0.1};
-    public static double[] BACK_LEFT_DRIVING_PID = {6.0, 0.0, 0.1};
+    public static double[] FRONT_LEFT_DRIVING_PID = {7.7816, 0.0, 0.031362};
+    public static double[] FRONT_RIGHT_DRIVING_PID = {7.8027, 0.0, 0.035489};
+    public static double[] BACK_LEFT_DRIVING_PID = {5.1173, 0.0, 0.018606};
+    public static double[] BACK_RIGHT_DRIVING_PID = {5.2302, 0.0, 0.029953};
     public static double[][] DRIVING_PID = {
         FRONT_LEFT_DRIVING_PID,
         FRONT_RIGHT_DRIVING_PID,

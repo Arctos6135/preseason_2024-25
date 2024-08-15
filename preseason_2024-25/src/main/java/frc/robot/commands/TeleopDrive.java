@@ -20,8 +20,8 @@ public class TeleopDrive extends Command {
         this.ySpeedSupplier = ySpeedSupplier;
         this.rotSpeedSupplier = rotSpeedSupplier;
         //0.5 was totally arbitrary so were gonna have to change this
-        xRateLimiter = new SlewRateLimiter(0.5);
-        yRateLimiter = new SlewRateLimiter(0.5);
+        xRateLimiter = new SlewRateLimiter(0.8);
+        yRateLimiter = new SlewRateLimiter(0.8);
 
         addRequirements(drivetrain);
     }
