@@ -3,9 +3,14 @@ package frc.robot.constants;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.swerve.Swerve;
 
 public class SwerveConstants {
     /* Assume units are in
@@ -39,7 +44,8 @@ public class SwerveConstants {
     }};
 
     // Position offsets (rotations).
-    public static final double FRONT_LEFT_POSITION_OFFSET = 0.935;
+    public static final double FRONT_LEFT_POSITION_OFFSET = 1.0
+    ;
     public static final double FRONT_RIGHT_POSITION_OFFSET = 0.570;
     public static final double BACK_LEFT_POSITION_OFFSET = 0.510;
     public static final double BACK_RIGHT_POSITION_OFFSET = 0.186;
@@ -106,14 +112,22 @@ public class SwerveConstants {
         BACK_RIGHT_TURNING_PID
     };
 
-    public static double[] FRONT_LEFT_DRIVING_PID = {7.7816, 0.0, 0.031362};
-    public static double[] FRONT_RIGHT_DRIVING_PID = {7.8027, 0.0, 0.035489};
-    public static double[] BACK_LEFT_DRIVING_PID = {5.1173, 0.0, 0.018606};
-    public static double[] BACK_RIGHT_DRIVING_PID = {5.2302, 0.0, 0.029953};
+    public static double[] FRONT_LEFT_DRIVING_PID = {7.8027, 0.0, 0.27691};
+    public static double[] FRONT_RIGHT_DRIVING_PID = {7.8027, 0.0, 0.27691                                                                };
+    public static double[] BACK_LEFT_DRIVING_PID = {5.1173, 0.0, 0.095211};
+    public static double[] BACK_RIGHT_DRIVING_PID = {5.2302, 0.0, 0.15666};
     public static double[][] DRIVING_PID = {
         FRONT_LEFT_DRIVING_PID,
         FRONT_RIGHT_DRIVING_PID,
         BACK_LEFT_DRIVING_PID,
         BACK_RIGHT_DRIVING_PID
     };
+
+    public static HolonomicPathFollowerConfig autoConfig = new HolonomicPathFollowerConfig(
+        new PIDConstants(5.0, 0.0, 0.0),
+        new PIDConstants(5.0, 0.0, 0.0),
+        SwerveConstants.MAX_SPEED,
+        SwerveConstants.DISTANCE_TO_CENTER,
+        new ReplanningConfig()
+    );
 }

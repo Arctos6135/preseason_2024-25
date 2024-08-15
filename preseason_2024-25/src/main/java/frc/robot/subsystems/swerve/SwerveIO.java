@@ -108,4 +108,8 @@ public class SwerveIO {
     public void setBackRightDrivingPID(double P, double I, double D) {}
 
     public void setBackRightTurningPID(double P, double I, double D) {}
+
+    public SwerveModuleState[] getModuleStates() {
+        return new SwerveModuleState[]{};
+    };
 }

@@ -2,6 +2,8 @@ package frc.robot.subsystems.swerve;
 
 import org.littletonrobotics.junction.Logger;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -11,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.SwerveConstants;
@@ -128,6 +131,31 @@ public class Swerve extends SubsystemBase {
             new SwerveModuleState()
         }
         );
+
+        AutoBuilder.configureHolonomic(
+            this::getPose, 
+            this::resetPose, 
+            this::getChassisSpeeds, 
+            this::robotRelativeDrive, 
+            SwerveConstants.autoConfig, 
+            () -> {
+                var alliance = DriverStation.getAlliance();
+                if (alliance.isPresent()) {
+                    return alliance.get() == DriverStation.Alliance.Red;
+                }
+                return false;
+            }, 
+            this);
+    }
+
+    public void robotRelativeDrive(ChassisSpeeds chassisSpeeds) {
+        var swerveModuleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
+
+        io.setStates(swerveModuleStates);
+    }
+
+    public ChassisSpeeds getChassisSpeeds() {
+        return kinematics.toChassisSpeeds(io.getModuleStates());
     }
 
     public void drive(double x, double y, double rotation){
@@ -214,6 +242,10 @@ public class Swerve extends SubsystemBase {
      */
     public Pose2d getPose() {
         return odometry.getPoseMeters();
+    }
+
+    public void resetPose(Pose2d pose) {
+        odometry.resetPosition(io.getAngle(), io.getModulePositions(), pose);
     }
 
     public void resetStates() {

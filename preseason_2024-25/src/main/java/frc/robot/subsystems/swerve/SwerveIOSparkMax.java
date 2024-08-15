@@ -98,6 +98,16 @@ public class SwerveIOSparkMax extends SwerveIO {
         inputs.backRightTargetAngle = backRight.angleSetpoint;
     }
 
+    @Override
+    public SwerveModuleState[] getModuleStates() {
+        return new SwerveModuleState[]{
+            frontLeft.getState(),
+            frontRight.getState(),
+            backLeft.getState(),
+            backRight.getState()
+        };
+    }
+
     @Override 
     public Rotation2d getAngle() {
         return Rotation2d.fromDegrees(gyro.getAngle());

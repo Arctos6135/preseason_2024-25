@@ -11,9 +11,14 @@ import frc.robot.subsystems.swerve.SwerveIOSparkMax;
 
 import java.util.function.DoubleSupplier;
 
+import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -25,6 +30,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  public LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardChooser<>("autoChooser");
+
   // The robot's subsystems and commands are defined here...
 
   private final XboxController driverController = new XboxController(OtherConstants.DRIVER_CONTROLLER);
@@ -66,5 +73,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  //public Command getAutonomousCommand() {}
+  public Command getAutonomousCommand() {
+    return autoChooser.get();
+  }
 }
