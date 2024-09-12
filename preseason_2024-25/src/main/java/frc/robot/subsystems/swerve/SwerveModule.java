@@ -109,7 +109,7 @@ public class SwerveModule {
      * Resets the turning encoders to the angle given by the analog encoders.
      */
     private void resetToAbsolute() {
-        Rotation2d absolutePosition = Rotation2d.fromRotations((absoluteTurningEncoder.getAbsolutePosition() - absoluteTurningEncoder.getPositionOffset()) % 1);
+        Rotation2d absolutePosition = Rotation2d.fromRotations((absoluteTurningEncoder.getAbsolutePosition() + absoluteTurningEncoder.getPositionOffset()));
         turningEncoder.setPosition(absolutePosition.getRadians());
     }
 
@@ -194,7 +194,7 @@ public class SwerveModule {
      * @return absolute encoder angle (rotations)
      */
     public Rotation2d getAbsoluteAngle() {
-        return Rotation2d.fromRotations(absoluteTurningEncoder.get());
+        return Rotation2d.fromRotations(absoluteTurningEncoder.getAbsolutePosition());
     }
 
     /**

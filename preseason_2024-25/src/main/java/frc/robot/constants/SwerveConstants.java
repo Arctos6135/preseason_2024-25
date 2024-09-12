@@ -44,11 +44,10 @@ public class SwerveConstants {
     }};
 
     // Position offsets (rotations).
-    public static final double FRONT_LEFT_POSITION_OFFSET = 1.0
-    ;
-    public static final double FRONT_RIGHT_POSITION_OFFSET = 0.570;
-    public static final double BACK_LEFT_POSITION_OFFSET = 0.510;
-    public static final double BACK_RIGHT_POSITION_OFFSET = 0.186;
+    public static final double FRONT_LEFT_POSITION_OFFSET = 0.977;
+    public static final double FRONT_RIGHT_POSITION_OFFSET = 0.400;
+    public static final double BACK_LEFT_POSITION_OFFSET = 0.500;
+    public static final double BACK_RIGHT_POSITION_OFFSET = 0.80;
     public static double[] POSITION_OFFSETS = {
         FRONT_LEFT_POSITION_OFFSET,
         FRONT_RIGHT_POSITION_OFFSET,
@@ -112,7 +111,7 @@ public class SwerveConstants {
         BACK_RIGHT_TURNING_PID
     };
 
-    public static double[] FRONT_LEFT_DRIVING_PID = {7.8027, 0.0, 0.27691};
+    public static double[] FRONT_LEFT_DRIVING_PID = {7.8027, 0.0, 0.20691};
     public static double[] FRONT_RIGHT_DRIVING_PID = {7.8027, 0.0, 0.27691                                                                };
     public static double[] BACK_LEFT_DRIVING_PID = {5.1173, 0.0, 0.095211};
     public static double[] BACK_RIGHT_DRIVING_PID = {5.2302, 0.0, 0.15666};

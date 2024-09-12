@@ -16,9 +16,12 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -53,6 +56,10 @@ public class RobotContainer {
   public RobotContainer() {
     drivetrain.setDefaultCommand(new TeleopDrive(drivetrain, driverLeftStickY, driverLeftStickX, driverRightStickX));
 
+    autoChooser.addDefaultOption("Forward", new PathPlannerAuto("Forward"));
+
+    drivetrain.resetPose(new Pose2d(2.0, 7.0, new Rotation2d()));
+
     // Configure the trigger bindings
     configureBindings();
   }
@@ -74,6 +81,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoChooser.get();
+    return new PathPlannerAuto("Forward"); // autoChooser.get();
   }
 }

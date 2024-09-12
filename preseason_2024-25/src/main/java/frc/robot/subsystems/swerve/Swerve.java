@@ -150,6 +150,8 @@ public class Swerve extends SubsystemBase {
 
     public void robotRelativeDrive(ChassisSpeeds chassisSpeeds) {
         var swerveModuleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
+        SwerveDriveKinematics.desaturateWheelSpeeds(
+            swerveModuleStates, SwerveConstants.MAX_SPEED);
 
         io.setStates(swerveModuleStates);
     }
