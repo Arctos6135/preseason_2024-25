@@ -113,5 +113,7 @@ public class SwerveIO {
 
     public SwerveModuleState[] getModuleStates() {
         return new SwerveModuleState[]{};
-    };
+    }
+
+    public void setDrivingVoltages(double voltage) {};
 }

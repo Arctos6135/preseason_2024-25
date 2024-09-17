@@ -44,6 +44,14 @@ public class SwerveIOSparkMax extends SwerveIO {
     }
 
     @Override
+    public void setDrivingVoltages(double voltage) {
+        frontLeft.setDrivingVoltage(voltage);
+        frontRight.setDrivingVoltage(voltage);
+        backLeft.setDrivingVoltage(voltage);
+        backRight.setDrivingVoltage(voltage);
+    }
+
+    @Override
     public void updateInputs(SwerveInputs inputs) {
         // Front Left
         inputs.frontLeftPosition = frontLeft.getPosition();

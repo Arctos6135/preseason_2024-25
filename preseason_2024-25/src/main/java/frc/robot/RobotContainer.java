@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.commands.TeleopDrive;
+import frc.robot.commands.characterization.StepVoltageRoutine;
 import frc.robot.commands.utility.resetAbsoluteEncoders;
 import frc.robot.constants.OtherConstants;
 import frc.robot.subsystems.swerve.Swerve;
@@ -68,6 +69,7 @@ public class RobotContainer {
 
   private void configSmartDashboard() {
     SmartDashboard.putData("resetAbsoluteEncoders", new resetAbsoluteEncoders(drivetrain));
+    SmartDashboard.putData("StepVoltageRoutine", new StepVoltageRoutine(drivetrain));
   }
 
   /**

@@ -281,6 +281,10 @@ public class SwerveModule {
         absoluteTurningEncoder.reset();
     }
 
+    public void setDrivingVoltage(double voltage) {
+        drivingMotor.setVoltage(voltage);
+    }
+
     /**
      * Sets the desired state of the module.
      * @param desiredState

@@ -155,6 +155,10 @@ public class Swerve extends SubsystemBase {
         io.resetAbsoluteEncoders();
     }
 
+    public void setDrivingVoltage(double voltage) {
+        io.setDrivingVoltages(voltage);
+    }
+
     public void robotRelativeDrive(ChassisSpeeds chassisSpeeds) {
         var swerveModuleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(
