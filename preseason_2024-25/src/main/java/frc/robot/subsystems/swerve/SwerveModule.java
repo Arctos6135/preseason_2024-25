@@ -3,6 +3,7 @@ package frc.robot.subsystems.swerve;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -26,6 +27,7 @@ public class SwerveModule {
     private final AnalogEncoder absoluteTurningEncoder;
 
     private final TalonFXConfiguration driveMotorConfig = new TalonFXConfiguration();
+    private final TalonFXConfigurator driveMotorConfigurator;
 
     private final RelativeEncoder turningEncoder;
 
@@ -56,6 +58,8 @@ public class SwerveModule {
         // Sets up the motors.
         this.drivingMotor = new TalonFX(CANBusConstants.DRIVE_IDS.get(moduleIdentifier));
         this.turningMotor = new CANSparkMax(CANBusConstants.TURN_IDS.get(moduleIdentifier), MotorType.kBrushless);
+
+        driveMotorConfigurator = drivingMotor.getConfigurator();
 
         // Creates the analog (absolute) encoder.
         absoluteTurningEncoder = new AnalogEncoder(SwerveConstants.ENCODER_PORTS.get(moduleIdentifier));
@@ -143,7 +147,8 @@ public class SwerveModule {
         
         // Sets the motor to be clockwise positive.
         driveMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
- 
+
+        driveMotorConfigurator.apply(driveMotorConfig);
 
         // drivingMotor.burnFlash();
     }
