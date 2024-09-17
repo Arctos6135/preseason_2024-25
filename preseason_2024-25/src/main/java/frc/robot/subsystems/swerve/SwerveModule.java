@@ -82,10 +82,6 @@ public class SwerveModule {
         turningEncoder.setPositionConversionFactor(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
         turningEncoder.setVelocityConversionFactor(SwerveConstants.TURNING_ENCODER_VELOCITY_FACTOR);
 
-        // Motors were zeroed facing forward, so angular offset is unnecessary.
-        this.chassisAngularOffset = 0.0; // SwerveConstants.ANGULAR_OFFSETS.get(moduleIdentifier);
-
-
         // Enables PID wrapping to take more efficient routes when turning.
         turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -279,6 +275,10 @@ public class SwerveModule {
      */
     public double getTurningAcceleration() {
         return turningAcceleration;
+    }
+
+    public void resetAbsoluteEncoder() {
+        absoluteTurningEncoder.reset();
     }
 
     /**

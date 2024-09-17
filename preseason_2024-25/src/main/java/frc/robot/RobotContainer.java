@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.commands.TeleopDrive;
+import frc.robot.commands.utility.resetAbsoluteEncoders;
 import frc.robot.constants.OtherConstants;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.swerve.SwerveIOSparkMax;
@@ -62,6 +63,11 @@ public class RobotContainer {
 
     // Configure the trigger bindings
     configureBindings();
+    configSmartDashboard();
+  }
+
+  private void configSmartDashboard() {
+    SmartDashboard.putData("resetAbsoluteEncoders", new resetAbsoluteEncoders(drivetrain));
   }
 
   /**

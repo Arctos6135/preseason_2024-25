@@ -36,6 +36,14 @@ public class SwerveIOSparkMax extends SwerveIO {
     }
 
     @Override
+    public void resetAbsoluteEncoders() {
+        frontLeft.resetAbsoluteEncoder();
+        frontRight.resetAbsoluteEncoder();
+        backLeft.resetAbsoluteEncoder();
+        backRight.resetAbsoluteEncoder();
+    }
+
+    @Override
     public void updateInputs(SwerveInputs inputs) {
         // Front Left
         inputs.frontLeftPosition = frontLeft.getPosition();

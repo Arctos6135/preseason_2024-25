@@ -148,6 +148,13 @@ public class Swerve extends SubsystemBase {
             this);
     }
 
+    /**
+     * Reset the values of the absolute encoders to be zero.
+     */
+    public void resetAbsoluteEncoders() {
+        io.resetAbsoluteEncoders();
+    }
+
     public void robotRelativeDrive(ChassisSpeeds chassisSpeeds) {
         var swerveModuleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(
