@@ -1,12 +1,12 @@
 package frc.robot.subsystems.swerve;
 
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
@@ -43,10 +43,11 @@ public class SwerveModule {
     public double drivingVelocity;
     public double turningVelocity;
 
-    public double lastDrivingVelocity;
-    public double lastTurningVelocity;
+    public double targetDrivingVelocity;
 
-    public double drivingAcceleration;
+    public double lastTargetDrivingVelocity;
+
+    public double targetDrivingAcceleration;
     public double turningAcceleration;
 
     public double angleSetpoint;
@@ -113,8 +114,7 @@ public class SwerveModule {
         lastTime = Timer.getFPGATimestamp();
 
         // Sets the last velocity of module motors to zero.
-        lastDrivingVelocity = 0.0;
-        lastTurningVelocity = 0.0;
+        lastTargetDrivingVelocity = 0.0;
     }
 
     /**
@@ -281,7 +281,7 @@ public class SwerveModule {
      * @return the acceleration of the driving motor.
      */
     public double getDrivingAcceleration() {
-        return drivingAcceleration;
+        return drivingMotor.getAcceleration().getValueAsDouble();
     }
 
     /**
@@ -307,6 +307,8 @@ public class SwerveModule {
     public void setState(SwerveModuleState desiredState) {
         SwerveModuleState correctedDesiredState = new SwerveModuleState();
         correctedDesiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
+        targetDrivingVelocity = desiredState.speedMetersPerSecond;
+
         // Accounts for the angular offset of the swerve module.
         correctedDesiredState.angle = desiredState.angle.plus(Rotation2d.fromRadians(chassisAngularOffset));
 
@@ -314,6 +316,8 @@ public class SwerveModule {
             correctedDesiredState,
             getAngle()
         );
+
+        targetDrivingAcceleration = (targetDrivingVelocity - lastTargetDrivingVelocity) / 0.02;
 
         // Sets the setpoint for the PID controllers to follow.
         drivingPIDController.setSetpoint(optimizedDesiredState.speedMetersPerSecond); // m/s
@@ -326,19 +330,14 @@ public class SwerveModule {
         drivingVoltage = drivingPIDController.calculate(drivingVelocity);
         turningVoltage = turningPIDController.calculate(getAngle().getRadians());
 
-        // Calculates motor acceleration given current and previous velocities.
-        drivingAcceleration = (drivingVelocity - lastDrivingVelocity) / (0.02);
-        turningAcceleration = (turningVelocity - lastTurningVelocity) / (0.02);
-
-        drivingVoltage += drivingFeedforward.calculate(optimizedDesiredState.speedMetersPerSecond, drivingAcceleration);
+        drivingVoltage += drivingFeedforward.calculate(targetDrivingVelocity, targetDrivingAcceleration);
 
         // Sets the voltage of the motors clamped to reasonable values.
         drivingMotor.setVoltage(MathUtil.clamp(drivingVoltage, -12, 12));
         turningMotor.setVoltage(MathUtil.clamp(turningVoltage, -12, 12));
 
         // Updates the last values.
-        lastDrivingVelocity = drivingVelocity;
-        lastTurningVelocity = turningVelocity;
+        lastTargetDrivingVelocity = targetDrivingVelocity;
 
         velocitySetpoint = optimizedDesiredState.speedMetersPerSecond;
         angleSetpoint = optimizedDesiredState.angle.getDegrees();

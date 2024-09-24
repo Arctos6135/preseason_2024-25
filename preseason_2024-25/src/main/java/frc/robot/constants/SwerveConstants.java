@@ -7,10 +7,7 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.util.Units;
-import frc.robot.subsystems.swerve.Swerve;
 
 public class SwerveConstants {
     /* Assume units are in
