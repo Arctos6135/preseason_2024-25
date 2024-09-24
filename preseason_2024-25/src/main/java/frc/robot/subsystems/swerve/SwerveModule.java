@@ -12,6 +12,7 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -34,8 +35,13 @@ public class SwerveModule {
     private final PIDController drivingPIDController;
     private final PIDController turningPIDController;
 
+    private final SimpleMotorFeedforward drivingFeedforward;
+
     public double drivingVoltage;
     public double turningVoltage;
+
+    public double drivingVelocity;
+    public double turningVelocity;
 
     public double lastDrivingVelocity;
     public double lastTurningVelocity;
@@ -51,6 +57,10 @@ public class SwerveModule {
 
     private double chassisAngularOffset = 0;
 
+    private String moduleIdentifier;
+
+    private static String[] modules = {"frontLeft", "frontRight", "backLeft", "backRight"};
+
     /**
      * Constructs an MK4i swerve module and configures the driving and turning motor, encoder, and PID controller.
      */
@@ -60,6 +70,8 @@ public class SwerveModule {
         this.turningMotor = new CANSparkMax(CANBusConstants.TURN_IDS.get(moduleIdentifier), MotorType.kBrushless);
 
         driveMotorConfigurator = drivingMotor.getConfigurator();
+
+        this.moduleIdentifier = modules[moduleIdentifier];
 
         // Creates the analog (absolute) encoder.
         absoluteTurningEncoder = new AnalogEncoder(SwerveConstants.ENCODER_PORTS.get(moduleIdentifier));
@@ -77,6 +89,9 @@ public class SwerveModule {
         // Creates PIDController with the module's unique gains.
         this.drivingPIDController = new PIDController(SwerveConstants.DRIVING_PID[moduleIdentifier][0], SwerveConstants.DRIVING_PID[moduleIdentifier][1], SwerveConstants.DRIVING_PID[moduleIdentifier][2]);
         this.turningPIDController = new PIDController(SwerveConstants.TURNING_PID[moduleIdentifier][0], SwerveConstants.TURNING_PID[moduleIdentifier][1], SwerveConstants.TURNING_PID[moduleIdentifier][2]);
+
+        // Creates feedforward controllers for the driving motor.
+        this.drivingFeedforward = new SimpleMotorFeedforward(SwerveConstants.DRIVING_FEEDFORWARDS[moduleIdentifier][0], SwerveConstants.DRIVING_FEEDFORWARDS[moduleIdentifier][1], SwerveConstants.DRIVING_FEEDFORWARDS[moduleIdentifier][2]);
 
         // Sets conversion factors so the encoder tracks in meters instead of rotations.
         turningEncoder.setPositionConversionFactor(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
@@ -304,25 +319,26 @@ public class SwerveModule {
         drivingPIDController.setSetpoint(optimizedDesiredState.speedMetersPerSecond); // m/s
         turningPIDController.setSetpoint(optimizedDesiredState.angle.getRadians()); // radians
 
+        drivingVelocity = getDrivingVelocity();
+        turningVelocity = getTurningVelocity();
+
         // Calculates the feedback voltage given by the PID controllers.
-        drivingVoltage = drivingPIDController.calculate(getDrivingVelocity());
+        drivingVoltage = drivingPIDController.calculate(drivingVelocity);
         turningVoltage = turningPIDController.calculate(getAngle().getRadians());
+
+        // Calculates motor acceleration given current and previous velocities.
+        drivingAcceleration = (drivingVelocity - lastDrivingVelocity) / (0.02);
+        turningAcceleration = (turningVelocity - lastTurningVelocity) / (0.02);
+
+        drivingVoltage += drivingFeedforward.calculate(optimizedDesiredState.speedMetersPerSecond, drivingAcceleration);
 
         // Sets the voltage of the motors clamped to reasonable values.
         drivingMotor.setVoltage(MathUtil.clamp(drivingVoltage, -12, 12));
         turningMotor.setVoltage(MathUtil.clamp(turningVoltage, -12, 12));
 
-        // Calculates acceleration of the module.
-        time = Timer.getFPGATimestamp();
-
-        // Calculates motor acceleration given current and previous velocities.
-        drivingAcceleration = (getDrivingVelocity() - lastDrivingVelocity) / (time - lastTime);
-        turningAcceleration = (getTurningVelocity() - lastTurningVelocity) / (time - lastTime);
-
         // Updates the last values.
-        lastTime = time;
-        lastDrivingVelocity = getDrivingVelocity();
-        lastTurningVelocity = getTurningVelocity();
+        lastDrivingVelocity = drivingVelocity;
+        lastTurningVelocity = turningVelocity;
 
         velocitySetpoint = optimizedDesiredState.speedMetersPerSecond;
         angleSetpoint = optimizedDesiredState.angle.getDegrees();

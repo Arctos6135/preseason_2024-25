@@ -78,27 +78,9 @@ public class SwerveConstants {
     public static final double MAX_ANGULAR_VELOCITY = 4;
 
     // Gains for feedforward and simulation purposes.
-    public static final double[] FRONT_LEFT_TURNING_GAINS = {0.135, 0.002209322474, 0.0008064027032};
-    public static final double[] FRONT_RIGHT_TURNING_GAINS = {0.135, 0.002209322474, 0.0008064027032}; // Placeholder until encoder wires fixed.
-    public static final double[] BACK_LEFT_TURNING_GAINS = {0.135, 0.002206896552, 0.0009622068966};
-    public static final double[] BACK_RIGHT_TURNING_GAINS = {0.125, 0.002084437086, 0.0007920860927};
-    public static final double[][] TURNING_GAINS = {
-        FRONT_LEFT_TURNING_GAINS,
-        FRONT_RIGHT_TURNING_GAINS,
-        BACK_LEFT_TURNING_GAINS,
-        BACK_RIGHT_TURNING_GAINS
+    public static final double[] STEADY_STATE_GAINS = {
+        0.21599,
     };
-
-    public static final LinearSystem<N1, N1, N1> FRONT_LEFT_DRIVING_PLANT = null;
-    public static final LinearSystem<N1, N1, N1> FRONT_RIGHT_DRIVING_PLANT = null;
-    public static final LinearSystem<N1, N1, N1> BACK_LEFT_DRIVING_PLANT = null;
-    public static final LinearSystem<N1, N1, N1> BACK_RIGHT_DRIVING_PLANT = null;
-    public static final List<LinearSystem<N1, N1, N1>> DRIVING_PLANTS = new ArrayList<>() {{
-        add(FRONT_LEFT_DRIVING_PLANT);
-        add(FRONT_RIGHT_DRIVING_PLANT);
-        add(BACK_LEFT_DRIVING_PLANT);
-        add(BACK_RIGHT_DRIVING_PLANT);
-    }};
 
     public static double[] FRONT_LEFT_TURNING_PID = {1.3, 0.0, 0.0};
     public static double[] FRONT_RIGHT_TURNING_PID = {1.3, 0.0, 0.0};
@@ -111,8 +93,8 @@ public class SwerveConstants {
         BACK_RIGHT_TURNING_PID
     };
 
-    public static double[] FRONT_LEFT_DRIVING_PID = {7.8027, 0.0, 0.20691};
-    public static double[] FRONT_RIGHT_DRIVING_PID = {7.8027, 0.0, 0.27691                                                                };
+    public static double[] FRONT_LEFT_DRIVING_PID = {5.8331, 0.0, 0.27143};
+    public static double[] FRONT_RIGHT_DRIVING_PID = {8.8186, 0.0, 0.27691};
     public static double[] BACK_LEFT_DRIVING_PID = {5.1173, 0.0, 0.095211};
     public static double[] BACK_RIGHT_DRIVING_PID = {5.2302, 0.0, 0.15666};
     public static double[][] DRIVING_PID = {
@@ -120,6 +102,17 @@ public class SwerveConstants {
         FRONT_RIGHT_DRIVING_PID,
         BACK_LEFT_DRIVING_PID,
         BACK_RIGHT_DRIVING_PID
+    };
+
+    public static double[] FRONT_LEFT_DRIVING_FEEDFORWARD = {0.500, 0.0, 0.0};
+    public static double[] FRONT_RIGHT_DRIVING_FEEDFORWARD = {0.500, 0.0, 0.0};
+    public static double[] BACK_LEFT_DRIVING_FEEDFORWARD = {0.500, 0.0, 0.0};
+    public static double[] BACK_RIGHT_DRIVING_FEEDFORWARD = {0.500, 0.0, 0.0};
+    public static double[][] DRIVING_FEEDFORWARDS = {
+        FRONT_LEFT_DRIVING_FEEDFORWARD,
+        FRONT_RIGHT_DRIVING_FEEDFORWARD,
+        BACK_LEFT_DRIVING_FEEDFORWARD,
+        BACK_RIGHT_DRIVING_FEEDFORWARD
     };
 
     public static HolonomicPathFollowerConfig autoConfig = new HolonomicPathFollowerConfig(

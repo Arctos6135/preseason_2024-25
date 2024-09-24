@@ -22,6 +22,8 @@ public class StepVoltageRoutine extends Command {
 
     @Override
     public void initialize() {
+        getStaticFriction();
+
         // Initialize variables
         currentVoltage = 0.0;
         lastStepTime = System.currentTimeMillis();
@@ -59,6 +61,14 @@ public class StepVoltageRoutine extends Command {
     public boolean isFinished() {
         // Finish if the voltage exceeds the maximum allowable voltage
         return currentVoltage > MAX_VOLTAGE;
+    }
+
+    public void getStaticFriction() {
+        double volts = 0.0;
+        while (swerve.getChassisSpeeds().vxMetersPerSecond <= 0.01 || swerve.getChassisSpeeds().vyMetersPerSecond <= 0.01) {
+            swerve.setDrivingVoltage(volts);
+            volts += 0.1;
+        }
     }
 
     @Override
