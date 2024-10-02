@@ -19,16 +19,16 @@ public class TeleopDrive extends Command {
         this.xSpeedSupplier = xSpeedSupplier;
         this.ySpeedSupplier = ySpeedSupplier;
         this.rotSpeedSupplier = rotSpeedSupplier;
-        //0.5 was totally arbitrary so were gonna have to change this
-        xRateLimiter = new SlewRateLimiter(0.8);
-        yRateLimiter = new SlewRateLimiter(0.8);
+
+        xRateLimiter = new SlewRateLimiter(1);
+        yRateLimiter = new SlewRateLimiter(1);
 
         addRequirements(drivetrain);
     }
 
     @Override
     public void initialize() {
-        // Probably some of the PID stuff goes here
+
     }
 
     @Override
