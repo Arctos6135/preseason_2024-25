@@ -19,8 +19,8 @@ public class SwerveConstants {
 
     public static final int FRONT_LEFT_ENCODER_PORT = 0;
     public static final int FRONT_RIGHT_ENCODER_PORT = 1;
-    public static final int BACK_LEFT_ENCODER_PORT = 2;
-    public static final int BACK_RIGHT_ENCODER_PORT = 3;
+    public static final int BACK_LEFT_ENCODER_PORT = 3;
+    public static final int BACK_RIGHT_ENCODER_PORT = 2;
     public static final List<Integer> ENCODER_PORTS = new ArrayList<>() {{
         add(FRONT_LEFT_ENCODER_PORT);
         add(FRONT_RIGHT_ENCODER_PORT);
@@ -41,10 +41,10 @@ public class SwerveConstants {
     }};
 
     // Position offsets (rotations).
-    public static final double FRONT_LEFT_POSITION_OFFSET = 0.977;
-    public static final double FRONT_RIGHT_POSITION_OFFSET = 0.400;
-    public static final double BACK_LEFT_POSITION_OFFSET = 0.500;
-    public static final double BACK_RIGHT_POSITION_OFFSET = 0.80;
+    public static final double FRONT_LEFT_POSITION_OFFSET = 0.98;
+    public static final double FRONT_RIGHT_POSITION_OFFSET = 0.54;
+    public static final double BACK_LEFT_POSITION_OFFSET = 0.5;
+    public static final double BACK_RIGHT_POSITION_OFFSET = 0.15;
     public static double[] POSITION_OFFSETS = {
         FRONT_LEFT_POSITION_OFFSET,
         FRONT_RIGHT_POSITION_OFFSET,
@@ -71,18 +71,18 @@ public class SwerveConstants {
     public static final double DRIVING_ENCODER_POSITION_FACTOR = DRIVE_WHEEL_CIRCUMFERENCE / DRIVING_GEARING_RATIO;
     public static final double DRIVING_ENCODER_VELOCITY_FACTOR = (DRIVE_WHEEL_CIRCUMFERENCE / DRIVING_GEARING_RATIO) / 60.0;
 
-    public static final double MAX_SPEED = 4;
-    public static final double MAX_ANGULAR_VELOCITY = 4;
+    public static final double MAX_SPEED = 2;
+    public static final double MAX_ANGULAR_VELOCITY = 2;
 
     // Gains for feedforward and simulation purposes.
     public static final double[] STEADY_STATE_GAINS = {
         0.21599,
     };
 
-    public static double[] FRONT_LEFT_TURNING_PID = {1.3, 0.0, 0.0};
-    public static double[] FRONT_RIGHT_TURNING_PID = {1.3, 0.0, 0.0};
-    public static double[] BACK_RIGHT_TURNING_PID = {1.3, 0.0, 0.0};
-    public static double[] BACK_LEFT_TURNING_PID = {1.3, 0.0, 0.0};
+    public static double[] FRONT_LEFT_TURNING_PID = {2.3, 0.0, 0.0};
+    public static double[] FRONT_RIGHT_TURNING_PID = {2.3, 0.0, 0.0};
+    public static double[] BACK_RIGHT_TURNING_PID = {2.3, 0.0, 0.0};
+    public static double[] BACK_LEFT_TURNING_PID = {2.3, 0.0, 0.0};
     public static double[][] TURNING_PID = {
         FRONT_LEFT_TURNING_PID,
         FRONT_RIGHT_TURNING_PID,
@@ -90,10 +90,10 @@ public class SwerveConstants {
         BACK_RIGHT_TURNING_PID
     };
 
-    public static double[] FRONT_LEFT_DRIVING_PID = {5.8331, 0.0, 0.27143};
-    public static double[] FRONT_RIGHT_DRIVING_PID = {8.8186, 0.0, 0.27691};
-    public static double[] BACK_LEFT_DRIVING_PID = {5.1173, 0.0, 0.095211};
-    public static double[] BACK_RIGHT_DRIVING_PID = {5.2302, 0.0, 0.15666};
+    public static double[] FRONT_LEFT_DRIVING_PID = {11.0551, 0.0, 0.11055};
+    public static double[] FRONT_RIGHT_DRIVING_PID = {10.389, 0.0, 0.10389};
+    public static double[] BACK_LEFT_DRIVING_PID = {11.7297, 0.0, 0.1173};
+    public static double[] BACK_RIGHT_DRIVING_PID = {11.2409, 0.0, 0.11241};
     public static double[][] DRIVING_PID = {
         FRONT_LEFT_DRIVING_PID,
         FRONT_RIGHT_DRIVING_PID,
@@ -101,10 +101,10 @@ public class SwerveConstants {
         BACK_RIGHT_DRIVING_PID
     };
 
-    public static double[] FRONT_LEFT_DRIVING_FEEDFORWARD = {0.500, 0.0, 0.0};
-    public static double[] FRONT_RIGHT_DRIVING_FEEDFORWARD = {0.500, 0.0, 0.0};
-    public static double[] BACK_LEFT_DRIVING_FEEDFORWARD = {0.500, 0.0, 0.0};
-    public static double[] BACK_RIGHT_DRIVING_FEEDFORWARD = {0.500, 0.0, 0.0};
+    public static double[] FRONT_LEFT_DRIVING_FEEDFORWARD = {0, 0.9216, 0.0182};
+    public static double[] FRONT_RIGHT_DRIVING_FEEDFORWARD = {0, 0.9407,  0.0187};
+    public static double[] BACK_LEFT_DRIVING_FEEDFORWARD = {0, 0.9396, 0.0186};
+    public static double[] BACK_RIGHT_DRIVING_FEEDFORWARD = {0, 0.9336, 0.0185};
     public static double[][] DRIVING_FEEDFORWARDS = {
         FRONT_LEFT_DRIVING_FEEDFORWARD,
         FRONT_RIGHT_DRIVING_FEEDFORWARD,

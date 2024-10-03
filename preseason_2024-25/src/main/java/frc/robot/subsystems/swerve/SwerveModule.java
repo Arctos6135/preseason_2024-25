@@ -105,7 +105,7 @@ public class SwerveModule {
         drivingPIDController.disableContinuousInput();
 
         // Sets a conversion factor on the analog controller.
-        absoluteTurningEncoder.setDistancePerRotation(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
+        // absoluteTurningEncoder.setDistancePerRotation(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
 
         // Resets the turning position to match the absolute position.
         resetToAbsolute();
@@ -121,7 +121,7 @@ public class SwerveModule {
      * Resets the turning encoders to the angle given by the analog encoders.
      */
     private void resetToAbsolute() {
-        Rotation2d absolutePosition = Rotation2d.fromRotations((absoluteTurningEncoder.getAbsolutePosition() + absoluteTurningEncoder.getPositionOffset()));
+        Rotation2d absolutePosition = Rotation2d.fromRotations((absoluteTurningEncoder.get()));
         turningEncoder.setPosition(absolutePosition.getRadians());
     }
 
@@ -217,7 +217,7 @@ public class SwerveModule {
      * @return absolute encoder angle (rotations)
      */
     public Rotation2d getAbsoluteAngle() {
-        return Rotation2d.fromRotations(absoluteTurningEncoder.getAbsolutePosition());
+        return Rotation2d.fromRotations(absoluteTurningEncoder.get());
     }
 
     /**

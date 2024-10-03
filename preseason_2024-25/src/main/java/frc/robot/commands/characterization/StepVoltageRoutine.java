@@ -45,7 +45,7 @@ public class StepVoltageRoutine extends Command {
 
         // Time control to ensure the step is applied at the correct interval
         long currentTime = System.currentTimeMillis();
-        if (currentTime - lastStepTime >= TIME_BETWEEN_STEPS * 1000) {
+        if (currentTime - lastStepTime >= TIME_BETWEEN_STEPS * 50) {
             // Set the voltage to all swerve modules
             swerve.setDrivingVoltage(currentVoltage);
 
