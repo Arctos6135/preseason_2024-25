@@ -101,10 +101,10 @@ public class SwerveConstants {
         BACK_RIGHT_DRIVING_PID
     };
 
-    public static double[] FRONT_LEFT_DRIVING_FEEDFORWARD = {0.500, 0.0, 0.0};
-    public static double[] FRONT_RIGHT_DRIVING_FEEDFORWARD = {0.500, 0.0, 0.0};
-    public static double[] BACK_LEFT_DRIVING_FEEDFORWARD = {0.500, 0.0, 0.0};
-    public static double[] BACK_RIGHT_DRIVING_FEEDFORWARD = {0.500, 0.0, 0.0};
+    public static double[] FRONT_LEFT_DRIVING_FEEDFORWARD = {0, 0.9216, 0.0182};
+    public static double[] FRONT_RIGHT_DRIVING_FEEDFORWARD = {0, 0.9407,  0.0187};
+    public static double[] BACK_LEFT_DRIVING_FEEDFORWARD = {0, 0.9396, 0.0186};
+    public static double[] BACK_RIGHT_DRIVING_FEEDFORWARD = {0, 0.9336, 0.0185};
     public static double[][] DRIVING_FEEDFORWARDS = {
         FRONT_LEFT_DRIVING_FEEDFORWARD,
         FRONT_RIGHT_DRIVING_FEEDFORWARD,
