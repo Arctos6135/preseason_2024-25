@@ -90,10 +90,10 @@ public class SwerveConstants {
         BACK_RIGHT_TURNING_PID
     };
 
-    public static double[] FRONT_LEFT_DRIVING_PID = {11.0551, 0.0, 0.11055};
-    public static double[] FRONT_RIGHT_DRIVING_PID = {10.389, 0.0, 0.10389};
-    public static double[] BACK_LEFT_DRIVING_PID = {11.7297, 0.0, 0.1173};
-    public static double[] BACK_RIGHT_DRIVING_PID = {11.2409, 0.0, 0.11241};
+    public static double[] FRONT_LEFT_DRIVING_PID = {5.0, 0.0, 0.0};
+    public static double[] FRONT_RIGHT_DRIVING_PID = {5.0, 0.0, 0.0};
+    public static double[] BACK_LEFT_DRIVING_PID = {5.0, 0.0 ,0.0};
+    public static double[] BACK_RIGHT_DRIVING_PID = {5.0, 0.0, 0.0};
     public static double[][] DRIVING_PID = {
         FRONT_LEFT_DRIVING_PID,
         FRONT_RIGHT_DRIVING_PID,
