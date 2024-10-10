@@ -152,9 +152,6 @@ public class SwerveModule {
         
         // Sets the neutral mode to brake mode.
         driveMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-
-        // Sets the driving encoder position factor.
-        driveMotorConfig.Feedback.SensorToMechanismRatio = SwerveConstants.DRIVING_ENCODER_POSITION_FACTOR;
         
         // Sets the motor to be clockwise positive.
         driveMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
@@ -201,7 +198,7 @@ public class SwerveModule {
      * @return driving velocity (m/s)
      */
     public double getDrivingVelocity() {
-        return drivingMotor.get();
+        return drivingMotor.getVelocity().getValueAsDouble() * SwerveConstants.DRIVING_ENCODER_VELOCITY_FACTOR;
     }
 
     /**
@@ -307,7 +304,6 @@ public class SwerveModule {
     public void setState(SwerveModuleState desiredState) {
         SwerveModuleState correctedDesiredState = new SwerveModuleState();
         correctedDesiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
-        targetDrivingVelocity = desiredState.speedMetersPerSecond;
 
         // Accounts for the angular offset of the swerve module.
         correctedDesiredState.angle = desiredState.angle.plus(Rotation2d.fromRadians(chassisAngularOffset));
@@ -316,6 +312,8 @@ public class SwerveModule {
             correctedDesiredState,
             getAngle()
         );
+
+        targetDrivingVelocity = optimizedDesiredState.speedMetersPerSecond;
 
         targetDrivingAcceleration = (targetDrivingVelocity - lastTargetDrivingVelocity) / 0.02;
 
