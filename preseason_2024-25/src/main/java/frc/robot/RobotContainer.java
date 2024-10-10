@@ -6,8 +6,13 @@ package frc.robot;
 
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.characterization.StepVoltageRoutine;
+import frc.robot.commands.shooter.Intake;
+import frc.robot.commands.shooter.Shoot;
 import frc.robot.commands.utility.resetAbsoluteEncoders;
 import frc.robot.constants.OtherConstants;
+import frc.robot.constants.ShooterConstants;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.swerve.SwerveIOSparkMax;
 
@@ -24,6 +29,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -51,6 +57,7 @@ public class RobotContainer {
       OtherConstants.DRIVE_DEADBAND * 2);
 
   private final Swerve drivetrain = new Swerve(new SwerveIOSparkMax());
+  private final Shooter shooter = new Shooter(new ShooterIOSparkMax());
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -79,7 +86,16 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  private void configureBindings() {}
+  private void configureBindings() {
+    Trigger operatorLeftBumper = new JoystickButton(operatorController, XboxController.Button.kLeftBumper.value);
+    Trigger operatorRightBumper = new JoystickButton(operatorController, XboxController.Button.kRightBumper.value);
+    Trigger operatorA = new JoystickButton(operatorController, XboxController.Button.kA.value);
+    Trigger operatorB = new JoystickButton(operatorController, XboxController.Button.kB.value);
+
+    operatorA.onTrue(Shoot.shoot(shooter));
+    operatorB.whileTrue(new Intake(shooter));
+
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
