@@ -27,4 +27,7 @@ public class CANBusConstants {
         add(BACK_LEFT_TURN);
         add(BACK_RIGHT_TURN);
     }};
+
+    public static final int SHOOTER_LEADER = 9;
+    public static final int SHOOTER_FOLLOWER = 10;
 }
