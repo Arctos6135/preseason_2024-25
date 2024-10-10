@@ -41,10 +41,10 @@ public class SwerveConstants {
     }};
 
     // Position offsets (rotations).
-    public static final double FRONT_LEFT_POSITION_OFFSET = 0.98;
-    public static final double FRONT_RIGHT_POSITION_OFFSET = 0.54;
-    public static final double BACK_LEFT_POSITION_OFFSET = 0.5;
-    public static final double BACK_RIGHT_POSITION_OFFSET = 0.15;
+    public static final double FRONT_LEFT_POSITION_OFFSET = 0.971 + 0.015;
+    public static final double FRONT_RIGHT_POSITION_OFFSET = 0.398;
+    public static final double BACK_LEFT_POSITION_OFFSET = 0.5 + 0.02;
+    public static final double BACK_RIGHT_POSITION_OFFSET = 0.675 - 0.5 - 0.005;
     public static double[] POSITION_OFFSETS = {
         FRONT_LEFT_POSITION_OFFSET,
         FRONT_RIGHT_POSITION_OFFSET,
@@ -71,8 +71,8 @@ public class SwerveConstants {
     public static final double DRIVING_ENCODER_POSITION_FACTOR = DRIVE_WHEEL_CIRCUMFERENCE / DRIVING_GEARING_RATIO;
     public static final double DRIVING_ENCODER_VELOCITY_FACTOR = (DRIVE_WHEEL_CIRCUMFERENCE / DRIVING_GEARING_RATIO) / 60.0;
 
-    public static final double MAX_SPEED = 0.25;
-    public static final double MAX_ANGULAR_VELOCITY = 1;
+    public static final double MAX_SPEED = 2;
+    public static final double MAX_ANGULAR_VELOCITY = 2;
 
     // Gains for feedforward and simulation purposes.
     public static final double[] STEADY_STATE_GAINS = {
