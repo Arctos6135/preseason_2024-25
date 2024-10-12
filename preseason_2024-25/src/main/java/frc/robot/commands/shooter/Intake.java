@@ -5,10 +5,12 @@ import frc.robot.subsystems.shooter.Shooter;
 
 public class Intake extends Command{
 
-    Shooter shooter;
+    private final Shooter shooter;
 
     public Intake(Shooter shooter){
         this.shooter = shooter;
+
+        addRequirements(shooter);
     }
 
     @Override
