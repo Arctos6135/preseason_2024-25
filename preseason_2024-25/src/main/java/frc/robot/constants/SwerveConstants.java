@@ -7,6 +7,10 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.system.LinearSystem;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 
 public class SwerveConstants {
@@ -111,6 +115,23 @@ public class SwerveConstants {
         BACK_LEFT_DRIVING_FEEDFORWARD,
         BACK_RIGHT_DRIVING_FEEDFORWARD
     };
+
+
+    public static List<LinearSystem<N2, N1, N2>> DRIVING_MOTOR_LINEAR_SYSTEMS = new ArrayList<>() {{
+        add(LinearSystemId.createDCMotorSystem(FRONT_LEFT_DRIVING_FEEDFORWARD[1], FRONT_LEFT_DRIVING_FEEDFORWARD[2]));
+        add(LinearSystemId.createDCMotorSystem(FRONT_RIGHT_DRIVING_FEEDFORWARD[1], FRONT_LEFT_DRIVING_FEEDFORWARD[2]));
+        add(LinearSystemId.createDCMotorSystem(BACK_LEFT_DRIVING_FEEDFORWARD[1], FRONT_LEFT_DRIVING_FEEDFORWARD[2]));
+        add(LinearSystemId.createDCMotorSystem(BACK_RIGHT_DRIVING_FEEDFORWARD[1], FRONT_LEFT_DRIVING_FEEDFORWARD[2]));
+    }};
+
+    public static List<LinearSystem<N2, N1, N2>> TURNING_MOTOR_LINEAR_SYSTEMS = new ArrayList<>() {{
+        add(LinearSystemId.createDCMotorSystem(0.0, 0.00373));
+        add(LinearSystemId.createDCMotorSystem(0.0, 0.00373));
+        add(LinearSystemId.createDCMotorSystem(0.0, 0.00373));
+        add(LinearSystemId.createDCMotorSystem(0.0, 0.00373));
+    }};
+
+
 
     public static HolonomicPathFollowerConfig autoConfig = new HolonomicPathFollowerConfig(
         new PIDConstants(5.0, 0.0, 0.0),
