@@ -130,6 +130,11 @@ public class SwerveIOSparkMax extends SwerveIO {
     }
 
     @Override
+    public void resetGyro(){
+        gyro.reset();
+    }
+
+    @Override
     public void setFrontLeftDrivingPID(double P, double I, double D) {
         frontLeft.setDrivingPID(P, I, D);
     }

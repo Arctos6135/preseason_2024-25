@@ -9,6 +9,7 @@ import frc.robot.commands.characterization.StepVoltageRoutine;
 import frc.robot.commands.shooter.Intake;
 import frc.robot.commands.shooter.Shoot;
 import frc.robot.commands.utility.resetAbsoluteEncoders;
+import frc.robot.commands.utility.resetDirection;
 import frc.robot.constants.OtherConstants;
 import frc.robot.constants.PositionConstants;
 import frc.robot.constants.ShooterConstants;
@@ -109,8 +110,12 @@ public class RobotContainer {
     Trigger operatorA = new JoystickButton(operatorController, XboxController.Button.kA.value);
     Trigger operatorB = new JoystickButton(operatorController, XboxController.Button.kB.value);
 
+    Trigger driverX = new JoystickButton(driverController, XboxController.Button.kX.value);
+
     operatorA.onTrue(Shoot.shoot(shooter));
     operatorB.whileTrue(new Intake(shooter));
+
+    driverX.onTrue(new resetDirection(drivetrain));
 
   }
 
