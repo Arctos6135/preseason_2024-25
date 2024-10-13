@@ -9,6 +9,8 @@ public class Intake extends Command{
 
     public Intake(Shooter shooter){
         this.shooter = shooter;
+
+        addRequirements(shooter);
     }
 
     @Override
