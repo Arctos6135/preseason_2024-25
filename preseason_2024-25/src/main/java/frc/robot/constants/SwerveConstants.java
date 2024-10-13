@@ -7,6 +7,10 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.system.LinearSystem;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
 
 public class SwerveConstants {
@@ -41,10 +45,10 @@ public class SwerveConstants {
     }};
 
     // Position offsets (rotations).
-    public static final double FRONT_LEFT_POSITION_OFFSET = 0.971 + 0.015;
-    public static final double FRONT_RIGHT_POSITION_OFFSET = 0.398;
-    public static final double BACK_LEFT_POSITION_OFFSET = 0.5 + 0.02;
-    public static final double BACK_RIGHT_POSITION_OFFSET = 0.675 - 0.5 - 0.005;
+    public static final double FRONT_LEFT_POSITION_OFFSET = 0.970;
+    public static final double FRONT_RIGHT_POSITION_OFFSET = 0.400;
+    public static final double BACK_LEFT_POSITION_OFFSET = 0.521;
+    public static final double BACK_RIGHT_POSITION_OFFSET = 0.174;
     public static double[] POSITION_OFFSETS = {
         FRONT_LEFT_POSITION_OFFSET,
         FRONT_RIGHT_POSITION_OFFSET,
@@ -69,10 +73,10 @@ public class SwerveConstants {
 
     // In meters.
     public static final double DRIVING_ENCODER_POSITION_FACTOR = DRIVE_WHEEL_CIRCUMFERENCE / DRIVING_GEARING_RATIO;
-    public static final double DRIVING_ENCODER_VELOCITY_FACTOR = (DRIVE_WHEEL_CIRCUMFERENCE / DRIVING_GEARING_RATIO) / 60.0;
+    public static final double DRIVING_ENCODER_VELOCITY_FACTOR = (DRIVE_WHEEL_CIRCUMFERENCE / DRIVING_GEARING_RATIO);
 
-    public static final double MAX_SPEED = 2;
-    public static final double MAX_ANGULAR_VELOCITY = 2;
+    public static final double MAX_SPEED = 3;
+    public static final double MAX_ANGULAR_VELOCITY = 3;
 
     // Gains for feedforward and simulation purposes.
     public static final double[] STEADY_STATE_GAINS = {
@@ -90,10 +94,10 @@ public class SwerveConstants {
         BACK_RIGHT_TURNING_PID
     };
 
-    public static double[] FRONT_LEFT_DRIVING_PID = {5.0, 0.0, 0.0};
-    public static double[] FRONT_RIGHT_DRIVING_PID = {5.0, 0.0, 0.0};
-    public static double[] BACK_LEFT_DRIVING_PID = {5.0, 0.0 ,0.0};
-    public static double[] BACK_RIGHT_DRIVING_PID = {5.0, 0.0, 0.0};
+    public static double[] FRONT_LEFT_DRIVING_PID = {2.0, 0.0, 0.0};
+    public static double[] FRONT_RIGHT_DRIVING_PID = {2.0, 0.0, 0.0};
+    public static double[] BACK_LEFT_DRIVING_PID = {2.0, 0.0 ,0.0};
+    public static double[] BACK_RIGHT_DRIVING_PID = {2.0, 0.0, 0.0};
     public static double[][] DRIVING_PID = {
         FRONT_LEFT_DRIVING_PID,
         FRONT_RIGHT_DRIVING_PID,
@@ -101,16 +105,33 @@ public class SwerveConstants {
         BACK_RIGHT_DRIVING_PID
     };
 
-    public static double[] FRONT_LEFT_DRIVING_FEEDFORWARD = {0, 0.9216, 0.0182};
-    public static double[] FRONT_RIGHT_DRIVING_FEEDFORWARD = {0, 0.9407,  0.0187};
-    public static double[] BACK_LEFT_DRIVING_FEEDFORWARD = {0, 0.9396, 0.0186};
-    public static double[] BACK_RIGHT_DRIVING_FEEDFORWARD = {0, 0.9336, 0.0185};
+    public static double[] FRONT_LEFT_DRIVING_FEEDFORWARD = {0, 2.3215, 0.04485};
+    public static double[] FRONT_RIGHT_DRIVING_FEEDFORWARD = {0, 2.3447,  0.06620};
+    public static double[] BACK_LEFT_DRIVING_FEEDFORWARD = {0, 2.2687, 0.07688};
+    public static double[] BACK_RIGHT_DRIVING_FEEDFORWARD = {0, 2.3215, 0.05213};
     public static double[][] DRIVING_FEEDFORWARDS = {
         FRONT_LEFT_DRIVING_FEEDFORWARD,
         FRONT_RIGHT_DRIVING_FEEDFORWARD,
         BACK_LEFT_DRIVING_FEEDFORWARD,
         BACK_RIGHT_DRIVING_FEEDFORWARD
     };
+
+
+    public static List<LinearSystem<N2, N1, N2>> DRIVING_MOTOR_LINEAR_SYSTEMS = new ArrayList<>() {{
+        add(LinearSystemId.createDCMotorSystem(FRONT_LEFT_DRIVING_FEEDFORWARD[1], FRONT_LEFT_DRIVING_FEEDFORWARD[2]));
+        add(LinearSystemId.createDCMotorSystem(FRONT_RIGHT_DRIVING_FEEDFORWARD[1], FRONT_LEFT_DRIVING_FEEDFORWARD[2]));
+        add(LinearSystemId.createDCMotorSystem(BACK_LEFT_DRIVING_FEEDFORWARD[1], FRONT_LEFT_DRIVING_FEEDFORWARD[2]));
+        add(LinearSystemId.createDCMotorSystem(BACK_RIGHT_DRIVING_FEEDFORWARD[1], FRONT_LEFT_DRIVING_FEEDFORWARD[2]));
+    }};
+
+    public static List<LinearSystem<N2, N1, N2>> TURNING_MOTOR_LINEAR_SYSTEMS = new ArrayList<>() {{
+        add(LinearSystemId.createDCMotorSystem(0.0, 0.00373));
+        add(LinearSystemId.createDCMotorSystem(0.0, 0.00373));
+        add(LinearSystemId.createDCMotorSystem(0.0, 0.00373));
+        add(LinearSystemId.createDCMotorSystem(0.0, 0.00373));
+    }};
+
+
 
     public static HolonomicPathFollowerConfig autoConfig = new HolonomicPathFollowerConfig(
         new PIDConstants(5.0, 0.0, 0.0),
