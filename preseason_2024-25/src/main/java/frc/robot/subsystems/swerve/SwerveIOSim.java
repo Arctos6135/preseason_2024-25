@@ -115,11 +115,6 @@ public class SwerveIOSim extends SwerveIO {
         };
     }
 
-    @Override 
-    public Rotation2d getAngle() {
-
-    }
-
     @Override
     public void setFrontLeftDrivingPID(double P, double I, double D) {
         frontLeft.setDrivingPID(P, I, D);
