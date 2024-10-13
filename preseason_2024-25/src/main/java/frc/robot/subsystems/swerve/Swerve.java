@@ -10,18 +10,22 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.constants.SwerveConstants;
 import frc.robot.util.TunableDouble;
 
 
 public class Swerve extends SubsystemBase {
     private final SwerveInputsAutoLogged inputs = new SwerveInputsAutoLogged();
+
+    public Rotation2d gyroRotation = Rotation2d.fromRadians(0);
 
     // Attributes
     SwerveDriveKinematics kinematics;
@@ -64,6 +68,7 @@ public class Swerve extends SubsystemBase {
     public TunableDouble backRightTurningD;
 
     private SwerveModulePosition[] modulePositions;
+    private SwerveModulePosition[] intialModulePositions;
     private SwerveIO io;
 
     // Constructor
@@ -113,6 +118,8 @@ public class Swerve extends SubsystemBase {
 
         // Create a swerve module positions object.
         modulePositions = io.getModulePositions();
+        intialModulePositions = modulePositions;
+
         // Create SwerveDriveKinematics object
         // Given units are the x and y distances of the wheel to the center of robot.
         kinematics = new SwerveDriveKinematics(
@@ -171,6 +178,16 @@ public class Swerve extends SubsystemBase {
         return kinematics.toChassisSpeeds(io.getModuleStates());
     }
 
+    public Rotation2d getAngle() {
+        if (Robot.isReal()) {
+            return io.getAngle();
+        }
+
+        else {
+            return gyroRotation;
+        }
+    }
+
     public void drive(double x, double y, double rotation){
         // Converts entered values (-1 to 1) into the units used by drivetrain
 
@@ -178,7 +195,10 @@ public class Swerve extends SubsystemBase {
         double ySpeed = y * SwerveConstants.MAX_SPEED;
         double rSpeed = rotation * SwerveConstants.MAX_ANGULAR_VELOCITY;
 
-        Rotation2d gyroRotation = io.getAngle();
+        if (Robot.isReal()) {
+        gyroRotation = io.getAngle();
+        };
+
 
         var swerveModuleStates = kinematics.toSwerveModuleStates(
             ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -195,6 +215,13 @@ public class Swerve extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.updateValues();
+
+        if (Robot.isReal() == false) {
+            io.update();
+        }
+
+        gyroRotation = Rotation2d.fromRadians(kinematics.toTwist2d(new SwerveDriveWheelPositions(intialModulePositions), new SwerveDriveWheelPositions(io.getModulePositions())).dtheta);
+
 
         io.updateInputs(inputs);
         Logger.processInputs(getName(), inputs);
@@ -241,7 +268,7 @@ public class Swerve extends SubsystemBase {
 
         // Updates the odometry.
         odometry.update(
-            io.getAngle(),
+            getAngle(),
             io.getModulePositions()
         );
 
@@ -258,7 +285,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void resetPose(Pose2d pose) {
-        odometry.resetPosition(io.getAngle(), io.getModulePositions(), pose);
+        odometry.resetPosition(getAngle(), io.getModulePositions(), pose);
     }
 
     public void resetStates() {

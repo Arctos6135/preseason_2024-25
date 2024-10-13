@@ -13,8 +13,10 @@ import frc.robot.constants.OtherConstants;
 import frc.robot.constants.PositionConstants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.swerve.Swerve;
+import frc.robot.subsystems.swerve.SwerveIOSim;
 import frc.robot.subsystems.swerve.SwerveIOSparkMax;
 
 import java.util.function.DoubleSupplier;
@@ -64,8 +66,14 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    if (Robot.isReal()) {
     drivetrain = new Swerve(new SwerveIOSparkMax());
     shooter = new Shooter(new ShooterIOSparkMax());
+    }
+    else {
+      drivetrain = new Swerve(new SwerveIOSim());
+      shooter = new Shooter(new ShooterIOSim());
+    }
 
 
     drivetrain.setDefaultCommand(new TeleopDrive(drivetrain, driverLeftStickY, driverLeftStickX, driverRightStickX));
@@ -76,7 +84,7 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("shoot", Shoot.shoot(shooter));
 
-    positionChooser.addOption("RED_AMP", PositionConstants.RED_AMP);
+    positionChooser.addDefaultOption("RED_AMP", PositionConstants.RED_AMP);
     positionChooser.addOption("RED_STAGE", PositionConstants.RED_STAGE);
     positionChooser.addOption("RED_SOURCE", PositionConstants.RED_SOURCE);
 

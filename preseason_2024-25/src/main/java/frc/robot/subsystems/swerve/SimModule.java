@@ -66,9 +66,11 @@ public class SimModule {
     public SimModule(int moduleIdentifier) {
         // Sets up the motors.
         this.drivingMotor = new DCMotorSim(SwerveConstants.DRIVING_MOTOR_LINEAR_SYSTEMS.get(moduleIdentifier), DCMotor.getKrakenX60(1), 6.12);
-        this.turningMotor = new DCMotorSim(SwerveConstants.TURNING_MOTOR_LINEAR_SYSTEMS.get(moduleIdentifier), DCMotor.getKrakenX60(1), 6.12);
+        this.turningMotor = new DCMotorSim(SwerveConstants.TURNING_MOTOR_LINEAR_SYSTEMS.get(moduleIdentifier), DCMotor.getNEO(1), (150.0 / 7.0));
 
         this.moduleIdentifier = modules[moduleIdentifier];
+
+        turningMotor.setState(0, 0);
 
         // Creates PIDController with the module's unique gains.
         this.drivingPIDController = new PIDController(SwerveConstants.DRIVING_PID[moduleIdentifier][0], SwerveConstants.DRIVING_PID[moduleIdentifier][1], SwerveConstants.DRIVING_PID[moduleIdentifier][2]);
@@ -102,7 +104,7 @@ public class SimModule {
      * @return position of the module in meters
      */
     public double getPosition() {
-        return drivingMotor.getAngularPositionRotations() * SwerveConstants.DRIVING_ENCODER_VELOCITY_FACTOR;
+        return drivingMotor.getAngularPositionRotations() * SwerveConstants.DRIVE_WHEEL_CIRCUMFERENCE;
     }
 
     /**
@@ -134,7 +136,7 @@ public class SimModule {
      * @return driving velocity (m/s)
      */
     public double getDrivingVelocity() {
-        return drivingMotor.getAngularVelocityRadPerSec() * SwerveConstants.DRIVING_ENCODER_VELOCITY_FACTOR;
+        return drivingMotor.getAngularVelocityRPM() * SwerveConstants.DRIVE_WHEEL_CIRCUMFERENCE / 60;
     }
 
     /**
@@ -142,7 +144,7 @@ public class SimModule {
      * @return module angle (radians)
      */
     public Rotation2d getAngle() {
-        return Rotation2d.fromRotations(turningMotor.getAngularPositionRotations());
+        return Rotation2d.fromRadians(turningMotor.getAngularPositionRotations() * SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
     }
 
     /**
@@ -150,7 +152,7 @@ public class SimModule {
      * @return angular velocity (rad/s)
      */
     public double getTurningVelocity() {
-        return turningMotor.getAngularVelocityRadPerSec();
+        return turningMotor.getAngularVelocityRadPerSec() / (150.0 / 7);
     }
 
     /**
@@ -166,7 +168,7 @@ public class SimModule {
      * @return module state
      */
     public SwerveModuleState getState() {
-        return new SwerveModuleState(getPosition(), getAngle());
+        return new SwerveModuleState(getDrivingVelocity(), getAngle());
     }
 
     /**
@@ -221,6 +223,11 @@ public class SimModule {
         drivingMotor.setInputVoltage(voltage);
     }
 
+    public void update() {
+        drivingMotor.update(0.02);
+        turningMotor.update(0.02);
+    }
+
     /**
      * Sets the desired state of the module.
      * @param desiredState
@@ -262,6 +269,6 @@ public class SimModule {
         lastTargetDrivingVelocity = targetDrivingVelocity;
 
         velocitySetpoint = optimizedDesiredState.speedMetersPerSecond;
-        angleSetpoint = optimizedDesiredState.angle.getDegrees();
+        angleSetpoint = optimizedDesiredState.angle.getRadians();
     }
 }

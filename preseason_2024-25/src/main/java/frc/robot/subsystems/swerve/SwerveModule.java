@@ -238,7 +238,7 @@ public class SwerveModule {
      * @return module state
      */
     public SwerveModuleState getState() {
-        return new SwerveModuleState(getPosition(), getAngle());
+        return new SwerveModuleState(getDrivingVelocity(), getAngle());
     }
 
     /**

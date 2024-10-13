@@ -3,10 +3,6 @@ package frc.robot.subsystems.swerve;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.ADIS16448_IMU;
-import edu.wpi.first.wpilibj.ADIS16470_IMU;
-import edu.wpi.first.wpilibj.simulation.ADIS16448_IMUSim;
-import edu.wpi.first.wpilibj.simulation.ADIS16470_IMUSim;
 
 public class SwerveIOSim extends SwerveIO {
 
@@ -24,6 +20,13 @@ public class SwerveIOSim extends SwerveIO {
         backLeft.getModulePosition(),
         backRight.getModulePosition()
         };
+    }
+
+    public void update() {
+        frontLeft.update();
+        frontRight.update();
+        backLeft.update();
+        backRight.update();
     }
 
     @Override
@@ -50,7 +53,7 @@ public class SwerveIOSim extends SwerveIO {
     public void updateInputs(SwerveInputs inputs) {
         // Front Left
         inputs.frontLeftPosition = frontLeft.getPosition();
-        inputs.frontLeftAngle = frontLeft.getAngle().getDegrees();
+        inputs.frontLeftAngle = frontLeft.angleSetpoint;
         inputs.frontLeftDrivingVelocity = frontLeft.getDrivingVelocity();
         inputs.frontLeftTurningVelocity = frontLeft.getTurningVelocity();
         inputs.frontLeftDrivingAcceleration = frontLeft.getDrivingAcceleration();
@@ -64,7 +67,7 @@ public class SwerveIOSim extends SwerveIO {
 
         // Front Right
         inputs.frontRightPosition = frontRight.getPosition();
-        inputs.frontRightAngle = frontRight.getAngle().getDegrees();
+        inputs.frontRightAngle = frontRight.angleSetpoint;
         inputs.frontRightDrivingVelocity = frontRight.getDrivingVelocity();
         inputs.frontRightTurningVelocity = frontRight.getTurningVelocity();
         inputs.frontRightDrivingAcceleration = frontRight.getDrivingAcceleration();
@@ -78,7 +81,7 @@ public class SwerveIOSim extends SwerveIO {
 
         // Back Left
         inputs.backLeftPosition = backLeft.getPosition();
-        inputs.backLeftAngle = backLeft.getAngle().getDegrees();
+        inputs.backLeftAngle = backLeft.angleSetpoint;
         inputs.backLeftDrivingVelocity = backLeft.getDrivingVelocity();
         inputs.backLeftTurningVelocity = backLeft.getTurningVelocity();
         inputs.backLeftDrivingAcceleration = backLeft.getDrivingAcceleration();
@@ -92,7 +95,7 @@ public class SwerveIOSim extends SwerveIO {
 
         // Back Right
         inputs.backRightPosition = backRight.getPosition();
-        inputs.backRightAngle = backRight.getAngle().getDegrees();
+        inputs.backRightAngle = backRight.angleSetpoint;
         inputs.backRightDrivingVelocity = backRight.getDrivingVelocity();
         inputs.backRightTurningVelocity = backRight.getTurningVelocity();
         inputs.backRightDrivingAcceleration = backRight.getDrivingAcceleration();
@@ -113,11 +116,6 @@ public class SwerveIOSim extends SwerveIO {
             backLeft.getState(),
             backRight.getState()
         };
-    }
-
-    @Override 
-    public Rotation2d getAngle() {
-
     }
 
     @Override

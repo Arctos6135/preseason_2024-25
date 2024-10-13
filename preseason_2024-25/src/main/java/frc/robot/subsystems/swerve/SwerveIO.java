@@ -115,5 +115,10 @@ public class SwerveIO {
         return new SwerveModuleState[]{};
     }
 
-    public void setDrivingVoltages(double voltage) {};
+    public void setDrivingVoltages(double voltage) {}
+
+    public void update() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    };
 }
