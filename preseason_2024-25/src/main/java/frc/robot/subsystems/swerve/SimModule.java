@@ -104,7 +104,7 @@ public class SimModule {
      * @return position of the module in meters
      */
     public double getPosition() {
-        return drivingMotor.getAngularPositionRotations() * SwerveConstants.DRIVE_WHEEL_CIRCUMFERENCE;
+        return drivingMotor.getAngularPositionRotations() * SwerveConstants.DRIVE_WHEEL_CIRCUMFERENCE * 6.12;
     }
 
     /**
@@ -144,7 +144,7 @@ public class SimModule {
      * @return module angle (radians)
      */
     public Rotation2d getAngle() {
-        return Rotation2d.fromRadians(turningMotor.getAngularPositionRotations() * SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
+        return Rotation2d.fromRadians(angleSetpoint); // Rotation2d.fromRadians(turningMotor.getAngularPositionRotations() * SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
     }
 
     /**
