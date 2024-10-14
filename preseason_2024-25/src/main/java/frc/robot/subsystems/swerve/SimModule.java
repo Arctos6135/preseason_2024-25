@@ -70,6 +70,7 @@ public class SimModule {
 
         this.moduleIdentifier = modules[moduleIdentifier];
 
+        drivingMotor.setState(0, 0);
         turningMotor.setState(0, 0);
 
         // Creates PIDController with the module's unique gains.
@@ -136,7 +137,7 @@ public class SimModule {
      * @return driving velocity (m/s)
      */
     public double getDrivingVelocity() {
-        return drivingMotor.getAngularVelocityRPM() * SwerveConstants.DRIVE_WHEEL_CIRCUMFERENCE / 60;
+        return drivingMotor.getAngularVelocityRPM() * SwerveConstants.DRIVE_WHEEL_CIRCUMFERENCE * 6.12 / 60;
     }
 
     /**
@@ -144,7 +145,7 @@ public class SimModule {
      * @return module angle (radians)
      */
     public Rotation2d getAngle() {
-        return Rotation2d.fromRadians(angleSetpoint); // Rotation2d.fromRadians(turningMotor.getAngularPositionRotations() * SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
+        return Rotation2d.fromRadians(turningMotor.getAngularPositionRotations() * SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
     }
 
     /**

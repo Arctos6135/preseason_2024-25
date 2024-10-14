@@ -78,11 +78,6 @@ public class SwerveConstants {
     public static final double MAX_SPEED = 3;
     public static final double MAX_ANGULAR_VELOCITY = 3;
 
-    // Gains for feedforward and simulation purposes.
-    public static final double[] STEADY_STATE_GAINS = {
-        0.21599,
-    };
-
     public static double[] FRONT_LEFT_TURNING_PID = {2.3, 0.0, 0.0};
     public static double[] FRONT_RIGHT_TURNING_PID = {2.3, 0.0, 0.0};
     public static double[] BACK_RIGHT_TURNING_PID = {2.3, 0.0, 0.0};
@@ -125,10 +120,10 @@ public class SwerveConstants {
     }};
 
     public static List<LinearSystem<N2, N1, N2>> TURNING_MOTOR_LINEAR_SYSTEMS = new ArrayList<>() {{
-        add(LinearSystemId.createDCMotorSystem(0.01, 0.3926));
-        add(LinearSystemId.createDCMotorSystem(0.01, 0.3926));
-        add(LinearSystemId.createDCMotorSystem(0.01, 0.3926));
-        add(LinearSystemId.createDCMotorSystem(0.01, 0.3926));
+        add(LinearSystemId.createDCMotorSystem(0.1, 0.3926));
+        add(LinearSystemId.createDCMotorSystem(0.1, 0.3926));
+        add(LinearSystemId.createDCMotorSystem(0.1, 0.3926));
+        add(LinearSystemId.createDCMotorSystem(0.1, 0.3926));
     }};
 
 
