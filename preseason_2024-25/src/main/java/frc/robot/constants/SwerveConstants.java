@@ -75,7 +75,7 @@ public class SwerveConstants {
     public static final double DRIVING_ENCODER_POSITION_FACTOR = DRIVE_WHEEL_CIRCUMFERENCE / DRIVING_GEARING_RATIO;
     public static final double DRIVING_ENCODER_VELOCITY_FACTOR = (DRIVE_WHEEL_CIRCUMFERENCE / DRIVING_GEARING_RATIO);
 
-    public static final double MAX_SPEED = 3;
+    public static final double MAX_SPEED = 4;
     public static final double MAX_ANGULAR_VELOCITY = 3;
 
     public static double[] FRONT_LEFT_TURNING_PID = {2.3, 0.0, 0.0};
@@ -120,17 +120,17 @@ public class SwerveConstants {
     }};
 
     public static List<LinearSystem<N2, N1, N2>> TURNING_MOTOR_LINEAR_SYSTEMS = new ArrayList<>() {{
-        add(LinearSystemId.createDCMotorSystem(0.1, 0.3926));
-        add(LinearSystemId.createDCMotorSystem(0.1, 0.3926));
-        add(LinearSystemId.createDCMotorSystem(0.1, 0.3926));
-        add(LinearSystemId.createDCMotorSystem(0.1, 0.3926));
+        add(LinearSystemId.createDCMotorSystem(0.0001, 0.03926));
+        add(LinearSystemId.createDCMotorSystem(0.0001, 0.03926));
+        add(LinearSystemId.createDCMotorSystem(0.0001, 0.03926));
+        add(LinearSystemId.createDCMotorSystem(0.0001, 0.03926));
     }};
 
 
 
     public static HolonomicPathFollowerConfig autoConfig = new HolonomicPathFollowerConfig(
-        new PIDConstants(5.0, 0.0, 0.0),
-        new PIDConstants(5.0, 0.0, 0.0),
+        new PIDConstants(0.1, 0.0, 0.0),
+        new PIDConstants(0.1, 0.0, 0.0),
         SwerveConstants.MAX_SPEED,
         SwerveConstants.DISTANCE_TO_CENTER,
         new ReplanningConfig()

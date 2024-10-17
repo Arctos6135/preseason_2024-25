@@ -1,9 +1,12 @@
 package frc.robot.subsystems.swerve;
 
+import java.sql.Driver;
+
 import org.littletonrobotics.junction.Logger;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.hal.AllianceStationID;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -15,6 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -100,25 +104,26 @@ public class Swerve extends SubsystemBase {
     }
 
     public void robotRelativeDrive(ChassisSpeeds chassisSpeeds) {
+
+        if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+            chassisSpeeds.omegaRadiansPerSecond *= -1;
+        }
+
         var swerveModuleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
         SwerveDriveKinematics.desaturateWheelSpeeds(
             swerveModuleStates, SwerveConstants.MAX_SPEED);
 
         io.setStates(swerveModuleStates);
+
+        Logger.recordOutput("target states", swerveModuleStates);
     }
 
     public ChassisSpeeds getChassisSpeeds() {
-        return kinematics.toChassisSpeeds(io.getModuleStates());
+        return ChassisSpeeds.fromRobotRelativeSpeeds(kinematics.toChassisSpeeds(io.getModuleStates()), io.getAngle());
     }
 
     public Rotation2d getAngle() {
-        if (Robot.isReal()) {
-            return io.getAngle();
-        }
-
-        else {
-            return gyroRotation;
-        }
+        return io.getAngle();
     }
 
     public void drive(double x, double y, double rotation){
@@ -126,8 +131,17 @@ public class Swerve extends SubsystemBase {
 
         double xSpeed = x * SwerveConstants.MAX_SPEED;
         double ySpeed = y * SwerveConstants.MAX_SPEED;
+
         double rSpeed = rotation * SwerveConstants.MAX_ANGULAR_VELOCITY;
 
+        if (DriverStation.getRawAllianceStation() == AllianceStationID.Blue1 || DriverStation.getRawAllianceStation() == AllianceStationID.Blue2 || DriverStation.getRawAllianceStation() == AllianceStationID.Blue3) {
+            xSpeed *= 1;
+            ySpeed *= 1;
+        }
+        else {
+            xSpeed *= -1;
+            ySpeed *= -1;
+        }
 
         var swerveModuleStates = kinematics.toSwerveModuleStates(
             ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -149,7 +163,7 @@ public class Swerve extends SubsystemBase {
     public void periodic() {
         SmartDashboard.updateValues();
         io.updateInputs(inputs);
-        io.update();
+        // io.update();
 
         modulePositions = io.getModulePositions();
 
@@ -162,6 +176,8 @@ public class Swerve extends SubsystemBase {
 
         Logger.recordOutput("pose", odometry.getPoseMeters());
         Logger.recordOutput("states", io.getModuleStates());
+
+        Logger.processInputs(getName(), inputs);
     }
 
     /**
@@ -174,6 +190,8 @@ public class Swerve extends SubsystemBase {
     }
 
     public void resetPose(Pose2d pose) {
+        
+
         odometry.resetPosition(getAngle(), io.getModulePositions(), pose);
     }
 

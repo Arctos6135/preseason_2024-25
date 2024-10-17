@@ -85,7 +85,7 @@ public class SwerveIO {
     public void setStates(SwerveModuleState[] moduleStates) {}
 
     public Rotation2d getAngle() {
-        return new Rotation2d(0);
+        return new Rotation2d(90);
     }
 
     // Placeholder which gets overidden.

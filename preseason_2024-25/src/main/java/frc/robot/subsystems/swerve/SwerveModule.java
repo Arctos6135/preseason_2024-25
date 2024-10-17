@@ -166,7 +166,7 @@ public class SwerveModule {
      * @return position of the module in meters
      */
     public double getPosition() {
-        return drivingMotor.getPosition().getValueAsDouble();
+        return drivingMotor.getPosition().getValueAsDouble() * SwerveConstants.DRIVING_ENCODER_POSITION_FACTOR;
     }
 
     /**

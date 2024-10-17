@@ -32,6 +32,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -114,12 +115,11 @@ public class RobotContainer {
   private void configureBindings() {
     Trigger operatorLeftBumper = new JoystickButton(operatorController, XboxController.Button.kLeftBumper.value);
     Trigger operatorRightBumper = new JoystickButton(operatorController, XboxController.Button.kRightBumper.value);
-    Trigger operatorA = new JoystickButton(operatorController, XboxController.Button.kA.value);
-    Trigger operatorB = new JoystickButton(operatorController, XboxController.Button.kB.value);
+    Trigger operatorA = new JoystickButton(driverController, XboxController.Button.kA.value);
+    Trigger operatorB = new JoystickButton(driverController, XboxController.Button.kB.value);
 
-    operatorA.onTrue(Shoot.shoot(shooter));
-    operatorB.whileTrue(new Intake(shooter));
-
+    operatorA.onTrue(new InstantCommand(()-> shooter.setVoltages(12)));
+    operatorB.onTrue(new InstantCommand(()-> shooter.setVoltages(-12)));
   }
 
   public void startMatch() {
