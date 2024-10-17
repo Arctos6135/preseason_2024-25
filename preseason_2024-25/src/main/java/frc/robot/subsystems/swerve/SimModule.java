@@ -11,26 +11,24 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.StateSpaceUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.system.LinearSystem;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import frc.robot.constants.CANBusConstants;
 import frc.robot.constants.SwerveConstants;
 
-public class SwerveModule {
-    private final TalonFX drivingMotor;
-    private final CANSparkMax turningMotor;
-
-    private final AnalogEncoder absoluteTurningEncoder;
-
-    private final TalonFXConfiguration driveMotorConfig = new TalonFXConfiguration();
-    private final TalonFXConfigurator driveMotorConfigurator;
-
-    private final RelativeEncoder turningEncoder;
+public class SimModule {
+    private final DCMotorSim drivingMotor;
+    private final DCMotorSim turningMotor;
 
     private final PIDController drivingPIDController;
     private final PIDController turningPIDController;
@@ -65,27 +63,12 @@ public class SwerveModule {
     /**
      * Constructs an MK4i swerve module and configures the driving and turning motor, encoder, and PID controller.
      */
-    public SwerveModule(int moduleIdentifier) {
+    public SimModule(int moduleIdentifier) {
         // Sets up the motors.
-        this.drivingMotor = new TalonFX(CANBusConstants.DRIVE_IDS.get(moduleIdentifier));
-        this.turningMotor = new CANSparkMax(CANBusConstants.TURN_IDS.get(moduleIdentifier), MotorType.kBrushless);
-
-        driveMotorConfigurator = drivingMotor.getConfigurator();
+        this.drivingMotor = new DCMotorSim(SwerveConstants.DRIVING_MOTOR_LINEAR_SYSTEMS.get(moduleIdentifier), DCMotor.getKrakenX60(1), 6.12);
+        this.turningMotor = new DCMotorSim(SwerveConstants.TURNING_MOTOR_LINEAR_SYSTEMS.get(moduleIdentifier), DCMotor.getKrakenX60(1), 6.12);
 
         this.moduleIdentifier = modules[moduleIdentifier];
-
-        // Creates the analog (absolute) encoder.
-        absoluteTurningEncoder = new AnalogEncoder(SwerveConstants.ENCODER_PORTS.get(moduleIdentifier));
-
-        // Adds a position offset to the absolute encoder to account for initial encoder placement.
-        absoluteTurningEncoder.setPositionOffset(SwerveConstants.POSITION_OFFSETS[moduleIdentifier]);
-
-        // Configures the motors to the proper settings.
-        configDriveMotor();
-        configTurningMotor();
-
-        // Creates the encoders.
-        this.turningEncoder = turningMotor.getEncoder();
 
         // Creates PIDController with the module's unique gains.
         this.drivingPIDController = new PIDController(SwerveConstants.DRIVING_PID[moduleIdentifier][0], SwerveConstants.DRIVING_PID[moduleIdentifier][1], SwerveConstants.DRIVING_PID[moduleIdentifier][2]);
@@ -94,21 +77,11 @@ public class SwerveModule {
         // Creates feedforward controllers for the driving motor.
         this.drivingFeedforward = new SimpleMotorFeedforward(SwerveConstants.DRIVING_FEEDFORWARDS[moduleIdentifier][0], SwerveConstants.DRIVING_FEEDFORWARDS[moduleIdentifier][1], SwerveConstants.DRIVING_FEEDFORWARDS[moduleIdentifier][2]);
 
-        // Sets conversion factors so the encoder tracks in meters instead of rotations.
-        turningEncoder.setPositionConversionFactor(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
-        turningEncoder.setVelocityConversionFactor(SwerveConstants.TURNING_ENCODER_VELOCITY_FACTOR);
-
         // Enables PID wrapping to take more efficient routes when turning.
         turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
         // Disabled for driving because it doesn't wrap around.
         drivingPIDController.disableContinuousInput();
-
-        // Sets a conversion factor on the analog controller.
-        // absoluteTurningEncoder.setDistancePerRotation(SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
-
-        // Resets the turning position to match the absolute position.
-        resetToAbsolute();
 
         // Gets an initial time value for use in acceleration calculation.
         lastTime = Timer.getFPGATimestamp();
@@ -121,44 +94,7 @@ public class SwerveModule {
      * Resets the turning encoders to the angle given by the analog encoders.
      */
     private void resetToAbsolute() {
-        Rotation2d absolutePosition = Rotation2d.fromRotations((absoluteTurningEncoder.get()));
-        turningEncoder.setPosition(absolutePosition.getRadians());
-    }
-
-    /**
-     * Configures the turning motor.
-     */
-    private void configTurningMotor() {
-        // Returns the motor to its factory settings.
-        turningMotor.restoreFactoryDefaults();
-        // Sets a limit on the current draw of the motor.
-        turningMotor.setSmartCurrentLimit(SwerveConstants.TURNING_CURRENT_LIMIT);
-        // Makes it so the motor spins clockwise.
-        turningMotor.setInverted(true);
-        // When doing nothing, the motor will brake.
-        turningMotor.setIdleMode(IdleMode.kBrake);
-
-        // Saves the changes so they retain throughout power cycles.
-        // sturningMotor.burnFlash();
-    }
-
-    /**
-     * Configures the driving motor.
-     */
-    private void configDriveMotor() {
-        // Enables and sets current limits.
-        driveMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-        driveMotorConfig.CurrentLimits.StatorCurrentLimit = SwerveConstants.DRIVING_CURRENT_LIMIT;
-        
-        // Sets the neutral mode to brake mode.
-        driveMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        
-        // Sets the motor to be clockwise positive.
-        driveMotorConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-
-        driveMotorConfigurator.apply(driveMotorConfig);
-
-        // drivingMotor.burnFlash();
+        turningMotor.setState(0.0, 0.0);
     }
 
     /**
@@ -166,7 +102,7 @@ public class SwerveModule {
      * @return position of the module in meters
      */
     public double getPosition() {
-        return drivingMotor.getPosition().getValueAsDouble();
+        return drivingMotor.getAngularPositionRotations() * SwerveConstants.DRIVING_ENCODER_VELOCITY_FACTOR;
     }
 
     /**
@@ -198,7 +134,7 @@ public class SwerveModule {
      * @return driving velocity (m/s)
      */
     public double getDrivingVelocity() {
-        return drivingMotor.getVelocity().getValueAsDouble() * SwerveConstants.DRIVING_ENCODER_VELOCITY_FACTOR;
+        return drivingMotor.getAngularVelocityRadPerSec() * SwerveConstants.DRIVING_ENCODER_VELOCITY_FACTOR;
     }
 
     /**
@@ -206,15 +142,7 @@ public class SwerveModule {
      * @return module angle (radians)
      */
     public Rotation2d getAngle() {
-        return Rotation2d.fromRadians(turningEncoder.getPosition());
-    }
-
-    /**
-     * Gets the angle reported by the absolute magnetic encoders.
-     * @return absolute encoder angle (rotations)
-     */
-    public Rotation2d getAbsoluteAngle() {
-        return Rotation2d.fromRotations(absoluteTurningEncoder.get());
+        return Rotation2d.fromRotations(turningMotor.getAngularPositionRotations());
     }
 
     /**
@@ -222,7 +150,7 @@ public class SwerveModule {
      * @return angular velocity (rad/s)
      */
     public double getTurningVelocity() {
-        return turningEncoder.getVelocity();
+        return turningMotor.getAngularVelocityRadPerSec();
     }
 
     /**
@@ -246,7 +174,7 @@ public class SwerveModule {
      * @return driving motor current
      */
     public double getDrivingCurrent() {
-        return drivingMotor.getStatorCurrent().getValueAsDouble();
+        return drivingMotor.getCurrentDrawAmps();
     }
 
     /**
@@ -254,7 +182,7 @@ public class SwerveModule {
      * @return turning motor current
      */
     public double getTurningCurrent() {
-        return turningMotor.getOutputCurrent();
+        return turningMotor.getCurrentDrawAmps();
     }
 
     /**
@@ -278,7 +206,7 @@ public class SwerveModule {
      * @return the acceleration of the driving motor.
      */
     public double getDrivingAcceleration() {
-        return drivingMotor.getAcceleration().getValueAsDouble();
+        return drivingMotor.getAngularVelocityRadPerSec();
     }
 
     /**
@@ -289,12 +217,8 @@ public class SwerveModule {
         return turningAcceleration;
     }
 
-    public void resetAbsoluteEncoder() {
-        absoluteTurningEncoder.reset();
-    }
-
     public void setDrivingVoltage(double voltage) {
-        drivingMotor.setVoltage(voltage);
+        drivingMotor.setInputVoltage(voltage);
     }
 
     /**
@@ -331,8 +255,8 @@ public class SwerveModule {
         drivingVoltage += drivingFeedforward.calculate(targetDrivingVelocity, targetDrivingAcceleration);
 
         // Sets the voltage of the motors clamped to reasonable values.
-        drivingMotor.setVoltage(MathUtil.clamp(drivingVoltage, -12, 12));
-        turningMotor.setVoltage(MathUtil.clamp(turningVoltage, -12, 12));
+        drivingMotor.setInputVoltage(MathUtil.clamp(drivingVoltage, -12, 12));
+        turningMotor.setInputVoltage(MathUtil.clamp(turningVoltage, -12, 12));
 
         // Updates the last values.
         lastTargetDrivingVelocity = targetDrivingVelocity;

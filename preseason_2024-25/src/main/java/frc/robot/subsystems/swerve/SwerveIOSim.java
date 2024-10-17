@@ -1,21 +1,20 @@
 package frc.robot.subsystems.swerve;
 
-import com.kauailabs.navx.frc.AHRS;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.ADIS16448_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
+import edu.wpi.first.wpilibj.simulation.ADIS16448_IMUSim;
+import edu.wpi.first.wpilibj.simulation.ADIS16470_IMUSim;
 
-public class SwerveIOSparkMax extends SwerveIO {
-    // Gyro.
-    private final ADIS16470_IMU gyro = new ADIS16470_IMU();
+public class SwerveIOSim extends SwerveIO {
 
     // Creates the swerve modules.
-    private final SwerveModule frontLeft = new SwerveModule(0);
-    private final SwerveModule frontRight = new SwerveModule(1);
-    private final SwerveModule backLeft = new SwerveModule(2);
-    private final SwerveModule backRight = new SwerveModule(3);
+    private final SimModule frontLeft = new SimModule(0);
+    private final SimModule frontRight = new SimModule(1);
+    private final SimModule backLeft = new SimModule(2);
+    private final SimModule backRight = new SimModule(3);
 
     @Override
     public SwerveModulePosition[] getModulePositions() {
@@ -37,10 +36,6 @@ public class SwerveIOSparkMax extends SwerveIO {
 
     @Override
     public void resetAbsoluteEncoders() {
-        frontLeft.resetAbsoluteEncoder();
-        frontRight.resetAbsoluteEncoder();
-        backLeft.resetAbsoluteEncoder();
-        backRight.resetAbsoluteEncoder();
     }
 
     @Override
@@ -56,7 +51,6 @@ public class SwerveIOSparkMax extends SwerveIO {
         // Front Left
         inputs.frontLeftPosition = frontLeft.getPosition();
         inputs.frontLeftAngle = frontLeft.getAngle().getDegrees();
-        inputs.frontLeftAbsoluteAngle = frontLeft.getAbsoluteAngle().getRotations();
         inputs.frontLeftDrivingVelocity = frontLeft.getDrivingVelocity();
         inputs.frontLeftTurningVelocity = frontLeft.getTurningVelocity();
         inputs.frontLeftDrivingAcceleration = frontLeft.getDrivingAcceleration();
@@ -71,7 +65,6 @@ public class SwerveIOSparkMax extends SwerveIO {
         // Front Right
         inputs.frontRightPosition = frontRight.getPosition();
         inputs.frontRightAngle = frontRight.getAngle().getDegrees();
-        inputs.frontRightAbsoluteAngle = frontRight.getAbsoluteAngle().getRotations();
         inputs.frontRightDrivingVelocity = frontRight.getDrivingVelocity();
         inputs.frontRightTurningVelocity = frontRight.getTurningVelocity();
         inputs.frontRightDrivingAcceleration = frontRight.getDrivingAcceleration();
@@ -86,7 +79,6 @@ public class SwerveIOSparkMax extends SwerveIO {
         // Back Left
         inputs.backLeftPosition = backLeft.getPosition();
         inputs.backLeftAngle = backLeft.getAngle().getDegrees();
-        inputs.backLeftAbsoluteAngle = backLeft.getAbsoluteAngle().getRotations();
         inputs.backLeftDrivingVelocity = backLeft.getDrivingVelocity();
         inputs.backLeftTurningVelocity = backLeft.getTurningVelocity();
         inputs.backLeftDrivingAcceleration = backLeft.getDrivingAcceleration();
@@ -101,7 +93,6 @@ public class SwerveIOSparkMax extends SwerveIO {
         // Back Right
         inputs.backRightPosition = backRight.getPosition();
         inputs.backRightAngle = backRight.getAngle().getDegrees();
-        inputs.backRightAbsoluteAngle = backRight.getAbsoluteAngle().getRotations();
         inputs.backRightDrivingVelocity = backRight.getDrivingVelocity();
         inputs.backRightTurningVelocity = backRight.getTurningVelocity();
         inputs.backRightDrivingAcceleration = backRight.getDrivingAcceleration();
@@ -122,16 +113,6 @@ public class SwerveIOSparkMax extends SwerveIO {
             backLeft.getState(),
             backRight.getState()
         };
-    }
-
-    @Override 
-    public Rotation2d getAngle() {
-        return Rotation2d.fromDegrees(gyro.getAngle());
-    }
-
-    @Override
-    public void resetGyro(){
-        gyro.reset();
     }
 
     @Override

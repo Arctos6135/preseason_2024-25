@@ -88,6 +88,8 @@ public class SwerveIO {
         return new Rotation2d(0);
     }
 
+    public void resetGyro(){}
+
     // Placeholder which gets overidden.
     public SwerveModulePosition[] getModulePositions() {
         return new SwerveModulePosition[3];

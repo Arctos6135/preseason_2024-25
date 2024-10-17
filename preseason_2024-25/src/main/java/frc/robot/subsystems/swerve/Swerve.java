@@ -155,6 +155,10 @@ public class Swerve extends SubsystemBase {
         io.resetAbsoluteEncoders();
     }
 
+    public void resetGyro(){
+        io.resetGyro();
+    }
+
     public void setDrivingVoltage(double voltage) {
         io.setDrivingVoltages(voltage);
     }

@@ -6,8 +6,15 @@ package frc.robot;
 
 import frc.robot.commands.TeleopDrive;
 import frc.robot.commands.characterization.StepVoltageRoutine;
+import frc.robot.commands.shooter.Intake;
+import frc.robot.commands.shooter.Shoot;
 import frc.robot.commands.utility.resetAbsoluteEncoders;
+import frc.robot.commands.utility.resetDirection;
 import frc.robot.constants.OtherConstants;
+import frc.robot.constants.PositionConstants;
+import frc.robot.constants.ShooterConstants;
+import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.swerve.Swerve;
 import frc.robot.subsystems.swerve.SwerveIOSparkMax;
 
@@ -15,6 +22,7 @@ import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.MathUtil;
@@ -24,6 +32,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -34,6 +43,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   public LoggedDashboardChooser<Command> autoChooser = new LoggedDashboardChooser<>("autoChooser");
+  public LoggedDashboardChooser<Pose2d> positionChooser = new LoggedDashboardChooser<>("positionChooser");
 
   // The robot's subsystems and commands are defined here...
 
@@ -50,15 +60,30 @@ public class RobotContainer {
       driverController.getRawAxis(XboxController.Axis.kRightX.value),
       OtherConstants.DRIVE_DEADBAND * 2);
 
-  private final Swerve drivetrain = new Swerve(new SwerveIOSparkMax());
+  private final Swerve drivetrain;
+  private final Shooter shooter;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    drivetrain = new Swerve(new SwerveIOSparkMax());
+    shooter = new Shooter(new ShooterIOSparkMax());
+
+
     drivetrain.setDefaultCommand(new TeleopDrive(drivetrain, driverLeftStickY, driverLeftStickX, driverRightStickX));
 
-    autoChooser.addDefaultOption("Forward", new PathPlannerAuto("Forward"));
+    autoChooser.addDefaultOption("Source Score and Leave", new PathPlannerAuto("Source Score and Leave"));
+    autoChooser.addOption("Amp Score and Leave", new PathPlannerAuto("Amp Score and Leave"));
+    autoChooser.addOption("Stage Score and Leave", new PathPlannerAuto("Stage Score and Leave"));
 
-    drivetrain.resetPose(new Pose2d(2.0, 7.0, new Rotation2d()));
+    NamedCommands.registerCommand("shoot", Shoot.shoot(shooter));
+
+    positionChooser.addOption("RED_AMP", PositionConstants.RED_AMP);
+    positionChooser.addOption("RED_STAGE", PositionConstants.RED_STAGE);
+    positionChooser.addOption("RED_SOURCE", PositionConstants.RED_SOURCE);
+
+    positionChooser.addOption("BLUE_AMP", PositionConstants.BLUE_AMP);
+    positionChooser.addOption("BLUE_STAGE", PositionConstants.BLUE_STAGE);
+    positionChooser.addOption("BLUE_SOURCE", PositionConstants.BLUE_SOURCE);
 
     // Configure the trigger bindings
     configureBindings();
@@ -79,7 +104,24 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  private void configureBindings() {}
+  private void configureBindings() {
+    Trigger operatorLeftBumper = new JoystickButton(operatorController, XboxController.Button.kLeftBumper.value);
+    Trigger operatorRightBumper = new JoystickButton(operatorController, XboxController.Button.kRightBumper.value);
+    Trigger operatorA = new JoystickButton(operatorController, XboxController.Button.kA.value);
+    Trigger operatorB = new JoystickButton(operatorController, XboxController.Button.kB.value);
+
+    Trigger driverX = new JoystickButton(driverController, XboxController.Button.kX.value);
+
+    operatorA.onTrue(Shoot.shoot(shooter));
+    operatorB.whileTrue(new Intake(shooter));
+
+    driverX.onTrue(new resetDirection(drivetrain));
+
+  }
+
+  public void startMatch() {
+    drivetrain.resetPose(positionChooser.get());
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -87,6 +129,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new PathPlannerAuto("Forward"); // autoChooser.get();
+    return autoChooser.get();
   }
 }
