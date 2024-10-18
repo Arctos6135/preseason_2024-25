@@ -14,8 +14,10 @@ import frc.robot.constants.OtherConstants;
 import frc.robot.constants.PositionConstants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.shooter.ShooterIOSim;
 import frc.robot.subsystems.shooter.ShooterIOSparkMax;
 import frc.robot.subsystems.swerve.Swerve;
+import frc.robot.subsystems.swerve.SwerveIOSim;
 import frc.robot.subsystems.swerve.SwerveIOSparkMax;
 
 import java.util.function.DoubleSupplier;
@@ -31,6 +33,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -65,8 +68,14 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    if (Robot.isReal()) {
     drivetrain = new Swerve(new SwerveIOSparkMax());
     shooter = new Shooter(new ShooterIOSparkMax());
+    }
+    else {
+      drivetrain = new Swerve(new SwerveIOSim());
+      shooter = new Shooter(new ShooterIOSim());
+    }
 
 
     drivetrain.setDefaultCommand(new TeleopDrive(drivetrain, driverLeftStickY, driverLeftStickX, driverRightStickX));
@@ -77,7 +86,7 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("shoot", Shoot.shoot(shooter));
 
-    positionChooser.addOption("RED_AMP", PositionConstants.RED_AMP);
+    positionChooser.addDefaultOption("RED_AMP", PositionConstants.RED_AMP);
     positionChooser.addOption("RED_STAGE", PositionConstants.RED_STAGE);
     positionChooser.addOption("RED_SOURCE", PositionConstants.RED_SOURCE);
 
@@ -107,8 +116,8 @@ public class RobotContainer {
   private void configureBindings() {
     Trigger operatorLeftBumper = new JoystickButton(operatorController, XboxController.Button.kLeftBumper.value);
     Trigger operatorRightBumper = new JoystickButton(operatorController, XboxController.Button.kRightBumper.value);
-    Trigger operatorA = new JoystickButton(operatorController, XboxController.Button.kA.value);
-    Trigger operatorB = new JoystickButton(operatorController, XboxController.Button.kB.value);
+    Trigger operatorA = new JoystickButton(driverController, XboxController.Button.kA.value);
+    Trigger operatorB = new JoystickButton(driverController, XboxController.Button.kB.value);
 
     Trigger driverX = new JoystickButton(driverController, XboxController.Button.kX.value);
 

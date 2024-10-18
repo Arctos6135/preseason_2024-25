@@ -8,7 +8,29 @@
   },
   "NTProvider": {
     "types": {
-      "/FMSInfo": "FMSInfo"
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/StepVoltageRoutine": "Command",
+      "/SmartDashboard/autoChooser": "String Chooser",
+      "/SmartDashboard/field": "Field2d",
+      "/SmartDashboard/positionChooser": "String Chooser",
+      "/SmartDashboard/resetAbsoluteEncoders": "Command"
+    },
+    "windows": {
+      "/SmartDashboard/autoChooser": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "retained": {
+      "SmartDashboard": {
+        "autoChooser": {
+          "open": true
+        },
+        "open": true
+      }
     }
   },
   "NetworkTables Info": {

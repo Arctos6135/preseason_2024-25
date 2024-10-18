@@ -85,7 +85,7 @@ public class SwerveIO {
     public void setStates(SwerveModuleState[] moduleStates) {}
 
     public Rotation2d getAngle() {
-        return new Rotation2d(0);
+        return new Rotation2d(90);
     }
 
     public void resetGyro(){}
@@ -117,5 +117,10 @@ public class SwerveIO {
         return new SwerveModuleState[]{};
     }
 
-    public void setDrivingVoltages(double voltage) {};
+    public void setDrivingVoltages(double voltage) {}
+
+    public void update() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    };
 }

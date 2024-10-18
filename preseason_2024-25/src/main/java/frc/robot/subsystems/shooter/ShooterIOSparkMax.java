@@ -5,6 +5,7 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import frc.robot.constants.CANBusConstants;
 import frc.robot.constants.ShooterConstants;
 import frc.robot.constants.SwerveConstants;
@@ -26,8 +27,7 @@ public class ShooterIOSparkMax extends ShooterIO {
         follower.setIdleMode(IdleMode.kBrake);
     }
 
-    public void setVoltage(double voltage){
+    public void setVoltages(double voltage){
         leader.setVoltage(voltage);
     }
-
 }
