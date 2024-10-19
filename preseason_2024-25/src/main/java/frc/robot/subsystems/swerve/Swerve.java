@@ -44,6 +44,8 @@ public class Swerve extends SubsystemBase {
 
     private SwerveIO io;
 
+    private Rotation2d initialRot = new Rotation2d(0);
+
     // Constructor
     public Swerve(SwerveIO io) {
         this.io = io;
@@ -127,7 +129,13 @@ public class Swerve extends SubsystemBase {
     }
 
     public Rotation2d getAngle() {
+        if (Robot.isReal()) {
         return io.getAngle();
+        }
+
+        else {
+            return gyroRotation;
+        }
     }
 
     public void drive(double x, double y, double rotation){
@@ -139,12 +147,12 @@ public class Swerve extends SubsystemBase {
         double rSpeed = rotation * SwerveConstants.MAX_ANGULAR_VELOCITY;
 
         if (DriverStation.getRawAllianceStation() == AllianceStationID.Blue1 || DriverStation.getRawAllianceStation() == AllianceStationID.Blue2 || DriverStation.getRawAllianceStation() == AllianceStationID.Blue3) {
-            xSpeed *= 1;
-            ySpeed *= 1;
-        }
-        else {
             xSpeed *= -1;
             ySpeed *= -1;
+        }
+        else {
+            xSpeed *= 1;
+            ySpeed *= 1;
         }
 
         var swerveModuleStates = kinematics.toSwerveModuleStates(
@@ -152,7 +160,7 @@ public class Swerve extends SubsystemBase {
                 xSpeed,
                 ySpeed,
                 rSpeed,
-                getAngle()
+                getAngle().plus(initialRot)
             )
         );
 
@@ -166,8 +174,12 @@ public class Swerve extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.updateValues();
+
+        if (Robot.isSimulation()) {
+            io.update();
+        }
+
         io.updateInputs(inputs);
-        // io.update();
 
         modulePositions = io.getModulePositions();
 
@@ -180,6 +192,7 @@ public class Swerve extends SubsystemBase {
 
         Logger.recordOutput("pose", odometry.getPoseMeters());
         Logger.recordOutput("states", io.getModuleStates());
+        Logger.recordOutput("rotation", gyroRotation);
 
         Logger.processInputs(getName(), inputs);
     }
@@ -194,9 +207,8 @@ public class Swerve extends SubsystemBase {
     }
 
     public void resetPose(Pose2d pose) {
-        
-
         odometry.resetPosition(getAngle(), io.getModulePositions(), pose);
+        initialRot = pose.getRotation();
     }
 
     public void resetStates() {

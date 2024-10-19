@@ -125,10 +125,10 @@ public class SwerveConstants {
     }};
 
     public static List<LinearSystem<N2, N1, N2>> TURNING_MOTOR_LINEAR_SYSTEMS = new ArrayList<>() {{
-        add(LinearSystemId.createDCMotorSystem(0.0001, 0.03926));
-        add(LinearSystemId.createDCMotorSystem(0.0001, 0.03926));
-        add(LinearSystemId.createDCMotorSystem(0.0001, 0.03926));
-        add(LinearSystemId.createDCMotorSystem(0.0001, 0.03926));
+        add(LinearSystemId.createDCMotorSystem(0.062527, 0.0002841));
+        add(LinearSystemId.createDCMotorSystem(0.062527, 0.0002841));
+        add(LinearSystemId.createDCMotorSystem(0.062527, 0.0002841));
+        add(LinearSystemId.createDCMotorSystem(0.062527, 0.00028416));
     }};
 
 
