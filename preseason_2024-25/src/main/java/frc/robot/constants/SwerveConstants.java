@@ -75,7 +75,7 @@ public class SwerveConstants {
     public static final double DRIVING_ENCODER_POSITION_FACTOR = DRIVE_WHEEL_CIRCUMFERENCE / DRIVING_GEARING_RATIO;
     public static final double DRIVING_ENCODER_VELOCITY_FACTOR = (DRIVE_WHEEL_CIRCUMFERENCE / DRIVING_GEARING_RATIO);
 
-    public static final double MAX_SPEED = 2.5;
+    public static final double MAX_SPEED = 3.0;
     public static final double MAX_ANGULAR_VELOCITY = 2.5;
 
     // Gains for feedforward and simulation purposes.

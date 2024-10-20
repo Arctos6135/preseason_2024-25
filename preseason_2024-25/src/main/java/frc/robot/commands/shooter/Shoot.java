@@ -8,7 +8,7 @@ import frc.robot.subsystems.shooter.Shooter;
 public class Shoot extends Command {
     
     public static Command shoot(Shooter shooter){
-        return new InstantCommand(() -> shooter.setVoltages(6))
+        return new InstantCommand(() -> shooter.setVoltages(12))
             .andThen(new WaitCommand(3))
             .andThen(new InstantCommand(() -> shooter.setVoltages(0)))
         ;

@@ -21,13 +21,12 @@ public class ShooterIOSparkMax extends ShooterIO {
         leader.setInverted(false);
         follower.setInverted(false);
 
-        follower.follow(leader, true);
-
         leader.setIdleMode(IdleMode.kBrake);
         follower.setIdleMode(IdleMode.kBrake);
     }
 
     public void setVoltages(double voltage){
         leader.setVoltage(voltage);
+        follower.setVoltage(voltage);
     }
 }
