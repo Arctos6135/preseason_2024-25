@@ -146,7 +146,7 @@ public class Swerve extends SubsystemBase {
 
         double rSpeed = rotation * SwerveConstants.MAX_ANGULAR_VELOCITY;
 
-        if (DriverStation.getRawAllianceStation() == AllianceStationID.Blue1 || DriverStation.getRawAllianceStation() == AllianceStationID.Blue2 || DriverStation.getRawAllianceStation() == AllianceStationID.Blue3) {
+        if (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue) {
             xSpeed *= -1;
             ySpeed *= -1;
         }
@@ -192,7 +192,7 @@ public class Swerve extends SubsystemBase {
 
         Logger.recordOutput("pose", odometry.getPoseMeters());
         Logger.recordOutput("states", io.getModuleStates());
-        Logger.recordOutput("rotation", gyroRotation);
+        Logger.recordOutput("rotation", getAngle());
 
         Logger.processInputs(getName(), inputs);
     }

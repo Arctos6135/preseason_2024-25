@@ -23,8 +23,8 @@ public class SwerveConstants {
 
     public static final int FRONT_LEFT_ENCODER_PORT = 0;
     public static final int FRONT_RIGHT_ENCODER_PORT = 1;
-    public static final int BACK_LEFT_ENCODER_PORT = 3;
-    public static final int BACK_RIGHT_ENCODER_PORT = 2;
+    public static final int BACK_LEFT_ENCODER_PORT = 2;
+    public static final int BACK_RIGHT_ENCODER_PORT = 3;
     public static final List<Integer> ENCODER_PORTS = new ArrayList<>() {{
         add(FRONT_LEFT_ENCODER_PORT);
         add(FRONT_RIGHT_ENCODER_PORT);
@@ -45,10 +45,10 @@ public class SwerveConstants {
     }};
 
     // Position offsets (rotations).
-    public static final double FRONT_LEFT_POSITION_OFFSET = 0.970;
-    public static final double FRONT_RIGHT_POSITION_OFFSET = 0.400;
+    public static final double FRONT_LEFT_POSITION_OFFSET = 0.993;
+    public static final double FRONT_RIGHT_POSITION_OFFSET = 0.397;
     public static final double BACK_LEFT_POSITION_OFFSET = 0.521;
-    public static final double BACK_RIGHT_POSITION_OFFSET = 0.174;
+    public static final double BACK_RIGHT_POSITION_OFFSET = 0.155;
     public static double[] POSITION_OFFSETS = {
         FRONT_LEFT_POSITION_OFFSET,
         FRONT_RIGHT_POSITION_OFFSET,

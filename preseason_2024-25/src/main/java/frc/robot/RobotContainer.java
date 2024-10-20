@@ -121,8 +121,11 @@ public class RobotContainer {
 
     Trigger driverX = new JoystickButton(driverController, XboxController.Button.kX.value);
 
-    operatorRightBumper.onTrue(Shoot.shoot(shooter));
-    operatorLeftBumper.whileTrue(new Intake(shooter));
+    operatorRightBumper.onTrue(new InstantCommand(() -> shooter.setVoltages(12)));
+    operatorRightBumper.onFalse(new InstantCommand(() -> shooter.setVoltages(0)));
+    operatorLeftBumper.onTrue(new InstantCommand(() -> shooter.setVoltages(-12)));
+    operatorLeftBumper.onFalse(new InstantCommand(() -> shooter.setVoltages(0)));
+
 
     driverX.onTrue(new resetDirection(drivetrain));
 
