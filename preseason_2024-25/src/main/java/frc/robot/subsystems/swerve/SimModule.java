@@ -1,33 +1,19 @@
 package frc.robot.subsystems.swerve;
 
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.configs.TalonFXConfigurator;
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
-import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.StateSpaceUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-import edu.wpi.first.wpilibj.simulation.EncoderSim;
-import frc.robot.constants.CANBusConstants;
 import frc.robot.constants.SwerveConstants;
+import frc.robot.util.SimMotor;
 
 public class SimModule {
-    private final DCMotorSim drivingMotor;
+    private final SimMotor drivingMotor;
     private final DCMotorSim turningMotor;
 
     private final PIDController drivingPIDController;
@@ -65,12 +51,11 @@ public class SimModule {
      */
     public SimModule(int moduleIdentifier) {
         // Sets up the motors.
-        this.drivingMotor = new DCMotorSim(SwerveConstants.DRIVING_MOTOR_LINEAR_SYSTEMS.get(moduleIdentifier), DCMotor.getKrakenX60(1), 6.12);
+        this.drivingMotor = new SimMotor(new double[][]{{0.06475, 0.05327}, {0.158, 0.7688}}, new double[][]{{0.03167}, {-0.002221}}, new double[]{11.21, 4.132}, new double[]{0.0});
         this.turningMotor = new DCMotorSim(SwerveConstants.TURNING_MOTOR_LINEAR_SYSTEMS.get(moduleIdentifier), DCMotor.getNEO(1), (150.0 / 7.0));
 
         this.moduleIdentifier = modules[moduleIdentifier];
 
-        drivingMotor.setState(0, 0);
         turningMotor.setState(0, 0);
 
         // Creates PIDController with the module's unique gains.
@@ -105,7 +90,7 @@ public class SimModule {
      * @return position of the module in meters
      */
     public double getPosition() {
-        return drivingMotor.getAngularPositionRotations() * SwerveConstants.DRIVE_WHEEL_CIRCUMFERENCE * 6.12;
+        return drivingMotor.getPosition();
     }
 
     /**
@@ -137,7 +122,7 @@ public class SimModule {
      * @return driving velocity (m/s)
      */
     public double getDrivingVelocity() {
-        return drivingMotor.getAngularVelocityRPM() * SwerveConstants.DRIVE_WHEEL_CIRCUMFERENCE * 6.12 / 60;
+        return drivingMotor.getVelocity();
     }
 
     /**
@@ -177,7 +162,7 @@ public class SimModule {
      * @return driving motor current
      */
     public double getDrivingCurrent() {
-        return drivingMotor.getCurrentDrawAmps();
+        return 0.0;
     }
 
     /**
@@ -209,7 +194,7 @@ public class SimModule {
      * @return the acceleration of the driving motor.
      */
     public double getDrivingAcceleration() {
-        return drivingMotor.getAngularVelocityRadPerSec();
+        return 0.0;
     }
 
     /**
@@ -221,7 +206,7 @@ public class SimModule {
     }
 
     public void setDrivingVoltage(double voltage) {
-        drivingMotor.setInputVoltage(voltage);
+        drivingMotor.setVoltage(voltage);
     }
 
     public void update() {
@@ -263,7 +248,7 @@ public class SimModule {
         drivingVoltage += drivingFeedforward.calculate(targetDrivingVelocity, targetDrivingAcceleration);
 
         // Sets the voltage of the motors clamped to reasonable values.
-        drivingMotor.setInputVoltage(MathUtil.clamp(drivingVoltage, -12, 12));
+        drivingMotor.setVoltage(MathUtil.clamp(drivingVoltage, -12, 12));
         turningMotor.setInputVoltage(MathUtil.clamp(turningVoltage, -12, 12));
 
         // Updates the last values.
