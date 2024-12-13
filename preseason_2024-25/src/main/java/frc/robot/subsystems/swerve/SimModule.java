@@ -1,20 +1,20 @@
 package frc.robot.subsystems.swerve;
 
+import java.util.List;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import frc.robot.constants.SwerveConstants;
 import frc.robot.util.SimMotor;
 
 public class SimModule {
     private final SimMotor drivingMotor;
-    private final DCMotorSim turningMotor;
+    private final SimMotor turningMotor;
 
     private final PIDController drivingPIDController;
     private final PIDController turningPIDController;
@@ -51,12 +51,10 @@ public class SimModule {
      */
     public SimModule(int moduleIdentifier) {
         // Sets up the motors.
-        this.drivingMotor = new SimMotor(new double[][]{{0.06475, 0.05327}, {0.158, 0.7688}}, new double[][]{{0.03167}, {-0.002221}}, new double[]{11.21, 4.132}, new double[]{0.0});
-        this.turningMotor = new DCMotorSim(SwerveConstants.TURNING_MOTOR_LINEAR_SYSTEMS.get(moduleIdentifier), DCMotor.getNEO(1), (150.0 / 7.0));
+        this.drivingMotor = new SimMotor(SwerveConstants.DRIVING_MATRICES.get(moduleIdentifier));
+        this.turningMotor = new SimMotor((SwerveConstants.TURNING_MATRICES.get(moduleIdentifier)));
 
         this.moduleIdentifier = modules[moduleIdentifier];
-
-        turningMotor.setState(0, 0);
 
         // Creates PIDController with the module's unique gains.
         this.drivingPIDController = new PIDController(SwerveConstants.DRIVING_PID[moduleIdentifier][0], SwerveConstants.DRIVING_PID[moduleIdentifier][1], SwerveConstants.DRIVING_PID[moduleIdentifier][2]);
@@ -82,7 +80,7 @@ public class SimModule {
      * Resets the turning encoders to the angle given by the analog encoders.
      */
     private void resetToAbsolute() {
-        turningMotor.setState(0.0, 0.0);
+        // turningMotor.setState(0.0, 0.0);
     }
 
     /**
@@ -130,15 +128,15 @@ public class SimModule {
      * @return module angle (radians)
      */
     public Rotation2d getAngle() {
-        return Rotation2d.fromRadians(turningMotor.getAngularPositionRotations() * SwerveConstants.TURNING_ENCODER_POSITION_FACTOR);
+        return Rotation2d.fromRadians(turningMotor.getPosition());
     }
-
+    
     /**
      * Gets the velocity of the turning motor in rad/s.
      * @return angular velocity (rad/s)
      */
     public double getTurningVelocity() {
-        return turningMotor.getAngularVelocityRadPerSec() / (150.0 / 7);
+        return turningMotor.getVelocity();
     }
 
     /**
@@ -170,7 +168,7 @@ public class SimModule {
      * @return turning motor current
      */
     public double getTurningCurrent() {
-        return turningMotor.getCurrentDrawAmps();
+        return 0.0; //turningMotor.getCurrentDrawAmps();
     }
 
     /**
@@ -214,6 +212,10 @@ public class SimModule {
         turningMotor.update(0.02);
     }
 
+    public void setSetpoint(double setpoint) {
+        drivingPIDController.setSetpoint(setpoint);;
+    }
+
     /**
      * Sets the desired state of the module.
      * @param desiredState
@@ -235,7 +237,7 @@ public class SimModule {
         targetDrivingAcceleration = (targetDrivingVelocity - lastTargetDrivingVelocity) / 0.02;
 
         // Sets the setpoint for the PID controllers to follow.
-        drivingPIDController.setSetpoint(optimizedDesiredState.speedMetersPerSecond); // m/s
+        // drivingPIDController.setSetpoint(optimizedDesiredState.speedMetersPerSecond); // m/s
         turningPIDController.setSetpoint(optimizedDesiredState.angle.getRadians()); // radians
 
         drivingVelocity = getDrivingVelocity();
@@ -249,7 +251,7 @@ public class SimModule {
 
         // Sets the voltage of the motors clamped to reasonable values.
         drivingMotor.setVoltage(MathUtil.clamp(drivingVoltage, -12, 12));
-        turningMotor.setInputVoltage(MathUtil.clamp(turningVoltage, -12, 12));
+        turningMotor.setVoltage(MathUtil.clamp(turningVoltage, -12, 12));
 
         // Updates the last values.
         lastTargetDrivingVelocity = targetDrivingVelocity;

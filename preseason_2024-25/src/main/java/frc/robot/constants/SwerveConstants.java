@@ -83,10 +83,10 @@ public class SwerveConstants {
         0.21599,
     };
 
-    public static double[] FRONT_LEFT_TURNING_PID = {2.3, 0.0, 0.0};
-    public static double[] FRONT_RIGHT_TURNING_PID = {2.3, 0.0, 0.0};
-    public static double[] BACK_RIGHT_TURNING_PID = {2.3, 0.0, 0.0};
-    public static double[] BACK_LEFT_TURNING_PID = {2.3, 0.0, 0.0};
+    public static double[] FRONT_LEFT_TURNING_PID = {2.8788, 0.0, 0.52009};
+    public static double[] FRONT_RIGHT_TURNING_PID = {2.8788, 0.0, 0.52009};
+    public static double[] BACK_RIGHT_TURNING_PID = {2.8788, 0.0, 0.52009};
+    public static double[] BACK_LEFT_TURNING_PID = {2.8788, 0.0, 0.52009};
     public static double[][] TURNING_PID = {
         FRONT_LEFT_TURNING_PID,
         FRONT_RIGHT_TURNING_PID,
@@ -131,6 +131,68 @@ public class SwerveConstants {
         add(LinearSystemId.createDCMotorSystem(0.062527, 0.00028416));
     }};
 
+    public static List<Object> FRONT_LEFT_DRIVING_MATRICES = new ArrayList<Object>() {{
+        add(new double[][]{{0.06475, 0.05327}, {0.158, 0.7688}});
+        add(new double[][]{{0.03167}, {-0.002221}});
+        add(new double[]{11.21, 4.132});
+        add(new double[]{0.0});
+    }};
+    
+    public static List<Object> FRONT_RIGHT_DRIVING_MATRICES = new ArrayList<Object>() {{
+        add(new double[][]{{0.06475, 0.05327}, {0.158, 0.7688}});
+        add(new double[][]{{0.03167}, {-0.002221}});
+        add(new double[]{11.21, 4.132});
+        add(new double[]{0.0});
+    }};
+    public static List<Object> BACK_LEFT_DRIVING_MATRICES = new ArrayList<Object>() {{
+        add(new double[][]{{0.06475, 0.05327}, {0.158, 0.7688}});
+        add(new double[][]{{0.03167}, {-0.002221}});
+        add(new double[]{11.21, 4.132});
+        add(new double[]{0.0});
+    }};
+    public static List<Object> BACK_RIGHT_DRIVING_MATRICES = new ArrayList<Object>() {{
+        add(new double[][]{{0.06475, 0.05327}, {0.158, 0.7688}});
+        add(new double[][]{{0.03167}, {-0.002221}});
+        add(new double[]{11.21, 4.132});
+        add(new double[]{0.0});
+    }};
+    public static List<List<Object>> DRIVING_MATRICES = new ArrayList<List<Object>>() {{
+        add(FRONT_LEFT_DRIVING_MATRICES);
+        add(FRONT_RIGHT_DRIVING_MATRICES);
+        add(BACK_LEFT_DRIVING_MATRICES);
+        add(BACK_RIGHT_DRIVING_MATRICES);
+    }};
+    public static List<Object> FRONT_LEFT_TURNING_MATRICES = new ArrayList<Object>() {{
+        add(new double[][]{{0.9149, -0.1065}, {0.2228, 0.7968}});
+        add(new double[][]{{-0.001372}, {0.004415}});
+        add(new double[]{-108.6, -32.12});
+        add(new double[]{0.0});
+    }};
+    public static List<Object> FRONT_RIGHT_TURNING_MATRICES = new ArrayList<Object>() {{
+        add(new double[][]{{0.9149, -0.1065}, {0.2228, 0.7968}});
+        add(new double[][]{{-0.001372}, {0.004415}});
+        add(new double[]{-108.6, -32.12});
+        add(new double[]{0.0});
+    }};
+    public static List<Object> BACK_LEFT_TURNING_MATRICES = new ArrayList<Object>() {{
+        add(new double[][]{{0.9149, -0.1065}, {0.2228, 0.7968}});
+        add(new double[][]{{-0.001372}, {0.004415}});
+        add(new double[]{-108.6, -32.12});
+        add(new double[]{0.0});
+    }};
+    public static List<Object> BACK_RIGHT_TURNING_MATRICES = new ArrayList<Object>() {{
+        add(new double[][]{{0.9149, -0.1065}, {0.2228, 0.7968}});
+        add(new double[][]{{-0.001372}, {0.004415}});
+        add(new double[]{-108.6, -32.12});
+        add(new double[]{0.0});
+    }};
+
+    public static List<List<Object>> TURNING_MATRICES = new ArrayList<List<Object>>() {{
+        add(FRONT_LEFT_TURNING_MATRICES);
+        add(FRONT_RIGHT_TURNING_MATRICES);
+        add(BACK_LEFT_TURNING_MATRICES);
+        add(BACK_RIGHT_TURNING_MATRICES);
+    }};
 
 
     public static HolonomicPathFollowerConfig autoConfig = new HolonomicPathFollowerConfig(

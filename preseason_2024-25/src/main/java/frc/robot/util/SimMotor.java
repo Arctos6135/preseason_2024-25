@@ -1,5 +1,8 @@
 package frc.robot.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SimMotor {
     private double[] den;
     private double[] num;
@@ -15,6 +18,11 @@ public class SimMotor {
     public SimMotor(double[][] A, double[][] B, double[] C, double[] D) {
         this.stateSpaceModel = new StateSpaceModel(A, B, C, D);
     }
+
+    public SimMotor(List<Object> matriceList) {
+        this.stateSpaceModel = new StateSpaceModel(matriceList);
+    }
+
 
     public void update(double dt) {
         stateSpaceModel.update(voltage);

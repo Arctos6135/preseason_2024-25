@@ -33,6 +33,10 @@ public class Swerve extends SubsystemBase {
 
     public Rotation2d gyroRotation = Rotation2d.fromDegrees(0);
 
+    public TunableDouble drivingP = new TunableDouble("drivingP", 0);
+    public TunableDouble drivingI = new TunableDouble("drivingI", 0);
+    public TunableDouble drivingD = new TunableDouble("drivingD", 0);
+
     // Attributes
     SwerveDriveKinematics kinematics;
     SwerveDriveOdometry odometry;
@@ -138,11 +142,27 @@ public class Swerve extends SubsystemBase {
         }
     }
 
+    double ticks = 0;
+    int setpoint = 0;
     public void drive(double x, double y, double rotation){
         // Converts entered values (-1 to 1) into the units used by drivetrain
 
         double xSpeed = x * SwerveConstants.MAX_SPEED;
         double ySpeed = y * SwerveConstants.MAX_SPEED;
+
+        ticks++;
+
+        if (ticks >= 100) {
+            ticks = 0;
+            if (setpoint == 0) {
+            io.setSetpoint(1);
+            setpoint = 1;
+            }
+            else {
+                io.setSetpoint(0);
+                setpoint = 0;
+            }
+        }
 
         double rSpeed = rotation * SwerveConstants.MAX_ANGULAR_VELOCITY;
 
@@ -174,6 +194,13 @@ public class Swerve extends SubsystemBase {
     @Override
     public void periodic() {
         SmartDashboard.updateValues();
+
+        if (drivingP.update() || drivingI.update() || drivingD.update()) {
+            io.setFrontLeftDrivingPID(drivingP.get(), drivingI.get(), drivingD.get());
+            io.setFrontRightDrivingPID(drivingP.get(), drivingI.get(), drivingD.get());
+            io.setBackLeftDrivingPID(drivingP.get(), drivingI.get(), drivingD.get());
+            io.setBackRightDrivingPID(drivingP.get(), drivingI.get(), drivingD.get());
+        }
 
         if (Robot.isSimulation()) {
             io.update();

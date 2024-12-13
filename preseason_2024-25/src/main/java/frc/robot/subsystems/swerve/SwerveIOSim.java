@@ -42,6 +42,14 @@ public class SwerveIOSim extends SwerveIO {
     }
 
     @Override
+    public void setSetpoint(double setpoint) {
+        frontLeft.setSetpoint(setpoint);
+        frontRight.setSetpoint(setpoint);
+        backLeft.setSetpoint(setpoint);
+        backRight.setSetpoint(setpoint);
+    }
+
+    @Override
     public void setDrivingVoltages(double voltage) {
         frontLeft.setDrivingVoltage(voltage);
         frontRight.setDrivingVoltage(voltage);

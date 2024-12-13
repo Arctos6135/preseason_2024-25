@@ -95,6 +95,8 @@ public class SwerveIO {
         return new SwerveModulePosition[3];
     }
 
+    public void setSetpoint(double setpoint){}
+
     public void resetAbsoluteEncoders() {}
 
     public void setFrontLeftDrivingPID(double P, double I, double D) {}

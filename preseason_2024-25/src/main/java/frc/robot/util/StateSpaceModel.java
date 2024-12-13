@@ -1,5 +1,8 @@
 package frc.robot.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.ejml.simple.SimpleMatrix;
 
 import edu.wpi.first.math.Matrix;
@@ -25,6 +28,10 @@ public class StateSpaceModel {
         stateVector = new Matrix<N2, N1>(new SimpleMatrix(initialState));
     }
 
+    public StateSpaceModel(List<Object> matriceList) {
+        this(((double[][])matriceList.get(0)), (double[][])matriceList.get(1), (double[])matriceList.get(2), (double[])matriceList.get(3));
+    }
+
     public void update(double input) {
         double state0 = A.get(0,0) * stateVector.get(0, 0) +  A.get(0, 1) * stateVector.get(1, 0);
         double state1 = A.get(1,0) * stateVector.get(0, 0) +  A.get(1, 1) * stateVector.get(1, 0);
@@ -36,6 +43,6 @@ public class StateSpaceModel {
     }
 
     public double getOutput() {
-        return stateVector.get(0,0) * C.get(0, 0) + stateVector.get(1, 0) * C.get(0, 1);
+        return stateVector.get(0,0) * C.get(0, 0) + stateVector.get(1, 0) * C.get(0, 1) + D.get(0, 0);
     }
 }
